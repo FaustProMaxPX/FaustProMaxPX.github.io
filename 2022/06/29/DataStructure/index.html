@@ -1,0 +1,1705 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Remake | 数据结构, XC 的个人博客">
+    <meta name="description" content="菜狗的Remake之路 – 数据结构篇
+
+
+使用语言：Java
+
+实例化对象的过程
+
+首先根据构造函数传入的参数初始化对象中的属性，然后该对象的属性的首个bit所在的位置返回，作为该对象的地址被存入到对应的变量中。
+所有地址长度位64位，n">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    
+
+    <title>Remake | 数据结构 | XC 的个人博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">XC 的个人博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">XC 的个人博客</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Remake | 数据结构</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                                <span class="chip bg-color">数据结构</span>
+                            </a>
+                        
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Remake/" class="post-category">
+                                Remake
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-06-29
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.3k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    21 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>菜狗的Remake之路 – 数据结构篇</p>
+<span id="more"></span>
+
+<p>使用语言：Java</p>
+<blockquote>
+<p>实例化对象的过程</p>
+</blockquote>
+<p>首先根据构造函数传入的参数初始化对象中的属性，然后该对象的属性的首个bit所在的位置返回，作为该对象的地址被存入到对应的变量中。</p>
+<p>所有地址长度位64位，null的地址为全0。</p>
+<p>tips：所有的赋值操作都是将该变量存储的字节全部拷贝到另一个变量中。</p>
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><p>尽量避免特判可有效提高代码健壮性。</p>
+<p>表头添加哨兵结点的思想：让链表在任何情况下的状态都遵循同一套操作逻辑。</p>
+<p>在单链表中添加头部哑节点的原因是，在某些情况下无法访问链表中结点的next属性，因此我们通过添加哑节点来使next属性在任何时刻都可以被访问。</p>
+<p>而对于双向链表，又出现了某些结点的prev属性不能被访问或是说不应该被访问。例如，按照原先单链表的设计，我们将需要在前插时对是否是头部哑节点进行特判。</p>
+<p>此时有两种解决方法：</p>
+<ol>
+<li>在尾部也添加一个哑节点。</li>
+<li>将链表设计成循环链表。</li>
+</ol>
+<h2 id="顺序表"><a href="#顺序表" class="headerlink" title="顺序表"></a>顺序表</h2><blockquote>
+<p>resize</p>
+</blockquote>
+<p>当顺序表需要进行resize操作时，将数组大小进行指数级更改，而非简单的加减。因为加减无法根据当前数据量的大小动态进行调整，导致在数据量过大时频繁地调用resize操作拖慢速度且占用大量空间。</p>
+<p>若顺序表中数组存储的不是基本数据类型，则不推荐懒惰删除，因为被删除对象的引用仍然保存着，不会被gc回收，占用内存。</p>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>继承会从父类继承所有的成员变量，静态变量，所有的方法和内部类。</p>
+<p>但被private修饰的不可直接访问。</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 调用父类方法</span>
+<span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">xxx</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>tips:构造器都不会被继承，但Java会默认在子类构造器中首先调用基类默认<em>无参</em>构造器。</p>
+<blockquote>
+<p>继承会破坏封装</p>
+</blockquote>
+<p>Java根据动态数据类型调用方法，若子类中覆写了一个方法，其中调用了从基类继承来的方法，但此方法调用了基类中被覆写的方法，则此时不会调用父类中被覆写的方法，而是子类的方法，最终陷入无限循环。</p>
+<p>封装被破坏的直接体现：模组中的方法不再以整体的形式被调用</p>
+<h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><h3 id="合并排序-选择排序"><a href="#合并排序-选择排序" class="headerlink" title="合并排序 (+ 选择排序)"></a>合并排序 (+ 选择排序)</h3><p>合并排序在处理有序数组时仅有O(N)的复杂度，因此可以选择将无序数组切分成若干部分，对其分别调用选择排序，再进行合并，实现排序加速。</p>
+<p>但若将数组切分到只剩单个元素的小块，则可直接用合并排序实现一切，复杂度为O(NlogN)，代价是内存占用较大。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sort</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * merge two sorted array to a sorted array
+     * @param &lt;T> type of data
+     * @param datas1 a sorted array and all of its elements are not null
+     * @param datas2 a sorted array and all of its elements are not null
+     * @param c The comparator of type T
+     * @return a sorted array containing all elements in datas1 and datas2
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>T<span class="token operator">></span> List<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">merge</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>T<span class="token operator">></span> datas1<span class="token punctuation">,</span> List<span class="token operator">&lt;</span>T<span class="token operator">></span> datas2<span class="token punctuation">,</span> Comparator<span class="token operator">&lt;</span>T<span class="token operator">></span> cc<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> i<span class="token punctuation">,</span> j<span class="token punctuation">;</span>
+        i <span class="token operator">=</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// ret = (T[])(new Object[datas1.length + datas2.length]);</span>
+        List<span class="token operator">&lt;</span>T<span class="token operator">></span> ret <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> idx <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> cmp <span class="token operator">=</span> cc<span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>datas1<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">,</span> datas2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>cmp <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                ret<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>datas1<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">++</span>i<span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                ret<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>datas2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token operator">++</span>j<span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            idx<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">!=</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            ret<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>datas1<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>j <span class="token operator">!=</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            ret<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>datas2<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span>j<span class="token punctuation">,</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> ret<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token keyword">void</span> <span class="token function">insertSort</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>T<span class="token operator">></span> datas<span class="token punctuation">,</span> Comparator<span class="token operator">&lt;</span>T<span class="token operator">></span> cc<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            T elem <span class="token operator">=</span> datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> j<span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> i<span class="token punctuation">;</span> j <span class="token operator">></span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> cc<span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> elem<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                datas<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>j<span class="token punctuation">,</span> datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            datas<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>j<span class="token punctuation">,</span> elem<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>T<span class="token operator">></span> List<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">mergeSort</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>T<span class="token operator">></span> datas<span class="token punctuation">,</span> Comparator<span class="token operator">&lt;</span>T<span class="token operator">></span> cc<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token function">insertSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> datas<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> mid <span class="token operator">=</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">;</span>
+            List<span class="token operator">&lt;</span>T<span class="token operator">></span> sort1 <span class="token operator">=</span> <span class="token function">mergeSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> mid<span class="token punctuation">)</span><span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            List<span class="token operator">&lt;</span>T<span class="token operator">></span> sort2 <span class="token operator">=</span> <span class="token function">mergeSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span>mid<span class="token punctuation">,</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            List<span class="token operator">&lt;</span>T<span class="token operator">></span> ret <span class="token operator">=</span> <span class="token function">merge</span><span class="token punctuation">(</span>sort1<span class="token punctuation">,</span> sort2<span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> ret<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h3><p>划分域：在数组中选取一个元素，在对元素重新组织后，使得在该元素的左边均为</p>
+<p>小于他的元素，右边均为大于他的元素。</p>
+<p>划分域 -&gt; 被选取的元素已经就位</p>
+<p>因此快排的思路就是，在数组中选取一个枢纽点，以他为中心重新组织数组，使其满足划分域的要求。然后对划分的左右两边继续调用快排直至数组中没有元素或只剩1个元素。</p>
+<p>快排的本质仍旧是一棵以枢纽点为节点的二叉树，树的平均高度为logN，而在树的每一层中进行的重组织的时间复杂度为O(N)，因此快排的时间复杂度为O(NlogN)</p>
+<p>但要注意的是，若枢纽点选取不当，会导致树退化成单链表，例如当数组基本有序或有大量重复元时，每次划分都只会划分出1个元素。</p>
+<blockquote>
+<p>优化方法</p>
+</blockquote>
+<ol>
+<li>使用随机算法进行枢纽元选取，有大概率会选到在中间大小的元素</li>
+<li>当数组元素数量不大时，切换为稳定的排序算法（插排&#x2F;归并），避免树的深度在最后大幅增加</li>
+</ol>
+<blockquote>
+<p>Hora partition</p>
+</blockquote>
+<p>使一个指针i指向数组起点，一个指针j指向数组终点，当i所指的元素小于pivot时，右移i，当j所指元素大于pivot时，左移j。i和j都停下时，交换所指元素。重复上述步骤，直至i与j交叉，然后将pivot与j交换。（此时j必定处于最后一个小于pivot的位置，因此需要如此交换）</p>
+<h3 id="快速选择"><a href="#快速选择" class="headerlink" title="快速选择"></a>快速选择</h3><p>若要选取数组中第k小的元素，则将数组中的最后一个元素作为pivot，初始化pivotloc于数组起点，然后遍历数组，若当前元素小于pivot，则将其与pivotloc交换，并移动pivotloc，最后交换pivotloc所指元素与pivot。这样就将数组切分成两块，然后检查获得的pivotloc是否与k相等，若大于，则对左半部分继续切分，若小于，则对右半部分继续切分。（此时，左半部分均小于pivotloc的元素，右半部分反之）</p>
+<h2 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h2><p>不实质性将两个结点连接，而是将其存储在同一个集合中，表明他们之间有链接。</p>
+<p>这样在查询两个结点之间是否连接时只需要看他们是否在同一集合中。</p>
+<p>re:我们不需要像图那样直到具体的连接情况，因此可以用逻辑上的连接代替。</p>
+<blockquote>
+<p>implement</p>
+</blockquote>
+<p>实现方式1：哈希表（通用）</p>
+<p>对于整形</p>
+<p>实现方式2：创建一个大小为N的数组，数组中存储的是其对应下标数组所属的集合的代表数字。</p>
+<p>快速连接的方法：直接修改集合的代表元素指向的父级结点的值。但此时父级结点的计算仍可能是一个昂贵的操作。最坏情况会退化到O(N)。</p>
+<p>因此我们选择将一个结合中所有的元素都指向结合代表元素，这样查询当前集合的父节点的时间就被大大压缩。</p>
+<p>此时需要考虑在合并时应将小的集合并到大的集合来减少树的深度。</p>
+<p>-&gt; 使用一个数组来追踪集合大小，确保每一次都是小的往大的合，这样树的深度永远被控制在logN。</p>
+<p>路径压缩：在执行isConnect时，将单个集合中的所有结点指向其最高父结点。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Union</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    
+    Integer<span class="token punctuation">[</span><span class="token punctuation">]</span> parent<span class="token punctuation">;</span>
+    Integer<span class="token punctuation">[</span><span class="token punctuation">]</span> size<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/*
+        AF(n) : a union containing n elements, 
+        their parent nodes are stored in &amp;#123;parent&amp;#125;
+        every set's size is stored in size
+
+        Rep invarient:
+        parent != null, elements in parent are greater than or equal to 0, less than n
+        size != null, elements in size are not less than 1
+    */</span>
+
+    <span class="token keyword">public</span> <span class="token function">Union</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        parent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        size <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            parent<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span>
+            size<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * check if p and q are belong to the same set
+     * compress the path at the same time
+     * @param p node p
+     * @param q node q
+     * @return if they are belong to the same set
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isConnect</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">,</span> <span class="token keyword">int</span> q<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>q<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> i <span class="token operator">==</span> j<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * find parent of p
+     * @param p node p
+     * @return its parent
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">find</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> p<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * connect set containing p and set containing q together
+     * @param p node p
+     * @param q node q
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">,</span> <span class="token keyword">int</span> q<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">int</span> i <span class="token operator">=</span> parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> j <span class="token operator">=</span> parent<span class="token punctuation">[</span>q<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">==</span> j<span class="token punctuation">)</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>size<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">>=</span> size<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            parent<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span>
+            size<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+=</span> size<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            parent<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> j<span class="token punctuation">;</span>
+            size<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">+=</span> size<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+</code></pre>
+<h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><blockquote>
+<p>前&#x2F;中&#x2F;后序遍历时间复杂度</p>
+</blockquote>
+<p>因为该遍历算法针对每一个结点作处理，其时间复杂度增长与结点个数有关。一次遍历要考虑N个节点，因此时间复杂度为O(N)</p>
+<blockquote>
+<p>层序遍历</p>
+</blockquote>
+<p>层序遍历的区别在于，该算法时间复杂度的增长与层数有关，假设层数为H，操作次数为1 + 2^1 + 2^2 + …</p>
+<p>因此其时间复杂度为O(2^H)，而H&#x3D;logN，所以时间复杂度为O(N)</p>
+<h3 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h3><p>对于一张有序的顺序表，可以通过不断的将其二分来进行压缩，BST就是二分查找的显式表现。</p>
+<p>根节点的左子树这种的元素均小于根节点的元素，右子树的均大于根节点元素。</p>
+<blockquote>
+<p>删除操作</p>
+</blockquote>
+<p>对于叶子节点，直接将其删除即可。</p>
+<p>对于有单个孩子的结点，用其孩子结点顶替当前结点。</p>
+<p>对于有两个孩子的结点，找到其左子树中最大的结点或右子树中最小的结点(必然是叶子结点或只有一个孩子的结点)来顶替它，然后删除用于顶替的结点。</p>
+<p>tip：但是删除操作做的越多，树的高度就会不断增高，因为每次删除都相当于让树的某一端的结点数量减少，最后失去平衡。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BinSearchTree</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> Node root<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> size<span class="token punctuation">;</span>
+    
+    <span class="token keyword">public</span> Integer <span class="token function">get</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> Integer <span class="token function">getHelper</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">,</span> Node troot<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">==</span> key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> Node <span class="token function">insert</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">,</span> Integer value<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        root <span class="token operator">=</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> root<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> Node <span class="token function">insertHelper</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">,</span> Integer value<span class="token punctuation">,</span> Node troot<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            size<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Pair</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">,</span> null<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">></span> key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                troot<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                troot<span class="token punctuation">.</span>right <span class="token operator">=</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> troot<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">containsKey</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> root<span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delete</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token function">deleteHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> Node <span class="token function">deleteHelper</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">,</span> Node troot<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            troot<span class="token punctuation">.</span>right <span class="token operator">=</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">></span> key<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            troot<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left <span class="token operator">!=</span> null <span class="token operator">&amp;&amp;</span> troot<span class="token punctuation">.</span>right <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                Node tmp <span class="token operator">=</span> <span class="token function">findMax</span><span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                troot<span class="token punctuation">.</span>elem <span class="token operator">=</span> tmp<span class="token punctuation">.</span>elem<span class="token punctuation">;</span>
+                troot<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                    troot <span class="token operator">=</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>right <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                    troot <span class="token operator">=</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">;</span>
+                <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            size<span class="token operator">--</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> troot<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> Node <span class="token function">findMax</span><span class="token punctuation">(</span>Node troot<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>right <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            troot <span class="token operator">=</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> troot<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Node</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">private</span> Pair elem<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> Node left<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> Node right<span class="token punctuation">;</span>
+        <span class="token keyword">public</span> <span class="token function">Node</span><span class="token punctuation">(</span>Pair elem<span class="token punctuation">,</span> BinSearchTree<span class="token punctuation">.</span>Node left<span class="token punctuation">,</span> BinSearchTree<span class="token punctuation">.</span>Node right<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>elem <span class="token operator">=</span> elem<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>left <span class="token operator">=</span> left<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>right <span class="token operator">=</span> right<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>       
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Pair</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">private</span> Integer key<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> Integer value<span class="token punctuation">;</span>
+        <span class="token keyword">public</span> <span class="token function">Pair</span><span class="token punctuation">(</span>Integer key<span class="token punctuation">,</span> Integer value<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>key <span class="token operator">=</span> key<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="平衡树"><a href="#平衡树" class="headerlink" title="平衡树"></a>平衡树</h3><p>在已知一组数据的情况下，若将其按随机顺序插入，则复杂度大概率是O(logN)，但若不提前知道数据，那么有可能会让树退化成单链表，因为先前并没有考虑该往哪里插入数据，基本都是插在底部，因此很有可能只往一端插入数据，让树的高度大幅增加。</p>
+<p>因此我们需要在每一次插入与删除之后检查树的平衡，若失衡则进行调整。</p>
+<blockquote>
+<p>左旋</p>
+</blockquote>
+<p>右端大量的数据破坏了树的平衡，则将原来的根节点作为新根节点的左子树，新根节点原来的左子树接到原根结点的右端。右旋同理。</p>
+<blockquote>
+<p>B tree</p>
+</blockquote>
+<p>使一个结点能够存储多个数据，例如每个结点允许存储3个数据，当数据量大于3时，将当前结点拆分，将第2大的数据放到父节点中存储。这样之后每个结点都有4棵子树，分别存储 &lt; val1, &gt;val1 &amp;&amp; &lt; val2，…的数据。只有当根节点中的数据也超过上限时，树的高度才会增加，将第2大的数据作为新的根节点，然后重新分配子树。</p>
+<blockquote>
+<p>红黑树</p>
+</blockquote>
+<p>红黑树即是B树(2-3树)和二叉树的结合，对于含有两个数据的结点，<strong>逻辑上</strong>添加一个哑结点作为这两个数据的父节点，这样就将他们拆分成二叉树，这个哑结点即为红黑树中的红。</p>
+<h2 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h2><p>将数据本身当作索引，仅仅把数据看作是位，而在数组对应的位置存储布尔值。</p>
+<p>但该方法会占用大量空间，且对于非数字类型不友好（但可以进行映射，确保任何值都会被分配到唯一的一个空间）。</p>
+<p>将元素转换为下标的过程即为hash，注意不要让hash生成负数，或对其进行特殊处理。</p>
+<p>对于超过2亿的数据量，必然会有多个元素共享空间的情况，因此我们不在数组中存储true&#x2F;false,而是对应的元素</p>
+<p>哈希的速度取决于它存储的数据量（越多的数据量代表越多的冲突），N个数据分布在M个桶里时，其平均访问速度为O(N&#x2F;M), L&#x3D;N&#x2F;M即为装在因子。当装载因子超过阈值时，就要进行rehash操作，通过使用更多的桶来减少冲突。</p>
+<p>但装载因子不是唯一需要考虑的东西，当一系列数据共享同一个空间时，其装载因子也可能非常小，因此哈希函数的涉及应确保哈希表中的数据分散存放。</p>
+<h2 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h2><p>可以追踪或移除最大&#x2F;最小元素</p>
+<p>堆用树的形式体现具有如下特质：</p>
+<ol>
+<li>所有的结点都要小于等于它的子节点</li>
+<li>完全</li>
+</ol>
+<blockquote>
+<p>add</p>
+</blockquote>
+<p>先将要插入的结点放在最后一个位置，若其父节点的值大于其值，则将父节点沉降，直到父节点的值小于该节点的值，此时空槽到达满足要求的位置。</p>
+<blockquote>
+<p>remove</p>
+</blockquote>
+<p>先将最后一个结点提升为root结点，然后沉降直到它的值小于它的孩子节点。</p>
+<blockquote>
+<p>用数组表示树</p>
+</blockquote>
+<ol>
+<li><p>将键存储在一个数组中，将对应的父节点id存在另一个数组中</p>
+</li>
+<li><p>只存储数据，不存储结构，假设是一个完整二叉树。</p>
+<p>父节点与子节点的下标关系：</p>
+<p>从1开始存储</p>
+<ul>
+<li>parent &#x3D; k&#x2F;2</li>
+<li>left child &#x3D; 2 * k</li>
+<li>right child &#x3D; 2 *</li>
+</ul>
+</li>
+</ol>
+<h2 id="Graph"><a href="#Graph" class="headerlink" title="Graph"></a>Graph</h2><h3 id="图的实现方式"><a href="#图的实现方式" class="headerlink" title="图的实现方式"></a>图的实现方式</h3><blockquote>
+<p>临接矩阵</p>
+</blockquote>
+<p>用二维数组存储图，其矩阵的行列分别表示起点与终点，矩阵中存储的内容表示两点是否连接，或者是两点间边的权重。</p>
+<p>遍历的时间复杂度为O(V^2)</p>
+<p>首先要将所有点当作起点展开一层循环，该层循环会持续执行V次，接着要检查当前起点所连接到的点，要遍历数组matrix[v][]，该层循环每轮要执行V次，由此可得时间复杂度为V^2次</p>
+<blockquote>
+<p>临接表</p>
+</blockquote>
+<p>维护一组链表，用数组下标表示起点，链表内容表示它连通的结点</p>
+<p>遍历的时间复杂度为O(V + E)</p>
+<p>首先仍要将所有结点都搜索一遍，但针对相邻点的处理有所不同，临接矩阵需要访问所有的点来确定是否连接，而临接矩阵只要访问对应下标上的链表长度的数据。对于没有相邻点的结点，其访问连接点只需要进行1次操作，即在图中没有边时，临接表只需进行V次操作，而当临接矩阵中出现边时，就需要再加上E次操作，因此总时间复杂度为O(V + E)</p>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><blockquote>
+<p>深度优先搜索</p>
+</blockquote>
+<p>遍历完某一结点的所有子节点后再转向另一结点。需要一个数组来保存访问情况，避免重复访问导致无限递归。</p>
+<blockquote>
+<p>图论算法的设计模式</p>
+</blockquote>
+<p>将图的信息传递给专门进行处理的客户类，让客户直接从对应的类中获取需要的处理后的信息。</p>
+<blockquote>
+<p>Topological Sort</p>
+</blockquote>
+<p>拓扑排序是一个<strong>有向无环图</strong>的所有顶点的线性序列，且具有如下特质：</p>
+<ol>
+<li>每一个顶点出现且只出现一次</li>
+<li>若存在一条从A到B的路径，则在序列中A出现在B之前。</li>
+</ol>
+<p>实现：</p>
+<ol>
+<li>维护一个存储入度为0的节点的数组</li>
+<li>每次从该数组中取出一个节点并删除该顶点及所有相关的有向边。</li>
+<li>更新图中其余节点的入度。</li>
+<li>重复2，3直到图为空。</li>
+</ol>
+<p>应用：拓扑排序常用来排序具有依赖关系的任务。</p>
+<h3 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h3><blockquote>
+<p>Shortest Path</p>
+</blockquote>
+<p>广度优先搜索不适合做最短路检索的原因：没有考虑边的权值。</p>
+<p>最短路径最后的生成结果是一棵树</p>
+<p>树的特性：</p>
+<ol>
+<li>没有环路(最短路径问题本身需要满足的条件)</li>
+<li>每一个节点都最多只有一个父节点(对于图中的每一个节点来说，到达它的最短路径数永远&lt;&#x3D;1)</li>
+</ol>
+<p>Dijkstra算法</p>
+<p>按照当前已知最短路的顺序访问各个节点，然后对该节点拥有的边进行松弛操作。</p>
+<p>A*算法</p>
+<p>基本和Dijkstra算法一致，但他访问节点的顺序是按照已知最短路再加上到达下一个节点的估计。和Dijkstra算法相比，该算法的速度会更快，因为D算法的执行顺序是根据到起点的距离，而A*算法加入了对终点距离的估计。</p>
+<h3 id="最小生成树"><a href="#最小生成树" class="headerlink" title="最小生成树"></a>最小生成树</h3><blockquote>
+<p>Spanning tree</p>
+</blockquote>
+<p>最小生成树与最短路径树的区别：</p>
+<p>最短路径树的生成与起点有关，而最小生成树与选取的起点无关。</p>
+<blockquote>
+<p> cut property</p>
+</blockquote>
+<p>对于两棵树来说，要生成他们融合后的最小生成树，那么连接他们的边中权重最小的那一条必然在最小生成树中。</p>
+<p>利用该性质我们可以得出，先将一棵树分割成两部分，一部分有一个节点，另一部分有剩余的所有结点，找出权重最小的连接着两棵树的边加入到MST中，重复上述步骤知道没有节点在第二部分，MST就生成了。</p>
+<p>和最短路径算法相比，最小生成树在增加节点时，更多的考虑该节点与树的距离，而非该节点与某一特定起点的距离。</p>
+<blockquote>
+<p>Kruskal</p>
+</blockquote>
+<p>每次都从图中抽取出权重最小的那条边，若没有构成环路，则将其加入MST中。</p>
+<blockquote>
+<p>判断图中有无环路的方法</p>
+</blockquote>
+<p>使用并查集存储已经连接起来的节点，若在检查某条边时，其对应的节点已经处于同一个集合中，则代表有环路。</p>
+<h2 id="Dynamic-Programming"><a href="#Dynamic-Programming" class="headerlink" title="Dynamic Programming"></a>Dynamic Programming</h2><blockquote>
+<p>Topological sort + Dijkstra</p>
+</blockquote>
+<p>拓扑排序会按照节点之间的依赖关系进行排序，也就是说，当某个节点被访问时，代表能到达它的边已经都被访问过了，因此，到达他的最短路径已经找到，可以在此基础上继续寻找最短路径。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>当一个问题的规模不断增大时，若其与对应的子问题有联系时，可以通过分割成子问题，然后通过子问题的答案推断出当前问题的答案。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Faustxc</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://FaustProMaxPX.github.io/2022/06/29/DataStructure/">http://FaustProMaxPX.github.io/2022/06/29/DataStructure/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Faustxc</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                                    <span class="chip bg-color">数据结构</span>
+                                </a>
+                            
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/06/29/make/">
+                    <div class="card-image">
+                        
+                        <img src="http://re8v056aa.bkt.clouddn.com/1.jpg" class="responsive-img" alt="Remake | Makefile">
+                        
+                        <span class="card-title">Remake | Makefile</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            菜狗的Remake之路 – Makefile篇
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-29
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Remake/" class="post-category">
+                                    Remake
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Makefile/">
+                        <span class="chip bg-color">Makefile</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/06/12/hello-world/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        
+                        <span class="card-title">Hello World</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Faustxc
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">21.9k</span>
+            
+            <br>
+            <span id="sitetime"></span>
+            <br>
+            <!-- 
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">Faustxc</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br> -->
+            
+            
+            
+                
+            
+            <!-- 
+                <span id="busuanzi_container_site_pv" style="display: none;">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv" style="display: none;">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+             -->
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/FaustProMaxPX" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1546327522@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1546327522" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1546327522" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<script language=javascript> 
+    function siteTime() { 
+        window.setTimeout("siteTime()", 1000); 
+        var seconds = 1000; 
+        var minutes = seconds * 60; 
+        var hours = minutes * 60; 
+        var days = hours * 24; 
+        var years = days * 365; 
+        var today = new Date(); 
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1; 
+        var todayDate = today.getDate(); 
+        var todayHour = today.getHours(); 
+        var todayMinute = today.getMinutes(); 
+        var todaySecond = today.getSeconds(); 
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳) 
+        year - 作为date对象的年份，为4位年份值 
+        month - 0-11之间的整数，做为date对象的月份 
+        day - 1-31之间的整数，做为date对象的天数 
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数 
+        minutes - 0-59之间的整数，做为date对象的分钟数 
+        seconds - 0-59之间的整数，做为date对象的秒数 
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */ 
+        var t1 = Date.UTC(2022, 05, 29, 00, 00, 00); //北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1; 
+        var diffYears = Math.floor(diff / years); 
+        var diffDays = Math.floor((diff / days) - diffYears * 365); 
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours); 
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes); 
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds); 
+        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒"; }
+        
+        siteTime(); 
+
+</script>
+<script> 
+    $(document).ready(function () { 
+        var int = setInterval(fixCount, 50); // 50ms周期检测函数 
+        var pvcountOffset = 80000; // 初始化首次数据 
+        var uvcountOffset = 20000; function fixCount() { 
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") { 
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset); 
+                clearInterval(int); 
+            } 
+            if ($("#busuanzi_container_site_pv").css("display") != "none") { 
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
+                clearInterval(int); // 停止检测 
+            } } }); 
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
