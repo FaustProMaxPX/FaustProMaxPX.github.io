@@ -1,0 +1,1626 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Remake | 数据库 (未完待续), XC 的个人博客">
+    <meta name="description" content="菜狗的Remake之路 – 数据库篇
+
+DatabaseSQLGrammarsql描述的是我需要什么，而非怎么做。底层交给DBMS实现。
+
+limit
+
+limit [Integer]
+查找表中前Integer条记录。通常与orderby一">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    
+
+    <title>Remake | 数据库 (未完待续) | XC 的个人博客</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">XC 的个人博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">XC 的个人博客</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Remake | 数据库 (未完待续)</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                                <span class="chip bg-color">数据库</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Remake/" class="post-category">
+                                Remake
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-06-30
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    14 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>菜狗的Remake之路 – 数据库篇</p>
+<span id="more"></span>
+<h1 id="Database"><a href="#Database" class="headerlink" title="Database"></a>Database</h1><h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><h3 id="Grammar"><a href="#Grammar" class="headerlink" title="Grammar"></a>Grammar</h3><p>sql描述的是我需要什么，而非怎么做。底层交给DBMS实现。</p>
+<blockquote>
+<p>limit</p>
+</blockquote>
+<p>limit [Integer]</p>
+<p>查找表中前Integer条记录。通常与orderby一同使用。</p>
+<blockquote>
+<p>group by</p>
+</blockquote>
+<p>将表切分成多个组，并以表为单位进行相关操作。</p>
+<p>group by不允许直接查询非group by参数的字段。</p>
+<p>re: group by会将许多记录作为整体操作，但非group by参数字段在分类后其数量在同一组中也势必&gt;&#x3D;1 无法成为一个整体被反映到表中，因此不被允许。</p>
+<p>所有的聚合函数都需要针对一个组来使用，如果不显式指明，则整张表作为一个组。</p>
+<p>Having对查询出的组根据给定条件进行过滤。</p>
+<blockquote>
+<p>like</p>
+</blockquote>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">WHERE</span> xxx <span class="token operator">LIKE</span> <span class="token string">'B_%'</span>
+<span class="token comment" spellcheck="true">-- _ means any character. % means any number of that character</span>
+
+<span class="token comment" spellcheck="true">-- Regular expression</span>
+<span class="token comment" spellcheck="true">-- ~ means match</span>
+<span class="token keyword">WHERE</span> xxx <span class="token operator">~</span> <span class="token string">'B.*'</span>
+</code></pre>
+<blockquote>
+<p>集合运算</p>
+</blockquote>
+<p>UNION: 取并集</p>
+<p>INTERSECT: 取交集</p>
+<p>EXCEPT: 取差集</p>
+<p>加上ALL代表显示重复值。</p>
+<blockquote>
+<p>view</p>
+</blockquote>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">view</span> view_name
+<span class="token keyword">as</span> select_statement
+</code></pre>
+<p>临时视图</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> bname<span class="token punctuation">,</span> scount
+<span class="token keyword">FROM</span> Boats2 B<span class="token punctuation">,</span>
+<span class="token punctuation">(</span>
+    <span class="token keyword">SELECT</span> B<span class="token punctuation">.</span>bid<span class="token punctuation">,</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span>
+    <span class="token keyword">FROM</span> R<span class="token punctuation">.</span>bid <span class="token operator">=</span> B<span class="token punctuation">.</span>bid <span class="token operator">AND</span> B<span class="token punctuation">.</span>color <span class="token operator">=</span> <span class="token string">'red'</span>
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> <span class="token number">b</span><span class="token punctuation">.</span>bid
+<span class="token punctuation">)</span> <span class="token keyword">AS</span> Reds<span class="token punctuation">(</span>bid<span class="token punctuation">,</span> scount<span class="token punctuation">)</span>
+<span class="token keyword">WHERE</span> Reds<span class="token punctuation">.</span>bid <span class="token operator">=</span> B<span class="token punctuation">.</span>bid <span class="token operator">AND</span> scount <span class="token operator">&lt;</span> <span class="token number">10</span>
+
+<span class="token keyword">WITH</span> tablename<span class="token punctuation">(</span><span class="token keyword">columns</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token punctuation">(</span>select_statement<span class="token punctuation">)</span>
+</code></pre>
+<h3 id="Concept"><a href="#Concept" class="headerlink" title="Concept"></a>Concept</h3><blockquote>
+<p>SQL执行流程</p>
+</blockquote>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token keyword">DISTINCT</span> target<span class="token operator">-</span>list
+<span class="token keyword">FROM</span> single <span class="token keyword">table</span>
+<span class="token keyword">WHERE</span> qualification
+<span class="token keyword">GROUP</span> <span class="token keyword">BY</span> grouping list
+<span class="token keyword">HAVING</span> <span class="token keyword">group</span><span class="token operator">-</span>qualification
+</code></pre>
+<ol>
+<li>FROM  确认要查询的表</li>
+<li>WHERE  筛选满足条件的记录</li>
+<li>SELECT  保留所需要(出现在SELECT&#x2F;GROUP BY&#x2F; HAVING)的字段</li>
+<li>GROUP BY  形成需要的组</li>
+<li>HAVING  筛选满足条件的组</li>
+<li>DISTINCT  去除冗余的记录</li>
+</ol>
+<blockquote>
+<p>Division</p>
+</blockquote>
+<p> 查找拥有所有船只的船员 &#x3D;&#x3D;&gt;  查找没有哪艘船不持有的船员</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">select</span> s<span class="token punctuation">.</span>sname
+<span class="token keyword">from</span> Sailors s
+<span class="token keyword">where</span> <span class="token operator">not</span> <span class="token keyword">exists</span> <span class="token punctuation">(</span>
+    <span class="token keyword">select</span> B<span class="token punctuation">.</span>bid
+    <span class="token keyword">from</span> Boats <span class="token number">b</span>
+    <span class="token keyword">where</span> <span class="token operator">not</span> <span class="token keyword">exists</span> <span class="token punctuation">(</span>
+        <span class="token keyword">select</span> R<span class="token punctuation">.</span>id
+        <span class="token keyword">where</span> R<span class="token punctuation">.</span>bid <span class="token operator">=</span> B<span class="token punctuation">.</span>bid
+        <span class="token operator">And</span> R<span class="token punctuation">.</span>sid <span class="token operator">=</span> S<span class="token punctuation">.</span>sid
+    <span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<blockquote>
+<p>NULL</p>
+</blockquote>
+<p>NULL代表<strong>不确定</strong></p>
+<p>所有与NULL直接进行判定的操作都被判为False</p>
+<p>聚合函数会忽略其所有操作的字段中的NULL值</p>
+<h2 id="Hardware"><a href="#Hardware" class="headerlink" title="Hardware"></a>Hardware</h2><h3 id="Disk"><a href="#Disk" class="headerlink" title="Disk"></a>Disk</h3><p>访问的方式不是通过指针解除引用，而是借助API</p>
+<p>READ：将一页数据从磁盘移到内存中，然后通过内存的地址对磁盘进行访问</p>
+<p>WRITE：将一页数据从内存写入磁盘</p>
+<p>注意API调用的速度都非常慢，需要良好的规划。</p>
+<blockquote>
+<p>访问一个页的时间消耗</p>
+</blockquote>
+<p>查找：磁盘臂将磁头定位到目标位置</p>
+<p>旋转延迟：等待目标数据块旋转到磁头下</p>
+<p>传输时间：将数据从磁盘读取到内存</p>
+<p>主要的IO时间消耗在查找和旋转延迟上</p>
+<blockquote>
+<p>预测行为</p>
+</blockquote>
+<p>缓存访问次数多的数据块</p>
+<p>提前将很有可能被访问的数据提取到内存中</p>
+<p>若要写入的是连续的数据块，则可以先进行缓存，最后一并写入。</p>
+<blockquote>
+<p>磁盘中数据块的组织</p>
+</blockquote>
+<p>Next block concept：</p>
+<ul>
+<li>在同一磁道上连续的数据块</li>
+<li>在同一磁盘上的数据块</li>
+<li>在相邻磁盘上的数据块</li>
+</ul>
+<p>因此可以将文件的数据块在磁盘上连续存储，来介绍查询和旋转延迟</p>
+<p>对于顺序的扫描，就可以做到提前提取，一次读取大量连续的数据块（一次性将文件的大部分提取到内存中）</p>
+<h3 id="Files"><a href="#Files" class="headerlink" title="Files"></a>Files</h3><p>表会被存储为逻辑文件，由数据块构成，每个数据块中都存储一系列记录</p>
+<blockquote>
+<p> DB File Structures</p>
+</blockquote>
+<ol>
+<li><p>Unordered Heap Files</p>
+<p>记录在页中随意存放，适用于经常查询所有记录的情况</p>
+</li>
+<li><p>Clustered Heap Files</p>
+<p>记录和页被分组存放</p>
+</li>
+<li><p>Sorted Files</p>
+<p>记录和页按某一顺序存放</p>
+</li>
+<li><p>Index Files</p>
+<p>可能会包含指向其他文件中记录的索引</p>
+</li>
+</ol>
+<h3 id="Page"><a href="#Page" class="headerlink" title="Page"></a>Page</h3><p>Header会包含：</p>
+<ol>
+<li>记录数量</li>
+<li>空余的空间</li>
+<li>可能会有指向下一个元素的指针</li>
+<li>可能会有Bitmaps</li>
+</ol>
+<blockquote>
+<p>布局</p>
+</blockquote>
+<p>方向：</p>
+<ul>
+<li><p>记录数量（定长还是变长）</p>
+</li>
+<li><p>是否打包</p>
+</li>
+</ul>
+<p>定长：</p>
+<ol>
+<li><p>打包</p>
+<p>让记录稠密分布，类似链表的形式。</p>
+<p>Record id &#x3D; (pageId, record number in page)</p>
+<p>添加元素十分容易，但删除需要重组数据，让后面的数据填补被删数据的空白。</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220528161445934.png" alt="稠密布局"></p>
+<ol start="2">
+<li><p>不打包</p>
+<p>在头部添加bitmaps，标记每个存储单元的存储情况</p>
+<p>在插入时只要寻找首个还没被标记的存储单元即可</p>
+<p>删除时只需要清除bitmaps中对应的位即可</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220528161648072.png" alt="稀疏布局"></p>
+<p>变长：</p>
+<p>在page的底部维护一个slot directory，第一个元素（从右往左）为记录的个数，第二个为指向首个空地址的指针，其余位置放置各个记录的id。</p>
+<p>插入元素时，只需要直接插入第二个指针指向的存储单元，并用一个闲置槽记录新纪录的id即可</p>
+<p>删除元素时，回收对应的存储单元，并清除对应id所在的槽。</p>
+<p>删除会导致page中出现不连续的空闲空间，此时可以对其进行再分配，也可以等剩余连续空间用完后再清理。</p>
+<p>而当page大小需要变化时，例如page需要扩容，则直接在slot directory的最后添加记录id即可（从右往左看）</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220528163256111.png" alt="变长布局"></p>
+<h3 id="Record"><a href="#Record" class="headerlink" title="Record"></a>Record</h3><p>关系模型</p>
+<p>每条记录都有一些固定的类型</p>
+<p>不将类型信息存储在记录中而是放在系统目录中，以此节省空间，</p>
+<blockquote>
+<p>定长</p>
+</blockquote>
+<p>在一个文件中，所有记录中字段的类型都是一致的</p>
+<p>在内存和磁盘中字节的表现形式一致。</p>
+<blockquote>
+<p>变长</p>
+</blockquote>
+<p>将变长的字段放在尾部，添加一个记录头，其中存储指向变长字段的指针以及长度</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220530094616356.png" alt="变长字段结构"></p>
+<h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><p>索引是一种数据结构，利用search key实现对data entry的快速查找和修改</p>
+<p>查找操作需要支持许多类型的操作，例如比较时需要考虑一维还是二维比较</p>
+<p>search key可以是表字段的任意子集，并且不一定要是unique键，也可以是某具有唯一性的复合属性</p>
+<p>data entry:存储在索引中的条目</p>
+<h4 id="ISAM"><a href="#ISAM" class="headerlink" title="ISAM"></a>ISAM</h4><p>最简单的做法：对存储键值的文件使用二分查找。但因为有跨页中断，因此效率一般</p>
+<p>改进：再多加一层连接不同的page，将其作为查找树的根节点。节点本身的键值起到标识左右子树范围的作用。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220530150809929.png" alt="ISAM原理图"></p>
+<p>压缩：每个内部节点的最左边的值可以被省略。</p>
+<p>插入：在指定位置插入对应节点，可能需要重新排序。如果插入后会超出原先能容纳的数据量，则会再开辟一块Overflow pages存储，被逻辑连接到最后一块页数据之后。随着超出数据量的增多，查找速度会逐步退化成线性。</p>
+<h4 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+ Tree"></a>B+ Tree</h4><p>结构与ISAM类似, 节点存储&lt;Key, Page Ptr&gt;</p>
+<p>但B+树可以实现动态索引，保持树永远是平衡的，并且支持更高效的插入和删除，因为增长都体现在根节点而非叶子节点。</p>
+<p>约束条件：</p>
+<ol>
+<li>每一个<strong>内部结点</strong>至少被填满一半，d &lt;&#x3D; #entry &lt;&#x3D; 2d</li>
+<li>d称为B树的阶数，结点最大扇出数为2d+1</li>
+</ol>
+<p>B+树的叶子结点之间必须做逻辑连接，因为他不像ISAM一样在物理层面就连在一起，但这也方便它进行动态分配。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220531192910950.png" alt="B+树原理图"></p>
+<p>插入操作：</p>
+<p>查找到新数据应在的叶子结点</p>
+<ol>
+<li><p>若该结点未满：直接将其存入，并重新排序</p>
+</li>
+<li><p>若该结点已满：分裂当前结点，建立一个新的结点，将现有的2d+1个数据中较小的d个拷贝进一个结点1，另一部分拷贝进另一个结点2。然后将结点2中最小的数据拷贝一份传入父节点中。若父节点已满重复上述步骤。</p>
+<p>如果要向新的索引结点传递数据，则直接推入，而非拷贝。</p>
+<p>re：对于B+树来说，所有的数据都存在叶子结点，因此必须在叶子结点保留相关数据，而其对应的值则可以传到索引结点起到划分域的作用。</p>
+</li>
+</ol>
+<p>大规模插入操作：</p>
+<p>将要插入的数据按照键先进行排序，然后直接向叶子结点插入数据，超出可容纳个数时就进行分裂，确保每一个叶子结点中的数据量都达到插入因子。这样和反复的插入相比节省了大量IO时间，已经完成装载的部分不会被算法考虑，节省时间。</p>
+<p>索引结构需要考虑的问题</p>
+<ol>
+<li>支持的查询</li>
+<li>Search key的选择</li>
+<li>数据的存储方式</li>
+<li>变长键的处理</li>
+<li>性能消耗</li>
+</ol>
+<h4 id="Search-Key-and-Ordering"><a href="#Search-Key-and-Ordering" class="headerlink" title="Search Key and Ordering"></a>Search Key and Ordering</h4><p>在一个有序的索引中，它的键都会按照字典序排列</p>
+<p>字典序：先比较search key中的第一个字段，若相等，继续比较第二个字段，以此类推。</p>
+<p>一个复合查询键的格式：整个查询由m个等值比较与一个大小比较(必须放在最后)构成。哦</p>
+<h4 id="Data-Entry-Storage"><a href="#Data-Entry-Storage" class="headerlink" title="Data Entry Storage"></a>Data Entry Storage</h4><p>数据在索引中的存储方式：</p>
+<ol>
+<li>值</li>
+<li>单一引用</li>
+<li>引用链表（当数据量很大时，单一引用的存储方式会分裂出大量的索引记录）</li>
+</ol>
+<p>如果存储引用，则必须能支持多索引查询，否则就需要为每个索引都建立一个索引文件，导致数据冗余，加大修改数据的难度。</p>
+<p>Clustered vs. Unclustered Index</p>
+<p>聚合索引会根据search key确保索引<em>大致有序</em>(并不要求绝对顺序)</p>
+<p>因此聚合索引往往能提供比较好的查询性能。同时顺序的磁盘访问也有助于进行类似prefetching之类的优化工作，并且也方便进行压缩操作。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220602203353495.png" alt="聚合索引 vs. 非聚合索引"></p>
+<p>对于聚合索引，它在查询时要涉及的页明显少于非聚合索引。</p>
+<p>但聚合索引的维护成本相对较高，并且由于其在初始插入时会预留1&#x2F;3空间给之后的插入操作，会带来一定的空间浪费。</p>
+<p>Variable Length Keys &amp; Records</p>
+<p>当字段为变长时，顺序就失去了意义（难以比较），不同的结点会存储不同长度的条目。与此同时，不同索引存储的记录引用个数也会产生较大的差距，不利于高效查询。</p>
+<p>因此针对变长的字段，我们在要求填充超过半数时，是从字节数的角度进行衡量。</p>
+<p>键后缀压缩</p>
+<p>提取记录中键的最小前缀放在头部，然后将剩余部分链接上去。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220602205107634.png" alt="键后缀压缩"></p>
+<p>适用于复合键，且首个属性个体差异不大，之后的属性差异较大。</p>
+<h2 id="Buffer-Management"><a href="#Buffer-Management" class="headerlink" title="Buffer Management"></a>Buffer Management</h2><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220608222913582.png" alt="缓冲区结构"></p>
+<p>当上层向缓存发起请求时，缓存会先在内部查找有没有需要的数据页，如果有，直接返回，如果没有，从磁盘读取到缓存，然后返回。</p>
+<p>脏页：在缓存中有数据被修改，但还没有刷入内存的数据页</p>
+<p>处理方式：用一个dirty bit标识当前页是否是脏页。</p>
+<table>
+<thead>
+<tr>
+<th>FrameId</th>
+<th>PageId</th>
+<th>Dirty?</th>
+<th>Pin count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Pin count显示当前有多少任务在使用该缓存</p>
+<h3 id="Replacement-Policy"><a href="#Replacement-Policy" class="headerlink" title="Replacement Policy"></a>Replacement Policy</h3><p>替换策略：</p>
+<p>Least-recently-used(LRU), Clock</p>
+<p>Most-recently-used(MRU)</p>
+<p>根据访问的数据特征选择</p>
+<h4 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h4><p>替换原则：挑选当前不被使用的，且在近期都没有被使用的数据页替换</p>
+<p>方法：在缓存池的结构中添加一个记录上一次使用截止期的字段</p>
+<table>
+<thead>
+<tr>
+<th>FrameId</th>
+<th>PageId</th>
+<th>Dirty?</th>
+<th>Pin count</th>
+<th>Last used</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>优势：对于部分数据需要被频繁访问的情况很友好</p>
+<p>劣势：找到最不受待见的数据页需要线性时间（可以用堆优化到对数级）</p>
+<h4 id="Clock"><a href="#Clock" class="headerlink" title="Clock"></a>Clock</h4><p>一种类LRU策略，用一个指针依次扫描缓存池中的Frame，在结构中添加一个字段表示是否为最近访问的字段。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220608224724744.png" alt="Clock"></p>
+<p>若指向的页正在被使用，直接跳过。若指向的页ref bits为1，且没有被使用，则将ref bits置为0。若某页既没有被使用，ref bits也为0，则将它替换下来。</p>
+<p>Clock替换掉的仅仅是当前不热门的数据，而LRU会替换掉最不热门的数据，因此Clock相对来说开销会小一点。</p>
+<p>但LRU类型的策略在面对大型数据时都存在致命缺陷:</p>
+<p>当数据页的数量超过了缓存池的大小时，缓存命中率会直接降为0。考虑文件长度为7页，缓存池大小为6页，读取前6页时都在填充缓存池，当读取到第7页时，会将第1页踢掉。若下一步是再次读取第1页，则又需要讲第1页重新从磁盘读入缓存。LRU会将后续马上要用到的数据踢出缓存，大大降低了效率。</p>
+<h4 id="MRU"><a href="#MRU" class="headerlink" title="MRU"></a>MRU</h4><p>当MRU处理大型文件时，第一轮与LRU无异。但在处理第7页数据时，它会踢掉最近使用的，也就是第6页。之后再次读取第1页时就会命中缓存，平均每次读取缓存命中次数为B - (N-B)。因此当文件过大时，命中次数也会下降。</p>
+<p>综上：LRU在随机读取，涉及热门程度的数据的读取上占据优势。MRU在重复读取上占据优势。DBMS会根据查询数据特征选择相对优秀的策略。</p>
+<h3 id="DBMS-vs-OS-Buffer-Cache"><a href="#DBMS-vs-OS-Buffer-Cache" class="headerlink" title="DBMS vs OS Buffer Cache"></a>DBMS vs OS Buffer Cache</h3><p>OS不会管理数据库的缓存</p>
+<p>re：</p>
+<ol>
+<li>不同OS支持的操作不相同，但都会支持DBMS，因此放在DBMS上具备更好的适配性</li>
+<li>OS只能识别物理层面上的连续的数据页，而DBMS可以根据其索引，例如B+树叶子结点的兄弟属性来识别逻辑上连续的数据页，能够更好的进行类似pre-fetching的操作。</li>
+<li>OS无法强制让数据刷入磁盘。</li>
+</ol>
+<h2 id="Sorting-and-Hashing"><a href="#Sorting-and-Hashing" class="headerlink" title="Sorting and Hashing"></a>Sorting and Hashing</h2><h3 id="out-of-core-algorithm"><a href="#out-of-core-algorithm" class="headerlink" title="out-of-core algorithm"></a>out-of-core algorithm</h3><h4 id="Single-passing-Streaming"><a href="#Single-passing-Streaming" class="headerlink" title="Single passing Streaming"></a>Single passing Streaming</h4><p>利用函数f(x)将记录映射为另一个值。</p>
+<p>尽可能地减少RAM的使用（映射函数需要让产出的结果占用空间小于其对应的记录），降低IO使用率。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220459995.png" alt="单缓冲"></p>
+<h4 id="Double-Buffer"><a href="#Double-Buffer" class="headerlink" title="Double Buffer"></a>Double Buffer</h4><p>主线程利用一对输入输出缓冲区进行常规的映射操作。</p>
+<p>另加一个IO线程，向目前没有使用的输入输出缓冲区填充&#x2F;释放数据。</p>
+<p>当主线程完成操作，等待缓冲区时，直接交换缓冲区。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220755064.png" alt="双缓冲"></p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220804636.png" alt="双缓冲(翻转后)"></p>
+<h4 id="2-Way"><a href="#2-Way" class="headerlink" title="2-Way"></a>2-Way</h4><p>Pass 0：</p>
+<p>读取一个数据页，排序并写入。</p>
+<p>只使用一个缓冲区。</p>
+<p>重复类似步骤，将整个文件包含的数据页写入，并保证每一页有序。</p>
+<p>Pass 1，2，3 …:</p>
+<p>至少需要3个缓冲区（假设每个缓冲区的大小为一个数据页）</p>
+<p>将两个输入缓冲区的数据进行归并排序传给输出缓冲区。</p>
+<blockquote>
+<p>2-Way External sort</p>
+</blockquote>
+<p>拥有&gt;3个缓冲区</p>
+<p>Pass 0:</p>
+<p>使用B个缓冲区，每次导入B页数据，总共需要N&#x2F;B（上取）个runs，每一个runs里运行一个排序进程。</p>
+<p>Pass 1：</p>
+<p>每个runs的数据长度为B，本轮可以进行B-1个runs的归并</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611224041793.png" alt="2路外部归并流程"></p>
+<p>因此在Pass 1可以完成B(B-1) pages数据的排序。</p>
+<h4 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h4><p>将数据分批读取到内存中，在进行hash操作。</p>
+<p>两步骤：</p>
+<ol>
+<li><p>Divide</p>
+<p>使用哈希函数hp将记录流传递到指定的磁盘分区</p>
+<p>满足匹配条件的都处在同一分区，确保具有同样特征的值不会在内存中被不同的哈希表计算（去除冗余）。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611230629236.png" alt="磁盘内分块"></p>
+</li>
+<li><p>Conquer</p>
+<p>利用哈希函数hr，将分区读取到RAM的hash表中</p>
+<p>然后读取桶中的数据，并将它们回写到磁盘中</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611230641780.png" alt="内存中哈希"></p>
+<p>若划分之后的数据块还是很大，则进行递归划分操作，满足条件后再进行Conquer。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Faustxc</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://FaustProMaxPX.github.io/2022/06/30/Database/">http://FaustProMaxPX.github.io/2022/06/30/Database/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Faustxc</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                                    <span class="chip bg-color">数据库</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/06/30/Cpp/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="C++">
+                        
+                        <span class="card-title">C++</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            C++极简笔记
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="post-category">
+                                    编程语言
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/C/">
+                        <span class="chip bg-color">C++</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/06/30/coroutine/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="字节青训 | Go语言基本特质">
+                        
+                        <span class="card-title">字节青训 | Go语言基本特质</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            啥都听不懂的青训营 摸鱼笔记之Go语言基本特质
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%9D%92%E8%AE%AD%E6%91%B8%E9%B1%BC%E7%AC%94%E8%AE%B0/" class="post-category">
+                                    青训摸鱼笔记
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Go/">
+                        <span class="chip bg-color">Go</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">39.7k</span>
+            
+            <br>
+            <span id="sitetime"></span>
+            <br>
+            <!-- 
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">Faustxc</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br> -->
+            
+            
+            
+                
+            
+            <!-- 
+                <span id="busuanzi_container_site_pv" style="display: none;">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv" style="display: none;">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+             -->
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/FaustProMaxPX" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1546327522@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1546327522" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1546327522" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<script language=javascript> 
+    function siteTime() { 
+        window.setTimeout("siteTime()", 1000); 
+        var seconds = 1000; 
+        var minutes = seconds * 60; 
+        var hours = minutes * 60; 
+        var days = hours * 24; 
+        var years = days * 365; 
+        var today = new Date(); 
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1; 
+        var todayDate = today.getDate(); 
+        var todayHour = today.getHours(); 
+        var todayMinute = today.getMinutes(); 
+        var todaySecond = today.getSeconds(); 
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳) 
+        year - 作为date对象的年份，为4位年份值 
+        month - 0-11之间的整数，做为date对象的月份 
+        day - 1-31之间的整数，做为date对象的天数 
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数 
+        minutes - 0-59之间的整数，做为date对象的分钟数 
+        seconds - 0-59之间的整数，做为date对象的秒数 
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */ 
+        var t1 = Date.UTC(2022, 05, 29, 00, 00, 00); //北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1; 
+        var diffYears = Math.floor(diff / years); 
+        var diffDays = Math.floor((diff / days) - diffYears * 365); 
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours); 
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes); 
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds); 
+        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒"; }
+        
+        siteTime(); 
+
+</script>
+<script> 
+    $(document).ready(function () { 
+        var int = setInterval(fixCount, 50); // 50ms周期检测函数 
+        var pvcountOffset = 80000; // 初始化首次数据 
+        var uvcountOffset = 20000; function fixCount() { 
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") { 
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset); 
+                clearInterval(int); 
+            } 
+            if ($("#busuanzi_container_site_pv").css("display") != "none") { 
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
+                clearInterval(int); // 停止检测 
+            } } }); 
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
