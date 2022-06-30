@@ -408,14 +408,14 @@ limit [Integer]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4k
+                    5.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    14 分
+                    19 分
                 </div>
                 
 
@@ -809,6 +809,108 @@ limit [Integer]
 </ol>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611230641780.png" alt="内存中哈希"></p>
 <p>若划分之后的数据块还是很大，则进行递归划分操作，满足条件后再进行Conquer。</p>
+<h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><h3 id="关系操作符和查询规划"><a href="#关系操作符和查询规划" class="headerlink" title="关系操作符和查询规划"></a>关系操作符和查询规划</h3><p>假设有一查询<br>$$<br>𝜋_{sname}(𝜋_{sid}(𝜋_{bid}(𝜎_{color}&#x3D;’red’(Boats)) ⋈ Res) ⋈ Sailors)<br>$$<br>则其对应的数据流图为</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220630213659.png"></p>
+<p>其中每一条边都代表数据的流向</p>
+<p>结点代表关系运算符</p>
+<p>源代表某个关系</p>
+<h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><p>对于每一个关系运算符要做的操作都会有一个对应的迭代器。筛选传入数据流中符合条件的元素，再传递到下一个操作的迭代器中。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">iterator</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">setup</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Iterator<span class="token operator">></span> inputs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    tuple <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+</code></pre>
+<p>init和next操作可以采取流式或批量算法</p>
+<p>流式：每次调用只有少量，有限的工作。</p>
+<p>批量：每次执行一系列的工作，在完成之前不会产生输出。</p>
+<h4 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h4><pre><code>init(predicate): 
+    child.init()
+    pred = predicate;
+    current = NULL;
+next(): 
+    while (current != EOF &amp;&amp; !pred(current))
+        current = child.next();
+    return current; 
+close(): 
+    child.close()
+</code></pre>
+<p>首先初始化自己的子结点，并装配断言</p>
+<p>next():不断循环直至到达文件末尾或是当前字段满足断言条件</p>
+<h4 id="Heap-Scan"><a href="#Heap-Scan" class="headerlink" title="Heap Scan"></a>Heap Scan</h4><p>该迭代器不可能有孩子，因为其处于最底层，负责从磁盘中读取指定关系的数据。</p>
+<pre><code>init(relation): 
+    heap = open heap file for this relation;
+    cur_page = heap.first_page(); // first page
+    cur_slot = cur_page.first_slot(); // first slot on that page
+    
+next(): 
+    if (cur_page == NULL) return EOF;  // End Of Fun
+    current = [cur_page, cur_slot]; // we will return this recordId
+    // advance the slot
+    cur_slot = cur_slot.next();
+    if (cur_slot == NULL) &#123;
+      // advance to next page, first slot
+      cur_page = cur_page.next();
+      if (cur_page != NULL)
+         cur_slot = cur_page.first_slot();
+    &#125;
+    return current; 
+    
+close(): 
+    heap.close()
+</code></pre>
+<h4 id="Sort"><a href="#Sort" class="headerlink" title="Sort"></a>Sort</h4><pre><code>init(keys):                // all of pass 0 in init, a blocking call
+    child.init()
+    repeatedly call child.next() and generate the sorted runs on disk, until child gives EOF
+    // set up for pass 1, assumes enough buffers to merge
+    open each sorted run file and load into input buffer for pass 1
+    
+next():              // pass 1 (assumes enough buffers to merge)
+    output = min tuple across all buffers
+    if min tuple was last one in its buffer, fetch next page from that run into buffer
+    return output (or EOF -- “End of Fun” -- if no tuples remain)
+close(): 
+    deallocate the runs files
+    child.close()
+</code></pre>
+<p>首先初始化所有的子节点，确保他们以及准备好了下一步操作。然后获取子节点的所有数据，并照上一章所讲的排序方法进行第0轮排序。完成后将所有的数据载入缓冲区进行归并。</p>
+<h4 id="Group-By"><a href="#Group-By" class="headerlink" title="Group By"></a>Group By</h4><pre><code>init(group_keys, aggs):
+    child.init()
+    cur_group = NULL;
+next():
+    result = NULL
+    do &#123;
+        tup = child.next();
+        if (group(tup) != cur_group) &#123; // New group!
+            if (cur_group != NULL)     // Form a result for current group
+                result = [cur_group, final() of all aggs]
+            cur_group = group(tup);
+            call init() on all the aggs
+        &#125; 	
+        call merge(tup) on all the aggs 
+    &#125; while (!result);
+    return result;
+close():
+    child.close()
+</code></pre>
+<p>这种实现方式的前提是已经完成排序。初始化参数是要分组的键和聚合函数</p>
+<p>next()操作：</p>
+<p>不断获取下一个数据，直到遇见不同组的数据</p>
+<p>当碰到新的某一组数据，且不是碰到的第一个组时，宣告本轮分组完成，结果包含当前组以及聚合函数的结果。若是碰到的第一个组，就获取对应分组并开始聚合函数的计算。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220630221951.png"></p>
+<p>以上就是一个完整的查询流程。整个过程都不需要将输出的数据存储到磁盘。所有迭代器的操作结果都会作为上一层的参数继续参与运算，元组流只需要留存在栈中。</p>
+<h2 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h2><h3 id="Simple-Nested-Loop-Join"><a href="#Simple-Nested-Loop-Join" class="headerlink" title="Simple Nested-Loop Join"></a>Simple Nested-Loop Join</h3><p>简单嵌套循环，每次循环从驱动表中读取一行数据，然后扫描一遍被驱动表，添加满足条件的数据。</p>
+<p>假设驱动表R有1000张数据页，每一页有100条数据</p>
+<p>被驱动表S有500张数据页，每一页有80条数据</p>
+<p>则开销为：</p>
+<p>扫描一遍驱动表要1000次IO(IO操作的单位为数据页而非记录)，而对于R中每一条记录，都要扫描一遍S表，IO次数为100000 * 500</p>
+<p>PS：若S为驱动表，开销为500 + 40000 * 1000，相对减少500次IO</p>
+<h3 id="Page-Nested-Loop-Join"><a href="#Page-Nested-Loop-Join" class="headerlink" title="Page Nested-Loop Join"></a>Page Nested-Loop Join</h3><p>和SNL相比，每次从驱动表中获取一页数据，然后从被驱动表获取一页数据。将获取的两页数据先进行一次Join操作。</p>
+<p>此时开销降低为 1000 + 1000 * 500(R为驱动表)</p>
+<p>演化：Chunk Nested-Loop Join</p>
+<p>一次IO从驱动表中获取几页数据，其余操作同上。</p>
+<p>开销可降低为 1000 + (1000 &#x2F; N) * 500 N为一次性获取的页数，一般为缓冲区数-2</p>
 
                 
             </div>
@@ -1323,7 +1425,7 @@ limit [Integer]
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">39.7k</span>
+                        class="white-color">40.8k</span>
             
             <br>
             <span id="sitetime"></span>
