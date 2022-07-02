@@ -4,18 +4,16 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="字节青训 | Go语言基本特质, XC 的个人博客">
-    <meta name="description" content="啥都听不懂的青训营 摸鱼笔记之Go语言基本特质
+    <meta name="keywords" content="Remake | CS50 AI入门笔记, XC 的个人博客">
+    <meta name="description" content="Introduction  to  AI
+术语
+actions
+在某一状态下可以作出的选择
+ACTION(s) 返回在状态s下可以采取的行动集合。
 
-
-协程协程：用户态，轻量级线程，栈MB级别
-线程：内核态，线程中可以运行多个协程，栈KB级别
-协程主要通信方式通过通信共享内存，类似生产者消费者模型
-
-
-Channel 通道
-
-make(c">
+transition model
+针对某个状态采取某个动作后产生的结果
+RESULT(s,">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -29,7 +27,7 @@ make(c">
 
     
 
-    <title>字节青训 | Go语言基本特质 | XC 的个人博客</title>
+    <title>Remake | CS50 AI入门笔记 | XC 的个人博客</title>
     <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -256,12 +254,12 @@ make(c">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">字节青训 | Go语言基本特质</h1>
+                    <h1 class="description center-align post-title">Remake | CS50 AI入门笔记</h1>
                 </div>
             </div>
         </div>
@@ -377,8 +375,8 @@ make(c">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Go/">
-                                <span class="chip bg-color">Go</span>
+                            <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">
+                                <span class="chip bg-color">人工智能</span>
                             </a>
                         
                     </div>
@@ -389,8 +387,8 @@ make(c">
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E9%9D%92%E8%AE%AD%E6%91%B8%E9%B1%BC%E7%AC%94%E8%AE%B0/" class="post-category">
-                                青训摸鱼笔记
+                            <a href="/categories/Remake/" class="post-category">
+                                Remake
                             </a>
                         
                     </div>
@@ -402,7 +400,7 @@ make(c">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-06-30
+                    2022-07-02
                 </div>
                 
 
@@ -411,14 +409,14 @@ make(c">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    677
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    6 分
                 </div>
                 
 
@@ -433,70 +431,161 @@ make(c">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>啥都听不懂的青训营 摸鱼笔记之Go语言基本特质</p>
-<span id="more"></span>
-
-<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p>协程：用户态，轻量级线程，栈MB级别</p>
-<p>线程：内核态，线程中可以运行多个协程，栈KB级别</p>
-<h3 id="协程主要通信方式"><a href="#协程主要通信方式" class="headerlink" title="协程主要通信方式"></a>协程主要通信方式</h3><p>通过通信共享内存，类似生产者消费者模型</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/coroutine2022-05-08%2019-45-09%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="协程通信"></p>
-<blockquote>
-<p>Channel 通道</p>
-</blockquote>
-<p>make(chan 元素类型, [缓冲大小])</p>
-<p>无缓冲通道又称为同步通道</p>
-<p>适当的缓冲大小可以弥补生产者消费者执行速度不均衡的问题 </p>
-<blockquote>
-<p>同步</p>
-</blockquote>
-<p>​	可使用lock,WaitGroup实现同步。</p>
-<h2 id="Go的依赖管理"><a href="#Go的依赖管理" class="headerlink" title="Go的依赖管理"></a>Go的依赖管理</h2><h3 id="1-GoPath"><a href="#1-GoPath" class="headerlink" title="1. GoPath"></a>1. GoPath</h3><blockquote>
-<p>结构</p>
-</blockquote>
-<ul>
-<li><p>bin: 项目编译的二进制文件</p>
+                <h1 id="Introduction-to-AI"><a href="#Introduction-to-AI" class="headerlink" title="Introduction  to  AI"></a>Introduction  to  AI</h1><span id="more"></span>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><ol>
+<li><p>actions</p>
+<p>在某一状态下可以作出的选择</p>
+<p>ACTION(s) 返回在状态s下可以采取的行动集合。</p>
 </li>
-<li><p>pkg: 项目编译的中间产物，加速编译</p>
+<li><p>transition model</p>
+<p>针对某个状态采取某个动作后产生的结果</p>
+<p>RESULT(s, action)返回由当前状态采取某行动后生成的新模型。</p>
 </li>
-<li><p>src: 项目源码</p>
-<p>项目代码直接依赖于src下的源码</p>
-<p>缺陷：无法处理项目代码依赖不同版本的情况</p>
+<li><p>state space</p>
+<p>从初始状态开始经过一系列行为可能产生的状态。</p>
 </li>
-</ul>
-<h3 id="2-GoVendor"><a href="#2-GoVendor" class="headerlink" title="2. GoVendor"></a>2. GoVendor</h3><p>项目目录下新增vendor文件，所有依赖包副本形式放在$ProjectRoot&#x2F;vendor</p>
-<p>依赖寻址：有先到vendor下，再到GoPath下</p>
-<p>问题：</p>
-<ul>
-<li>无法控制依赖版本</li>
-<li>更新项目又可能出现依赖冲突，导致编译出错。</li>
-<li>本质：仍旧依赖的是源码，无法通过版本分辨</li>
-</ul>
-<h3 id="3-Go-Module"><a href="#3-Go-Module" class="headerlink" title="3. Go Module"></a>3. Go Module</h3><p>通过go.mod文件进行版本管理</p>
-<blockquote>
-<p>依赖管理三要素</p>
-</blockquote>
-<pre><code> 1. 配置文件，描述依赖   	go.mod
- 1. 中心仓库管理依赖库       Proxy
- 1. 本地工具                         go get/mod
+</ol>
+<h2 id="Search"><a href="#Search" class="headerlink" title="Search"></a>Search</h2><p>search problems contain</p>
+<ol>
+<li>initial state</li>
+<li>actions</li>
+<li>transition model</li>
+<li>goal test 测试给定的状态是否为目标状态</li>
+<li>path cost function 代价计算</li>
+</ol>
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>是一种记录当前状态信息的数据结构，其中包含：</p>
+<ol>
+<li>当前状态描述</li>
+<li>父状态</li>
+<li>由父状态转移到当前状态采取的行动</li>
+<li>到达当前状态的消耗</li>
+</ol>
+<h3 id="MiniMax"><a href="#MiniMax" class="headerlink" title="MiniMax"></a>MiniMax</h3><p>进行二元博弈时，做最坏的打算，尽最大的努力。</p>
+<p>博弈结果用分数来表示，A胜加分，B胜减分。一方尽可能的使分数增大，一方尽可能的使分数减少。</p>
+<p>由于任何一方在做决策时都会受到另一方之前所作决策的影响。例如A要在B尽可能降低了分数的情况下，作出最大程度提高分数的决策。</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">MAX_VALUE</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true"># 若当前状态对局已结束，则返回对局结果</span>
+    <span class="token keyword">if</span> TERMINAL<span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> UTILITY<span class="token punctuation">(</span>state<span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true"># 初始化当前分数为负无穷</span>
+    v <span class="token operator">=</span> <span class="token operator">-</span>INFINITY
+    <span class="token comment" spellcheck="true"># 尝试所有可以由当前状态派生出的状态，计算对手在派生状态中采取的降低分数的决策。选取所有派生中仍旧能带来最大收益的状态。</span>
+    <span class="token keyword">for</span> action <span class="token keyword">in</span> ACTIONS<span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        v <span class="token operator">=</span> MAX<span class="token punctuation">(</span>v<span class="token punctuation">,</span> MIN_VALUE<span class="token punctuation">(</span>RESULT<span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> v
 </code></pre>
-<p>对于所需要的不同版本的依赖，go会采取最低兼容版本算法。</p>
-<blockquote>
-<p>依赖分发-Proxy</p>
+<p>如此递归的求解可能的状态，效率并不高，因此可以做一定的剪枝操作，例如当派生状态1的最小收益为4时，若派生状态2已经确定其最小值小于4（孙子状态有收益值已经小于4了，则对手采取操作后该派生的最大收益必定不可能大于4）。此时可以直接忽略该状态。</p>
+<p>Limit Minimax</p>
+<p>限制minimax的求解次数，例如限制搜索树的深度，每一步决策只尝试计算之后X步的可能状态。同时添加一个估计函数，判断达成目标的可能性。</p>
+<h2 id="Knowledge"><a href="#Knowledge" class="headerlink" title="Knowledge"></a>Knowledge</h2><p>model:负责对所有可能的逻辑语句作出判断</p>
+<p>knowledge base: 计算机初始情况下已知正误的逻辑语句集合</p>
+<p>model check：依据已有的知识来推断给定的语句是否成立。罗列所有的可能性，判断何时前置条件与查询结果均成立。</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">model_check</span><span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> qeury<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    
+    <span class="token keyword">def</span> <span class="token function">check_all</span><span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> symbols<span class="token punctuation">,</span> model<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment" spellcheck="true"># all of the symbols have been assigned</span>
+        <span class="token keyword">if</span> <span class="token operator">not</span> symbols<span class="token punctuation">:</span>
+            <span class="token comment" spellcheck="true"># if this model is compatiable with knowledge</span>
+            <span class="token comment" spellcheck="true"># return whether query is compatiable with model</span>
+            <span class="token keyword">if</span> knowledge<span class="token punctuation">.</span>evaluate<span class="token punctuation">(</span>model<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> query<span class="token punctuation">.</span>evaluate<span class="token punctuation">(</span>model<span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true"># else this model is nonsense to us</span>
+            <span class="token keyword">return</span> <span class="token boolean">True</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            remaining <span class="token operator">=</span> symbols<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true"># pop a symbol to assign</span>
+            p <span class="token operator">=</span> remaining<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token comment" spellcheck="true"># 分两种情况讨论，当前条件为真或当前条件为假</span>
+            model_true <span class="token operator">=</span> model<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            model_true<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">True</span>
+            model_false <span class="token operator">=</span> model<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            model_false<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">False</span>
+            <span class="token comment" spellcheck="true"># 如果两种情况无法同时为真，就代表还有其他条件影响结果，此时不能得出结论。但若同时为真，就代表无论其余条件是什么，目前已有知识已经足够作出判断</span>
+            <span class="token keyword">return</span> check_all<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> remaining<span class="token punctuation">,</span> model_true<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token operator">&amp;</span> chekc_all<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> remaining<span class="token punctuation">,</span> model_false<span class="token punctuation">)</span>
+    
+    symbols <span class="token operator">=</span> set<span class="token punctuation">.</span>union<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">)</span>
+    check_all<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> symbols<span class="token punctuation">,</span> dict<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<h2 id="Probability"><a href="#Probability" class="headerlink" title="Probability"></a>Probability</h2><blockquote>
+<p>unconditional probability</p>
 </blockquote>
-<p>在源站与目标之间加一层代理，代理缓存源站中的依赖</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/coroutine2022-05-08%2020-34-11%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/coroutine2022-05-08%2020-34-35%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></p>
-<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><h3 id="1-规则"><a href="#1-规则" class="headerlink" title="1. 规则"></a>1. 规则</h3><p>所有测试文件以_test.go结尾</p>
-<p>函数命名：func Testxx(*testing.T)</p>
-<p>初始化逻辑放到TestMain中</p>
-<h3 id="2-mock"><a href="#2-mock" class="headerlink" title="2. mock"></a>2. mock</h3><p>模仿真实对象行为的模拟对象</p>
-<p>mock模拟的不是测试对象而是<strong>测试对象的依赖</strong></p>
-<p>Why？</p>
+<p>在没有任何前提条件的情况下作出判断</p>
+<blockquote>
+<p>conditional probability</p>
+</blockquote>
+<p>基于某些前提，判断某件事发生的可能性。</p>
+<p>符号表示P(a | b)，在b发生的前提下，a发生的可能性。</p>
+<blockquote>
+<p>random variable</p>
+</blockquote>
+<p>象征所有可能出现的情况。</p>
+<blockquote>
+<p>independence</p>
+</blockquote>
+<p>某事件的发生不会影响其他事件发生的可能性。</p>
+<p>即某两个事件相互之间没有关联。</p>
+<h3 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h3><p>P(b | a) &#x3D; P(a | b) * P(b) &#x2F; P(a)</p>
+<p>可以通过该公式，可以推算出一些难以观测的情况的发生概率</p>
+<p>已知在某未知原因下某件有明显影响事件的发生概率，就可以推算出在该明显影响下，对应的未知原因发生的概率。</p>
+<p>例如，每一份疾病报告的正确性难以观测，但在疾病发生的前提下，对应报告的正确率容易采集，这样就可以推算出一份报告检测出疾病的概率。</p>
+<h3 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h3><p>用于表示random variables之间依赖关系的数据结构。</p>
+<h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><ol>
+<li><p>有向图</p>
+</li>
+<li><p>每一个节点象征一个随即变量</p>
+</li>
+<li><p>从X指向Y的箭头表示X是Y的父节点</p>
+</li>
+<li><p>每一个节点都有可能性分布 P(X | Parent(X))</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/AIbyese%20network.png" alt="byese network"></p>
+</li>
+</ol>
+<h4 id="推论操作"><a href="#推论操作" class="headerlink" title="推论操作"></a>推论操作</h4><ol>
+<li>枚举</li>
+</ol>
 <ul>
-<li>(1)提高 A 的测试覆盖率。A 依赖 B，本质上依赖的是 B 的返回结果，也就是说 B 的返回结果会影响 A 的行为。通过 mock B 我们可以构造各种正常和异常的来自 B 的返回结果，从而更充分测试 A 的行为。</li>
-<li>(2)避免 B 的因素从而对 A 产生影响。依赖真实的 B 去测试 A 可能有很多问题：B 的开发没有完成时无法测试 A;B 有阻塞性bug 时无法测试 A;B 的依赖 C 有阻塞性 bug 时无法测试 A;</li>
-<li>(3)提高 A 的测试效率。B 的真实行为可能很慢，而 B 的模拟行为是非常快的，因此可以加快 A 的测试执行速度。</li>
+<li>Query X：需要计算概率分布的变量</li>
+<li>Evidence variables E：已知的事件e的变量</li>
+<li>Hidden variable Y：不是以上二者的变量</li>
 </ul>
+<p>$$<br>P(X|e) &#x3D; αP(X,e)&#x3D;α\sum_yP(X,e,y)<br>$$</p>
+<ol start="2">
+<li><p>样本</p>
+<p>生成一定数量的样本，在样本中筛选出符合条件的样本用于计算概率。</p>
+<p>例如，若要求推断火车准点的概率，则查看火车准点在样本中的占比。若有前提条件，则先筛选出满足前提的样本，然后根据这些样本推断概率。</p>
+<p>优化：由于样本生成没有规律，若某个前提条件发生的可能性很小，那么就会导致大量的算力被浪费在生成无用的样本上。</p>
+<p>此时可以采取可能性加权的方式进行优化。</p>
+<p>在获取样本时，固定前提条件必然满足，之后计算在该样本的所有前置条件中，要求的前提条件满足的可能性，可能性越高，权重越大。</p>
+<p>例如：前提条件是火车准点，则在生成一个样本后，根据样本中的天气情况以及道路维护状态计算火车准点的可能性，依此为样本赋予权重。</p>
+</li>
+</ol>
+<h3 id="Markov-model"><a href="#Markov-model" class="headerlink" title="Markov model"></a>Markov model</h3><p>用于模拟伪随机变化系统的随即模型，假设当前的状态只与依赖有限的过去的状态。</p>
+<h4 id="Markov-chain"><a href="#Markov-chain" class="headerlink" title="Markov chain"></a>Markov chain</h4><p>一个随机变量序列，其中每一个变量的分布都遵循Markov假设。</p>
+<h4 id="Hidden-Markov-model"><a href="#Hidden-Markov-model" class="headerlink" title="Hidden Markov model"></a>Hidden Markov model</h4><p>也是一条Markov链，但其中的状态很难被直接且准确地观测到。但一些可观测到的事件可以帮助推断出隐藏的状况。例如：街上的人都带着雨伞 -&gt; 今天下雨。</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>filtering</td>
+<td>根据目前已知的观测结果，计算当前状况的概率分布。</td>
+</tr>
+<tr>
+<td>prediction</td>
+<td>根据目前已知的观测结果，计算未来状况的概率分布。</td>
+</tr>
+<tr>
+<td>smoothing</td>
+<td>根据目前已知的观测结果，计算过去状况的概率分布。</td>
+</tr>
+<tr>
+<td>most likely explanation</td>
+<td>根据目前已知的观测结果，计算最可能的状态序列。</td>
+</tr>
+</tbody></table>
 
                 
             </div>
@@ -523,7 +612,7 @@ make(c">
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FaustProMaxPX.github.io/2022/06/30/coroutine/">http://FaustProMaxPX.github.io/2022/06/30/coroutine/</a>
+                    <a href="http://FaustProMaxPX.github.io/2022/07/02/AI/">http://FaustProMaxPX.github.io/2022/07/02/AI/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -561,8 +650,8 @@ make(c">
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Go/">
-                                    <span class="chip bg-color">Go</span>
+                                <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">
+                                    <span class="chip bg-color">人工智能</span>
                                 </a>
                             
                         </div>
@@ -736,29 +825,30 @@ make(c">
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/06/30/Database/">
+                <a href="/2022/07/02/AI/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Remake | 数据库 (未完待续)">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Remake | CS50 AI入门笔记">
                         
-                        <span class="card-title">Remake | 数据库 (未完待续)</span>
+                        <span class="card-title">Remake | CS50 AI入门笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            菜狗的Remake之路 – 数据库篇
+                            Introduction  to  AI
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -771,11 +861,12 @@ make(c">
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">数据库</span>
+                    <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">
+                        <span class="chip bg-color">人工智能</span>
                     </a>
                     
                 </div>
@@ -789,19 +880,19 @@ make(c">
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/06/30/Architecture/">
+                <a href="/2022/06/30/MySQL/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="字节青训 | 架构">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="MySQL">
                         
-                        <span class="card-title">字节青训 | 架构</span>
+                        <span class="card-title">MySQL</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            啥都听不懂的青训营 摸鱼笔记之架构
+                            MySQL 简易笔记
                         
                     </div>
                     <div class="publish-info">
@@ -812,8 +903,8 @@ make(c">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9D%92%E8%AE%AD%E6%91%B8%E9%B1%BC%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    青训摸鱼笔记
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="post-category">
+                                    编程语言
                                 </a>
                             
                             
@@ -823,8 +914,12 @@ make(c">
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%9E%B6%E6%9E%84/">
-                        <span class="chip bg-color">架构</span>
+                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">数据库</span>
+                    </a>
+                    
+                    <a href="/tags/MySQL/">
+                        <span class="chip bg-color">MySQL</span>
                     </a>
                     
                 </div>
