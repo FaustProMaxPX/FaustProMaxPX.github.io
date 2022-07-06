@@ -404,14 +404,14 @@ Java随记面向过程编程同一个模块或不同模块的函数能够不受�
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    10.8k
+                    11.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    40 分
+                    42 分
                 </div>
                 
 
@@ -689,6 +689,13 @@ Class class = Test.class
 </ul>
 </li>
 </ul>
+<h2 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h2><p>并发:同时完成多个任务，无需等待当前任务完成就可以执行其他的任务。解决了程序因为外部控制导致的阻塞，例如IO。因此并发问题常见于IO密集型任务。</p>
+<p>并行：同时完成在多个位置，完成多个任务。即让多个CPU同时执行程序的不同部分来提升效率。</p>
+<p>并发通过对共享资源的有效控制，提升程序效率。而并行则是通过使用更多的资源，来提升效率。</p>
+<p>trick：抽象泄露，抽象可以通过屏蔽对任务不重要的部分，让人更加容易地理解并设计程序。但抽象如果有所遗漏，即使这些细节被隐藏，也难以掩盖它带来的影响。而支持并发的语言和库似乎多少都有这个问题。</p>
+<p>并发的使用条件</p>
+<p>并发操作需要CPU切换上下文，这会消耗CPU一定的性能。因此，如果程序是CPU密集的，即CPU一般都处于忙碌状态，此时使用并发是没有意义的，应当确保程序开启的线程数和CPU的核心数相等。</p>
+<p>但如果CPU会因某些原因陷入阻塞状态，那么此时使用并发绝对是值得的。</p>
 <h2 id="JDBC"><a href="#JDBC" class="headerlink" title="JDBC"></a>JDBC</h2><p>JDBC:提供一套<strong>统一的数据库接口</strong>由数据库厂商实现</p>
 <h3 id="1-JDBC编写流程："><a href="#1-JDBC编写流程：" class="headerlink" title="1.JDBC编写流程："></a>1.JDBC编写流程：</h3><h5 id="1-1注册驱动：获取Driver类"><a href="#1-1注册驱动：获取Driver类" class="headerlink" title="1.1注册驱动：获取Driver类"></a>1.1注册驱动：获取Driver类</h5><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//com.mysql.cj.jdbc.Driver</span>
 Driver driver <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Driver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1552,7 +1559,7 @@ String sql <span class="token operator">=</span> <span class="token string">"del
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">42.5k</span>
+                        class="white-color">45.8k</span>
             
             <br>
             <span id="sitetime"></span>
