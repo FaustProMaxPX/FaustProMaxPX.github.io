@@ -48,7 +48,7 @@ cin
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 6.2.0"></head>
 
 
 <body>
@@ -417,14 +417,14 @@ cin
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.9k
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    7 分
+                    8 分
                 </div>
                 
 
@@ -433,6 +433,9 @@ cin
         </div>
         <hr class="clearfix">
 
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
         
 
         
@@ -483,10 +486,12 @@ cin
 <p>multimap</p>
 </blockquote>
 <p>一个键可以对应多个值</p>
-<pre class=" language-C++"><code class="language-C++">unordered_multimap<string,int> map;
-    map.insert(&#123;"cxc", 1&#125;);
-    map.insert(&#123;"cxc", 10&#125;);
-</code></pre>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">unordered_multimap&lt;string,int&gt; map;
+    map.insert(&#123;&quot;cxc&quot;, 1&#125;);
+    map.insert(&#123;&quot;cxc&quot;, 10&#125;);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
 <blockquote>
 <p>iterator</p>
 </blockquote>
@@ -511,9 +516,11 @@ cin
 <li>default construction: the construction takes no parameters</li>
 <li>copy construction: use an object to construct another construction as the copy</li>
 </ol>
-<pre class=" language-c++"><code class="language-c++">vector<int> vec&#123;&#125; // default construction
-vector<int> vec&#123;1,2,3&#125; // regular construction
-</code></pre>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">vector&lt;int&gt; vec&#123;&#125; &#x2F;&#x2F; default construction
+vector&lt;int&gt; vec&#123;1,2,3&#125; &#x2F;&#x2F; regular construction<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
 <p>做深拷贝时要注意，若拷贝对象中存储的是指针类型，则应深拷贝指针指向的对象而非指针本身。直接调用STL库中的拷贝构造只会深拷贝存储的对象。</p>
 <p>copy assignment: <em>删除旧的对象</em>，将其变量名用于另一个变量的拷贝。首先确保<code>另一个变量</code>不是自己本身。</p>
 <p>tips: </p>
@@ -521,37 +528,39 @@ vector<int> vec&#123;1,2,3&#125; // regular construction
 <li><p>拷贝构造器，拷贝赋值，析构函数要么全用默认，要么全部自定义。</p>
 </li>
 <li><p>应显示指明子类的构造函数，默认会使用基类的构造函数。</p>
-<pre class=" language-c++"><code class="language-c++">class Drink &#123;
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class Drink &#123;
     private:
-        std::string _flavor
+    	std::string _flavor
     
-    public:
-        Drink() = default; // 显式指明默认构造器
-        Drink(std::string flavor) : _flavor(flavor) &#123;&#125;
+	public:
+		Drink() &#x3D; default; &#x2F;&#x2F; 显式指明默认构造器
+    	Drink(std::string flavor) : _flavor(flavor) &#123;&#125;
 &#125;
 
 class Tea : public Drink &#123;
     public:
-        Tea() = default;
-        Tea(string flavor) : Drink(flavor) &#123;&#125; // invoke base constructor
-&#125;
-</code></pre>
-</li>
+    	Tea() &#x3D; default;
+	    Tea(string flavor) : Drink(flavor) &#123;&#125; &#x2F;&#x2F; invoke base constructor
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <p>若构造器使用explicit修饰，则该构造器不能对参数作隐式的类型转换，也不能用拷贝初始化。</p>
-<pre class=" language-c++"><code class="language-c++">explicit HashMap(size_t bucket_count, const H& hash = H());
-</code></pre>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">explicit HashMap(size_t bucket_count, const H&amp; hash &#x3D; H());<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>对于声明了noexcept的函数，编译器会对其进行优化，但此类函数一旦抛出异常，就会终止程序。</p>
-<pre class=" language-c++"><code class="language-c++">void func() noexcept
-</code></pre>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void func() noexcept<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
 <p>Initializer_list constructor</p>
-<pre class=" language-c++"><code class="language-c++">myvector(const myvector<T>& other) : t_size(other.t_size), length(other.length) &#123;
-        datas = new T[length];
-        for (int i = 0; i < t_size; i++) &#123;
-            datas[i] = other.datas[i];
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">myvector(const myvector&lt;T&gt;&amp; other) : t_size(other.t_size), length(other.length) &#123;
+        datas &#x3D; new T[length];
+        for (int i &#x3D; 0; i &lt; t_size; i++) &#123;
+            datas[i] &#x3D; other.datas[i];
         &#125;
-    &#125;
-</code></pre>
+    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h4 id="折构函数"><a href="#折构函数" class="headerlink" title="折构函数"></a>折构函数</h4><p>删除单个对象关键字：delete</p>
 <p>删除数组关键字：delete []</p>
 <p>折构函数声明：ClassName::~ClassName()</p>
@@ -559,21 +568,25 @@ class Tea : public Drink &#123;
 <p><strong>若一个类要被继承，则必须将其析构函数设置为虚函数</strong></p>
 <h4 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h4><p>允许类外的对象访问类内的私有对象</p>
 <p>初始化列表</p>
-<pre class=" language-c++"><code class="language-c++">private:
-    int logicalSize;
-StringVector::StringVector() : logicalSize(0) &#123;&#125;
-</code></pre>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">private:
+	int logicalSize;
+StringVector::StringVector() : logicalSize(0) &#123;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>语法</p>
-<pre class=" language-C++"><code class="language-C++">class A &#123;
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">class A &#123;
     public:
-        virtual void make() = 0; // The class implementing A must define this method
+    	virtual void make() &#x3D; 0; &#x2F;&#x2F; The class implementing A must define this method
 &#125;;
 
-// 此处的public代表B中所有由A继承来的方法与属性的访问限制照旧
-class B : public A &#123; // B implement A
+&#x2F;&#x2F; 此处的public代表B中所有由A继承来的方法与属性的访问限制照旧
+class B : public A &#123; &#x2F;&#x2F; B implement A
     ...
-&#125;
-</code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <p>对于一个接口，其只能包含纯虚函数。</p>
 <p>对于非虚成员，所有的在父类中与子类成员同名的成员都会被隐藏。</p>
 <p>只有声明为虚函数的方法会被动态绑定到子类上，其余方法一概到编译类型中去寻找。</p>
@@ -582,31 +595,33 @@ class B : public A &#123; // B implement A
 </blockquote>
 <p>concept是一个在编译期间进行判定的断言，属于接口的一类</p>
 <p>对模板类的类型参数进行一定的约束。</p>
-<pre class=" language-c++"><code class="language-c++">template <typename It, typename Type>
-requires Input_Iterator<It> && Iterator_of<It> 
-    && Equality_comparable<Value_type<It>, Type>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">template &lt;typename It, typename Type&gt;
+requires Input_Iterator&lt;It&gt; &amp;&amp; Iterator_of&lt;It&gt; 
+	&amp;&amp; Equality_comparable&lt;Value_type&lt;It&gt;, Type&gt;
 int count(It it, Type val)&#123;
     ...
 &#125;
 
-template <typename It, typename Type>
-concept DerivedFrom = Input_Iterator<It> && Iterator_of<It> 
-    && Equality_comparable<Value_type<It>, Type>
+template &lt;typename It, typename Type&gt;
+concept DerivedFrom &#x3D; Input_Iterator&lt;It&gt; &amp;&amp; Iterator_of&lt;It&gt; 
+	&amp;&amp; Equality_comparable&lt;Value_type&lt;It&gt;, Type&gt;
 
-template <class D, class B>
-int count(It it, Type val) requires DerivedFrom<D, B>
+template &lt;class D, class B&gt;
+int count(It it, Type val) requires DerivedFrom&lt;D, B&gt;
 &#123;
     
-&#125;
-</code></pre>
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h2 id="Lambada"><a href="#Lambada" class="headerlink" title="Lambada"></a>Lambada</h2><p>语法：</p>
 <p>[capture clause] (parameter) -&gt; returnType {function body}</p>
 <p>capture clause:give access to outside variables</p>
 <p>stable_partition()</p>
-<pre class=" language-C++"><code class="language-C++">BidirectionalIterator stable_partition (BidirectionalIterator first,
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">BidirectionalIterator stable_partition (BidirectionalIterator first,
                                         BidirectionalIterator last,
-                                        UnaryPredicate pred);
-</code></pre>
+                                        UnaryPredicate pred);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
 <p>将集合中的元素分成两组，一组符合pred要求，一组不符合，并且不改变各元素相对位置。</p>
 <p>tips：如果调用非STL内置的方法对容器进行操作，该方法只能操作容器内容，但容器大小不会动态变化。</p>
 <h2 id="Const"><a href="#Const" class="headerlink" title="Const"></a>Const</h2><p> 被const修饰的变量不可被修改，包括该变量中的内容。同时若一个函数的参数为const，则在该函数调用的所有函数中都必须满足const，(即不能将一个const参数传递给非const参数)。</p>
@@ -618,16 +633,20 @@ int count(It it, Type val) requires DerivedFrom<D, B>
 <p>const on functions</p>
 </blockquote>
 <p>保证这个函数不会调用除const functions之外的函数，并且不允许修改任何非静态，非可变的成员</p>
-<pre class=" language-c++"><code class="language-c++">void fun() const;
-</code></pre>
-<p>const pointer</p>
-<pre class=" language-c++"><code class="language-c++">// read from right to left
-// const iterator 类似于常量指针
-int * const p; // constant pointer to a non-const int
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void fun() const;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-const int * p; // non-const pointer to a const int
-// const_iterator 类似于指针常量
-</code></pre>
+
+
+<p>const pointer</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; read from right to left
+&#x2F;&#x2F; const iterator 类似于常量指针
+int * const p; &#x2F;&#x2F; constant pointer to a non-const int
+
+const int * p; &#x2F;&#x2F; non-const pointer to a const int
+&#x2F;&#x2F; const_iterator 类似于指针常量<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <p>tips：一个被const修饰的对象同样不能调用非const方法，因此建议在实现一个类的时候，同时实现const和非const两个版本。</p>
 <h2 id="lvalue-and-rvalue"><a href="#lvalue-and-rvalue" class="headerlink" title="lvalue and rvalue"></a>lvalue and rvalue</h2><p>lvalue:被变量名(地址)标识的表达式，可以用<code>&amp;</code>取到地址</p>
 <p>rvalue:临时变量，无法用&amp;取到地址， 无法被保存。</p>
@@ -676,14 +695,16 @@ const int * p; // non-const pointer to a const int
 </blockquote>
 <p>在构造器中获取所有资源</p>
 <p>在析构函数中释放所有资源</p>
-<pre class=" language-c++"><code class="language-c++">// you don't need to invoke close
-ifstream input("xxx.txt");
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; you don&#39;t need to invoke close
+ifstream input(&quot;xxx.txt&quot;);
 
-// you must invoke close
+&#x2F;&#x2F; you must invoke close
 ifstream input();
-input.open("xxx.txt");
-input.close();
-</code></pre>
+input.open(&quot;xxx.txt&quot;);
+input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h2 id="SmartPointer"><a href="#SmartPointer" class="headerlink" title="SmartPointer"></a>SmartPointer</h2><blockquote>
 <p>std::unique_pointer</p>
 </blockquote>
@@ -1044,6 +1065,9 @@ input.close();
 <script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
 
 <!-- 代码语言 -->
 
@@ -1219,7 +1243,7 @@ input.close();
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">45.8k</span>
+                        class="white-color">46.7k</span>
             
             <br>
             <span id="sitetime"></span>

@@ -36,7 +36,7 @@ Linux中一切皆文件隐藏文件以 . 打">
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 6.2.0"></head>
 
 
 <body>
@@ -426,6 +426,9 @@ Linux中一切皆文件隐藏文件以 . 打">
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
 
         
 
@@ -714,8 +717,8 @@ Linux中一切皆文件隐藏文件以 . 打">
 </tr>
 </tbody></table>
 <p>时间格式：</p>
-<pre><code>f1 f2 f3 f4 f5 program
-</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">f1 f2 f3 f4 f5 program<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <ul>
 <li>其中 f1 是表示分钟，f2 表示小时，f3 表示一个月份中的第几日，f4 表示月份，f5 表示一个星期中的第几天。program 表示要执行的程序。</li>
 <li>当 f1 为 * 时表示每分钟都要执行 program，f2 为 * 时表示每小时都要执行程序，其馀类推</li>
@@ -798,13 +801,13 @@ Linux中一切皆文件隐藏文件以 . 打">
 </tr>
 </tbody></table>
 <p>eg：</p>
-<pre class=" language-shell"><code class="language-shell">[root@localhost ~J# at 02:00 2013-07-26
-at> /bin/sync
-at> /sbin/shutdown -h now
-at> <EOT>
-job 9 at 2013-07-26 02:00
-#在指定的时间关机。在一个at任务中是可以执行多个系统命令的
-</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~J<span class="token comment"># at 02:00 2013-07-26</span>
+at<span class="token operator">></span> /bin/sync
+at<span class="token operator">></span> /sbin/shutdown -h now
+at<span class="token operator">></span> <span class="token operator">&lt;</span>EOT<span class="token operator">></span>
+job <span class="token number">9</span> at <span class="token number">2013</span>-07-26 02:00
+<span class="token comment">#在指定的时间关机。在一个at任务中是可以执行多个系统命令的</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>atq:查看当前等待运行的job</p>
 <p>atrm [工作号] 删除指定的job</p>
 
@@ -1161,6 +1164,9 @@ job 9 at 2013-07-26 02:00
 <script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
 
 <!-- 代码语言 -->
 
@@ -1336,7 +1342,7 @@ job 9 at 2013-07-26 02:00
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">45.8k</span>
+                        class="white-color">46.7k</span>
             
             <br>
             <span id="sitetime"></span>

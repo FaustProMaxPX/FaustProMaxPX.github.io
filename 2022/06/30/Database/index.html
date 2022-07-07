@@ -39,7 +39,7 @@ limit [Integer]
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 6.2.0"></head>
 
 
 <body>
@@ -425,6 +425,9 @@ limit [Integer]
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
 
         
 
@@ -449,13 +452,16 @@ limit [Integer]
 <blockquote>
 <p>like</p>
 </blockquote>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">WHERE</span> xxx <span class="token operator">LIKE</span> <span class="token string">'B_%'</span>
-<span class="token comment" spellcheck="true">-- _ means any character. % means any number of that character</span>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">WHERE</span> xxx <span class="token operator">LIKE</span> <span class="token string">'B_%'</span>
+<span class="token comment">-- _ means any character. % means any number of that character</span>
 
-<span class="token comment" spellcheck="true">-- Regular expression</span>
-<span class="token comment" spellcheck="true">-- ~ means match</span>
+<span class="token comment">-- Regular expression</span>
+<span class="token comment">-- ~ means match</span>
 <span class="token keyword">WHERE</span> xxx <span class="token operator">~</span> <span class="token string">'B.*'</span>
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <blockquote>
 <p>集合运算</p>
 </blockquote>
@@ -466,30 +472,36 @@ limit [Integer]
 <blockquote>
 <p>view</p>
 </blockquote>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">view</span> view_name
-<span class="token keyword">as</span> select_statement
-</code></pre>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">create</span> <span class="token keyword">view</span> view_name
+<span class="token keyword">as</span> select_statement<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>临时视图</p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> bname<span class="token punctuation">,</span> scount
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> bname<span class="token punctuation">,</span> scount
 <span class="token keyword">FROM</span> Boats2 B<span class="token punctuation">,</span>
 <span class="token punctuation">(</span>
-    <span class="token keyword">SELECT</span> B<span class="token punctuation">.</span>bid<span class="token punctuation">,</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span>
+	<span class="token keyword">SELECT</span> B<span class="token punctuation">.</span>bid<span class="token punctuation">,</span> <span class="token function">COUNT</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span>
     <span class="token keyword">FROM</span> R<span class="token punctuation">.</span>bid <span class="token operator">=</span> B<span class="token punctuation">.</span>bid <span class="token operator">AND</span> B<span class="token punctuation">.</span>color <span class="token operator">=</span> <span class="token string">'red'</span>
-    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> <span class="token number">b</span><span class="token punctuation">.</span>bid
+    <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> b<span class="token punctuation">.</span>bid
 <span class="token punctuation">)</span> <span class="token keyword">AS</span> Reds<span class="token punctuation">(</span>bid<span class="token punctuation">,</span> scount<span class="token punctuation">)</span>
 <span class="token keyword">WHERE</span> Reds<span class="token punctuation">.</span>bid <span class="token operator">=</span> B<span class="token punctuation">.</span>bid <span class="token operator">AND</span> scount <span class="token operator">&lt;</span> <span class="token number">10</span>
 
-<span class="token keyword">WITH</span> tablename<span class="token punctuation">(</span><span class="token keyword">columns</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token punctuation">(</span>select_statement<span class="token punctuation">)</span>
-</code></pre>
+<span class="token keyword">WITH</span> tablename<span class="token punctuation">(</span><span class="token keyword">columns</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> <span class="token punctuation">(</span>select_statement<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+
+
 <h3 id="Concept"><a href="#Concept" class="headerlink" title="Concept"></a>Concept</h3><blockquote>
 <p>SQL执行流程</p>
 </blockquote>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token keyword">DISTINCT</span> target<span class="token operator">-</span>list
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token keyword">DISTINCT</span> target<span class="token operator">-</span>list
 <span class="token keyword">FROM</span> single <span class="token keyword">table</span>
 <span class="token keyword">WHERE</span> qualification
 <span class="token keyword">GROUP</span> <span class="token keyword">BY</span> grouping list
-<span class="token keyword">HAVING</span> <span class="token keyword">group</span><span class="token operator">-</span>qualification
-</code></pre>
+<span class="token keyword">HAVING</span> <span class="token keyword">group</span><span class="token operator">-</span>qualification<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <ol>
 <li>FROM  确认要查询的表</li>
 <li>WHERE  筛选满足条件的记录</li>
@@ -502,18 +514,20 @@ limit [Integer]
 <p>Division</p>
 </blockquote>
 <p> 查找拥有所有船只的船员 &#x3D;&#x3D;&gt;  查找没有哪艘船不持有的船员</p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">select</span> s<span class="token punctuation">.</span>sname
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">select</span> s<span class="token punctuation">.</span>sname
 <span class="token keyword">from</span> Sailors s
 <span class="token keyword">where</span> <span class="token operator">not</span> <span class="token keyword">exists</span> <span class="token punctuation">(</span>
-    <span class="token keyword">select</span> B<span class="token punctuation">.</span>bid
-    <span class="token keyword">from</span> Boats <span class="token number">b</span>
+	<span class="token keyword">select</span> B<span class="token punctuation">.</span>bid
+    <span class="token keyword">from</span> Boats b
     <span class="token keyword">where</span> <span class="token operator">not</span> <span class="token keyword">exists</span> <span class="token punctuation">(</span>
-        <span class="token keyword">select</span> R<span class="token punctuation">.</span>id
+    	<span class="token keyword">select</span> R<span class="token punctuation">.</span>id
         <span class="token keyword">where</span> R<span class="token punctuation">.</span>bid <span class="token operator">=</span> B<span class="token punctuation">.</span>bid
         <span class="token operator">And</span> R<span class="token punctuation">.</span>sid <span class="token operator">=</span> S<span class="token punctuation">.</span>sid
     <span class="token punctuation">)</span>
-<span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <blockquote>
 <p>NULL</p>
 </blockquote>
@@ -815,85 +829,90 @@ limit [Integer]
 <p>结点代表关系运算符</p>
 <p>源代表某个关系</p>
 <h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><p>对于每一个关系运算符要做的操作都会有一个对应的迭代器。筛选传入数据流中符合条件的元素，再传递到下一个操作的迭代器中。</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">iterator</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">void</span> <span class="token function">setup</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Iterator<span class="token operator">></span> inputs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> iterator <span class="token punctuation">&#123;</span>
+    <span class="token keyword">void</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Iterator</span><span class="token punctuation">></span></span> inputs<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
     tuple <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-</code></pre>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>init和next操作可以采取流式或批量算法</p>
 <p>流式：每次调用只有少量，有限的工作。</p>
 <p>批量：每次执行一系列的工作，在完成之前不会产生输出。</p>
-<h4 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h4><pre><code>init(predicate): 
+<h4 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h4><pre class="line-numbers language-none"><code class="language-none">init(predicate): 
     child.init()
-    pred = predicate;
-    current = NULL;
+    pred &#x3D; predicate;
+    current &#x3D; NULL;
 next(): 
-    while (current != EOF &amp;&amp; !pred(current))
-        current = child.next();
+    while (current !&#x3D; EOF &amp;&amp; !pred(current))
+        current &#x3D; child.next();
     return current; 
 close(): 
     child.close()
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>首先初始化自己的子结点，并装配断言</p>
 <p>next():不断循环直至到达文件末尾或是当前字段满足断言条件</p>
 <h4 id="Heap-Scan"><a href="#Heap-Scan" class="headerlink" title="Heap Scan"></a>Heap Scan</h4><p>该迭代器不可能有孩子，因为其处于最底层，负责从磁盘中读取指定关系的数据。</p>
-<pre><code>init(relation): 
-    heap = open heap file for this relation;
-    cur_page = heap.first_page(); // first page
-    cur_slot = cur_page.first_slot(); // first slot on that page
+<pre class="line-numbers language-none"><code class="language-none">init(relation): 
+    heap &#x3D; open heap file for this relation;
+    cur_page &#x3D; heap.first_page(); &#x2F;&#x2F; first page
+    cur_slot &#x3D; cur_page.first_slot(); &#x2F;&#x2F; first slot on that page
     
 next(): 
-    if (cur_page == NULL) return EOF;  // End Of Fun
-    current = [cur_page, cur_slot]; // we will return this recordId
-    // advance the slot
-    cur_slot = cur_slot.next();
-    if (cur_slot == NULL) &#123;
-      // advance to next page, first slot
-      cur_page = cur_page.next();
-      if (cur_page != NULL)
-         cur_slot = cur_page.first_slot();
+    if (cur_page &#x3D;&#x3D; NULL) return EOF;  &#x2F;&#x2F; End Of Fun
+    current &#x3D; [cur_page, cur_slot]; &#x2F;&#x2F; we will return this recordId
+    &#x2F;&#x2F; advance the slot
+    cur_slot &#x3D; cur_slot.next();
+    if (cur_slot &#x3D;&#x3D; NULL) &#123;
+      &#x2F;&#x2F; advance to next page, first slot
+      cur_page &#x3D; cur_page.next();
+      if (cur_page !&#x3D; NULL)
+         cur_slot &#x3D; cur_page.first_slot();
     &#125;
     return current; 
     
 close(): 
-    heap.close()
-</code></pre>
-<h4 id="Sort"><a href="#Sort" class="headerlink" title="Sort"></a>Sort</h4><pre><code>init(keys):                // all of pass 0 in init, a blocking call
+	heap.close()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h4 id="Sort"><a href="#Sort" class="headerlink" title="Sort"></a>Sort</h4><pre class="line-numbers language-none"><code class="language-none">init(keys):                &#x2F;&#x2F; all of pass 0 in init, a blocking call
     child.init()
     repeatedly call child.next() and generate the sorted runs on disk, until child gives EOF
-    // set up for pass 1, assumes enough buffers to merge
+    &#x2F;&#x2F; set up for pass 1, assumes enough buffers to merge
     open each sorted run file and load into input buffer for pass 1
     
-next():              // pass 1 (assumes enough buffers to merge)
-    output = min tuple across all buffers
+next():              &#x2F;&#x2F; pass 1 (assumes enough buffers to merge)
+    output &#x3D; min tuple across all buffers
     if min tuple was last one in its buffer, fetch next page from that run into buffer
     return output (or EOF -- “End of Fun” -- if no tuples remain)
 close(): 
     deallocate the runs files
     child.close()
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>首先初始化所有的子节点，确保他们以及准备好了下一步操作。然后获取子节点的所有数据，并照上一章所讲的排序方法进行第0轮排序。完成后将所有的数据载入缓冲区进行归并。</p>
-<h4 id="Group-By"><a href="#Group-By" class="headerlink" title="Group By"></a>Group By</h4><pre><code>init(group_keys, aggs):
+<h4 id="Group-By"><a href="#Group-By" class="headerlink" title="Group By"></a>Group By</h4><pre class="line-numbers language-none"><code class="language-none">init(group_keys, aggs):
     child.init()
-    cur_group = NULL;
+    cur_group &#x3D; NULL;
 next():
-    result = NULL
+    result &#x3D; NULL
     do &#123;
-        tup = child.next();
-        if (group(tup) != cur_group) &#123; // New group!
-            if (cur_group != NULL)     // Form a result for current group
-                result = [cur_group, final() of all aggs]
-            cur_group = group(tup);
+        tup &#x3D; child.next();
+        if (group(tup) !&#x3D; cur_group) &#123; &#x2F;&#x2F; New group!
+            if (cur_group !&#x3D; NULL)     &#x2F;&#x2F; Form a result for current group
+                result &#x3D; [cur_group, final() of all aggs]
+            cur_group &#x3D; group(tup);
             call init() on all the aggs
         &#125; 	
         call merge(tup) on all the aggs 
     &#125; while (!result);
     return result;
 close():
-    child.close()
-</code></pre>
+	child.close()
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>这种实现方式的前提是已经完成排序。初始化参数是要分组的键和聚合函数</p>
 <p>next()操作：</p>
 <p>不断获取下一个数据，直到遇见不同组的数据</p>
@@ -1257,6 +1276,9 @@ close():
 <script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
 
 <!-- 代码语言 -->
 
@@ -1432,7 +1454,7 @@ close():
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">45.8k</span>
+                        class="white-color">46.7k</span>
             
             <br>
             <span id="sitetime"></span>

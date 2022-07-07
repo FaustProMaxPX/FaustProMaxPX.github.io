@@ -40,7 +40,7 @@ RESULT(s,">
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 6.2.0"></head>
 
 
 <body>
@@ -426,6 +426,9 @@ RESULT(s,">
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
 
         
 
@@ -463,49 +466,51 @@ RESULT(s,">
 <h3 id="MiniMax"><a href="#MiniMax" class="headerlink" title="MiniMax"></a>MiniMax</h3><p>进行二元博弈时，做最坏的打算，尽最大的努力。</p>
 <p>博弈结果用分数来表示，A胜加分，B胜减分。一方尽可能的使分数增大，一方尽可能的使分数减少。</p>
 <p>由于任何一方在做决策时都会受到另一方之前所作决策的影响。例如A要在B尽可能降低了分数的情况下，作出最大程度提高分数的决策。</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">MAX_VALUE</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment" spellcheck="true"># 若当前状态对局已结束，则返回对局结果</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">MAX_VALUE</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 若当前状态对局已结束，则返回对局结果</span>
     <span class="token keyword">if</span> TERMINAL<span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token keyword">return</span> UTILITY<span class="token punctuation">(</span>state<span class="token punctuation">)</span>
-    <span class="token comment" spellcheck="true"># 初始化当前分数为负无穷</span>
+    <span class="token comment"># 初始化当前分数为负无穷</span>
     v <span class="token operator">=</span> <span class="token operator">-</span>INFINITY
-    <span class="token comment" spellcheck="true"># 尝试所有可以由当前状态派生出的状态，计算对手在派生状态中采取的降低分数的决策。选取所有派生中仍旧能带来最大收益的状态。</span>
+    <span class="token comment"># 尝试所有可以由当前状态派生出的状态，计算对手在派生状态中采取的降低分数的决策。选取所有派生中仍旧能带来最大收益的状态。</span>
     <span class="token keyword">for</span> action <span class="token keyword">in</span> ACTIONS<span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
         v <span class="token operator">=</span> MAX<span class="token punctuation">(</span>v<span class="token punctuation">,</span> MIN_VALUE<span class="token punctuation">(</span>RESULT<span class="token punctuation">(</span>state<span class="token punctuation">,</span> action<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> v
-</code></pre>
+    <span class="token keyword">return</span> v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>如此递归的求解可能的状态，效率并不高，因此可以做一定的剪枝操作，例如当派生状态1的最小收益为4时，若派生状态2已经确定其最小值小于4（孙子状态有收益值已经小于4了，则对手采取操作后该派生的最大收益必定不可能大于4）。此时可以直接忽略该状态。</p>
 <p>Limit Minimax</p>
 <p>限制minimax的求解次数，例如限制搜索树的深度，每一步决策只尝试计算之后X步的可能状态。同时添加一个估计函数，判断达成目标的可能性。</p>
 <h2 id="Knowledge"><a href="#Knowledge" class="headerlink" title="Knowledge"></a>Knowledge</h2><p>model:负责对所有可能的逻辑语句作出判断</p>
 <p>knowledge base: 计算机初始情况下已知正误的逻辑语句集合</p>
 <p>model check：依据已有的知识来推断给定的语句是否成立。罗列所有的可能性，判断何时前置条件与查询结果均成立。</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">model_check</span><span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> qeury<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">model_check</span><span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> qeury<span class="token punctuation">)</span><span class="token punctuation">:</span>
     
     <span class="token keyword">def</span> <span class="token function">check_all</span><span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> symbols<span class="token punctuation">,</span> model<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token comment" spellcheck="true"># all of the symbols have been assigned</span>
-        <span class="token keyword">if</span> <span class="token operator">not</span> symbols<span class="token punctuation">:</span>
-            <span class="token comment" spellcheck="true"># if this model is compatiable with knowledge</span>
-            <span class="token comment" spellcheck="true"># return whether query is compatiable with model</span>
+        <span class="token comment"># all of the symbols have been assigned</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> symbols<span class="token punctuation">:</span>
+            <span class="token comment"># if this model is compatiable with knowledge</span>
+            <span class="token comment"># return whether query is compatiable with model</span>
             <span class="token keyword">if</span> knowledge<span class="token punctuation">.</span>evaluate<span class="token punctuation">(</span>model<span class="token punctuation">)</span><span class="token punctuation">:</span>
                 <span class="token keyword">return</span> query<span class="token punctuation">.</span>evaluate<span class="token punctuation">(</span>model<span class="token punctuation">)</span>
-            <span class="token comment" spellcheck="true"># else this model is nonsense to us</span>
+            <span class="token comment"># else this model is nonsense to us</span>
             <span class="token keyword">return</span> <span class="token boolean">True</span>
         <span class="token keyword">else</span><span class="token punctuation">:</span>
             remaining <span class="token operator">=</span> symbols<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
-            <span class="token comment" spellcheck="true"># pop a symbol to assign</span>
+            <span class="token comment"># pop a symbol to assign</span>
             p <span class="token operator">=</span> remaining<span class="token punctuation">.</span>pop<span class="token punctuation">(</span><span class="token punctuation">)</span>
-            <span class="token comment" spellcheck="true"># 分两种情况讨论，当前条件为真或当前条件为假</span>
+            <span class="token comment"># 分两种情况讨论，当前条件为真或当前条件为假</span>
             model_true <span class="token operator">=</span> model<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
             model_true<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">True</span>
             model_false <span class="token operator">=</span> model<span class="token punctuation">.</span>copy<span class="token punctuation">(</span><span class="token punctuation">)</span>
             model_false<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">False</span>
-            <span class="token comment" spellcheck="true"># 如果两种情况无法同时为真，就代表还有其他条件影响结果，此时不能得出结论。但若同时为真，就代表无论其余条件是什么，目前已有知识已经足够作出判断</span>
+            <span class="token comment"># 如果两种情况无法同时为真，就代表还有其他条件影响结果，此时不能得出结论。但若同时为真，就代表无论其余条件是什么，目前已有知识已经足够作出判断</span>
             <span class="token keyword">return</span> check_all<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> remaining<span class="token punctuation">,</span> model_true<span class="token punctuation">)</span> <span class="token operator">&amp;</span><span class="token operator">&amp;</span> chekc_all<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> remaining<span class="token punctuation">,</span> model_false<span class="token punctuation">)</span>
     
-    symbols <span class="token operator">=</span> set<span class="token punctuation">.</span>union<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">)</span>
-    check_all<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> symbols<span class="token punctuation">,</span> dict<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-</code></pre>
+    symbols <span class="token operator">=</span> <span class="token builtin">set</span><span class="token punctuation">.</span>union<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">)</span>
+    check_all<span class="token punctuation">(</span>knowledge<span class="token punctuation">,</span> query<span class="token punctuation">,</span> symbols<span class="token punctuation">,</span> <span class="token builtin">dict</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h2 id="Probability"><a href="#Probability" class="headerlink" title="Probability"></a>Probability</h2><blockquote>
 <p>unconditional probability</p>
 </blockquote>
@@ -935,6 +940,9 @@ RESULT(s,">
 <script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
 
 <!-- 代码语言 -->
 
@@ -1110,7 +1118,7 @@ RESULT(s,">
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">45.8k</span>
+                        class="white-color">46.7k</span>
             
             <br>
             <span id="sitetime"></span>

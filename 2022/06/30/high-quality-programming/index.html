@@ -50,7 +50,7 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 6.2.0"></head>
 
 
 <body>
@@ -436,6 +436,9 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
 
         
 
@@ -493,8 +496,10 @@
 <li>正常代码最小缩进</li>
 </ol>
 <h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><p>Go提供benchmark工具进行基准性能测试</p>
-<pre class=" language-shell"><code class="language-shell">go test -bench=. -benchmen
-</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">go <span class="token builtin class-name">test</span> -bench<span class="token operator">=</span>. -benchmen<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
 <h3 id="性能优化建议"><a href="#性能优化建议" class="headerlink" title="性能优化建议"></a>性能优化建议</h3><h3 id="预分配"><a href="#预分配" class="headerlink" title="预分配"></a>预分配</h3><p>尽量在make阶段确定切片&#x2F;对象大小</p>
 <p>slice进行扩容时会在已有切片基础上创建切片，不会创建新的底层数组。</p>
 <blockquote>
@@ -865,6 +870,9 @@
 <script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
 
 <!-- 代码语言 -->
 
@@ -1040,7 +1048,7 @@
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">45.8k</span>
+                        class="white-color">46.7k</span>
             
             <br>
             <span id="sitetime"></span>
