@@ -408,14 +408,14 @@ limit [Integer]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.1k
+                    6.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    19 分
+                    23 分
                 </div>
                 
 
@@ -930,6 +930,98 @@ close():
 <p>演化：Chunk Nested-Loop Join</p>
 <p>一次IO从驱动表中获取几页数据，其余操作同上。</p>
 <p>开销可降低为 1000 + (1000 &#x2F; N) * 500 N为一次性获取的页数，一般为缓冲区数-2</p>
+<h3 id="Index-Nested-Loop-Join"><a href="#Index-Nested-Loop-Join" class="headerlink" title="Index Nested-Loop Join"></a>Index Nested-Loop Join</h3><p>驱动表在拿到数据后，直接根据关联字段的索引进行查找。和上述的方法相比，该方法每从驱动表取出一条记录，都只要去查询被驱动表的索引，查询次数为索引的高度。</p>
+<p>开销为：驱动表页数 + 驱动表记录数 * 索引树高度</p>
+<h3 id="Sort-Merge-Join"><a href="#Sort-Merge-Join" class="headerlink" title="Sort-Merge Join"></a>Sort-Merge Join</h3><p>条件：有相同字段(自然连接)或指定的判定条件</p>
+<p>步骤：</p>
+<ol>
+<li>将驱动表和被驱动表按照join key排序</li>
+<li>归并扫描排序后的表并提取出满足条件的元组</li>
+</ol>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">do &#123;
+  if (!mark) &#123;
+    while (r &lt; s) &#123; advance r &#125;
+    while (r &gt; s) &#123; advance s &#125;
+    &#x2F;&#x2F; mark start of “block” of S
+    mark &#x3D; s
+  &#125;
+  if (r &#x3D;&#x3D; s) &#123;
+    result &#x3D; &lt;r, s&gt;
+    advance s
+    return result
+  &#125;
+  else &#123;
+    reset s to mark
+    advance r
+    mark &#x3D; NULL
+  &#125;
+&#125; while(r)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>开销：R和S排序的IO开销，加上归并时，读取一遍R和S的开销</p>
+<h3 id="Grace-Hash-Join"><a href="#Grace-Hash-Join" class="headerlink" title="Grace Hash Join"></a>Grace Hash Join</h3><p>与SNL的区别仅为预处理阶段。</p>
+<p>将R表映射到B-1个分区，每个分区的页数都&lt;&#x3D;B-2，然后将R表的各个分区都读进内存建立哈希映射，然后将S表读入并进行匹配。</p>
+<p>以上的做法会导致磁盘扫描次数过多，无法起到减小开销的目的。</p>
+<p>Grace Hash Join的操作：</p>
+<ol>
+<li>将两张表按照同一个哈希函数分配到不同的分片中，得到B-1个分区，每个分区由两张表组成Ri,Sj(R和S的子表)</li>
+<li>针对每一个分区，将一张表读入内存，建立哈希表，然后读取另一张表进行匹配。</li>
+</ol>
+<p>如果分区后仍然无法装入内存，则递归进行进一步分区。</p>
+<h2 id="Parallel-Query"><a href="#Parallel-Query" class="headerlink" title="Parallel Query"></a>Parallel Query</h2><h3 id="并行架构"><a href="#并行架构" class="headerlink" title="并行架构"></a>并行架构</h3><ol>
+<li><p>共享内存</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709152532.png"></p>
+</li>
+<li><p>共享磁盘</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709152604.png"></p>
+</li>
+<li><p>无共享</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709152629.png"></p>
+</li>
+</ol>
+<p>本章主要介绍无共享架构的数据库。</p>
+<h3 id="并行的种类"><a href="#并行的种类" class="headerlink" title="并行的种类"></a>并行的种类</h3><ol>
+<li><p>Intra-query parallel</p>
+<p>不同的线程执行某一个单一的查询</p>
+</li>
+<li><p>Inter-query parallel</p>
+<p>单个或多个线程执行许多不同的查询或事务。</p>
+</li>
+</ol>
+<h3 id="数据划分"><a href="#数据划分" class="headerlink" title="数据划分"></a>数据划分</h3><p>由于无共享数据库中的数据分散在不同的机器，因此良好的划分策略可以大幅提升检索效率。</p>
+<ol>
+<li><p>Range</p>
+<p>所有的数据根据范围分布到不同的存储器上。适合做等值连接，范围查询，分组。</p>
+</li>
+<li><p>Hash</p>
+<p>通过哈希确定数据所处的分组。适合等值连接，分组。</p>
+</li>
+<li><p>Round-Robin</p>
+<p>轮询策略，可以有效地分散负载。</p>
+</li>
+</ol>
+<p>Lookup by key</p>
+<p>如果数据依据键分布，则可以直接检索到相关的结点。(Range, Hash)</p>
+<p>否则就必须广播查询所有的结点。(Round Robin)</p>
+<p>插入键值或有唯一性约束的键也类似。</p>
+<h3 id="Parallel-Join"><a href="#Parallel-Join" class="headerlink" title="Parallel Join"></a>Parallel Join</h3><h4 id="Parallel-Grace-Hash-Join"><a href="#Parallel-Grace-Hash-Join" class="headerlink" title="Parallel Grace Hash Join"></a>Parallel Grace Hash Join</h4><ol>
+<li>首先将所有的数据利用哈希函数hn，分布到不同的机器上去。</li>
+<li>等到第1步完成后，每台机器都在本机对得到的数据进行进一步的Hash操作。</li>
+<li>每台机器完成Hash后，进行 GHJ</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709163827.png"></p>
+<p>整个过程只有第一步需要机器等待数据分发完毕，其他时刻都不存在等待，因此效率会比较高。</p>
+<h4 id="Parallel-Sort-Merge-Join"><a href="#Parallel-Sort-Merge-Join" class="headerlink" title="Parallel Sort-Merge Join"></a>Parallel Sort-Merge Join</h4><p>Pass 0：将数据按照范围传送到指定的机器上去。</p>
+<p>范围选取方式：根据输入获取样本，并根据每个范围内的数据量进行分割。如下图所示，频率高的区间，范围小，确保数据在每台机器上平均分布。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709165057.png"></p>
+<p>Pass 1：在每台机器上进行Sort-Merge Join操作</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709165303.png"></p>
+<h4 id="Symmetric-Hash-join"><a href="#Symmetric-Hash-join" class="headerlink" title="Symmetric Hash join"></a>Symmetric Hash join</h4><p>无论是Hash join还是Sort Merge Join都有一个等待同步的过程。但Symmetric Hash Join可以做到整个Join过程没有任何等待，且全程只需要流式传输。</p>
+<p>这种Join方式让每台机器都为驱动表和被驱动表各维护一张哈希表，每当一个数据到来，就将其添加到对应表的哈希表中，然后让该数据去探索另一张表的哈希表，寻找可以匹配的记录并输出。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709171615.png"></p>
+<h4 id="One-side-shuffle-Join"><a href="#One-side-shuffle-Join" class="headerlink" title="One-side shuffle Join"></a>One-side shuffle Join</h4><p>如果R表本身已经被合理地划分了，就只划分S表，然后在每台机器上进行join并合并结果。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709172320.png"></p>
+<h4 id="Broadcast-Join"><a href="#Broadcast-Join" class="headerlink" title="Broadcast Join"></a>Broadcast Join</h4><p>如果R表很小，那就将它传送给每一个获得S表分块的机器上</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709172436.png"></p>
 
                 
             </div>
@@ -1454,7 +1546,7 @@ close():
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">47.7k</span>
+                        class="white-color">49.6k</span>
             
             <br>
             <span id="sitetime"></span>
