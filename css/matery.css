@@ -34,7 +34,7 @@
 }
 
 body {
-    background-color: #eaeaea;
+    background-color: #ffffff;
     margin: 0;
     color: #34495e;
     overflow-x: hidden;
@@ -241,7 +241,7 @@ mark {
 }
 
 .bg-color {
-    background-image: linear-gradient(to right, #1177b0 0%, #1177b0 100%);
+    background-image: linear-gradient(to right, #1976d2 0%, #6a1b9a 100%);;
 }
 
 .text-color {
@@ -550,10 +550,11 @@ header .go-back i {
     height: 40vh !important;
 }
 
-/* .bg-cover:after {
-    -webkit-animation: rainbow 60s infinite;
-    animation: rainbow 60s infinite;
-} */
+.bg-cover:after {
+    /* -webkit-animation: rainbow 60s infinite;
+    animation: rainbow 60s infinite; */
+   
+}
 
 .bg-cover:before,
 .bg-cover:after {
@@ -591,6 +592,13 @@ header .go-back i {
     margin: 0 auto;
     font-size: 2.5rem;
     font-weight: 400;
+}
+
+@-webkit-keyframes my_grey {
+    0%, 100%{
+        background: #e0e0e0;
+    }
+    
 }
 
 @-webkit-keyframes rainbow {

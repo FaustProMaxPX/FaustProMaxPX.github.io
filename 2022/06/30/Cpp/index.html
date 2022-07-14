@@ -34,6 +34,15 @@ cin
 
 
     
+    <style>
+        body{
+            background-image: url(https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/blog20220714125351.png);
+            background-repeat:no-repeat;
+            background-size: 100% 100%;
+            background-attachment:fixed;
+        }
+    </style>
+
 
     <title>C++ | 狂奔的蜗牛</title>
     <link rel="icon" type="image/png" href="/favicon.png">
@@ -48,10 +57,16 @@ cin
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"></head>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
 
 
 <body>
+    
+
     <header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
@@ -119,17 +134,6 @@ cin
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
     </a>
     
   </li>
@@ -220,17 +224,6 @@ cin
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
 		</a>
           
         </li>
@@ -424,7 +417,7 @@ cin
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    7 分
                 </div>
                 
 
@@ -475,11 +468,11 @@ cin
 </blockquote>
 <p>头插速度更加快，但是访问元素速度相对较慢。</p>
 <blockquote>
-<p>map&#x2F;set</p>
+<p>map/set</p>
 </blockquote>
 <p>数据按照键排序存储（排序方式自定义），在迭代访问一系列元素时速度较快</p>
 <blockquote>
-<p>unordered_map&#x2F;unordered_set</p>
+<p>unordered_map/unordered_set</p>
 </blockquote>
 <p>数据无序存储，访问单个元素时较快。</p>
 <blockquote>
@@ -487,8 +480,8 @@ cin
 </blockquote>
 <p>一个键可以对应多个值</p>
 <pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">unordered_multimap&lt;string,int&gt; map;
-    map.insert(&#123;&quot;cxc&quot;, 1&#125;);
-    map.insert(&#123;&quot;cxc&quot;, 10&#125;);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+    map.insert({"cxc", 1});
+    map.insert({"cxc", 10});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -497,7 +490,7 @@ cin
 </blockquote>
 <p>分类：</p>
 <ul>
-<li>输入&#x2F;输出迭代器</li>
+<li>输入/输出迭代器</li>
 <li>Forward iterator : 同时具备写入与读取的功能</li>
 <li>Bidirectional iterator : 具有以上所有功能，且既可以向前也可以向后移动，接受<code>--</code>运算符</li>
 <li>Random Access iterator : 具有以上所有功能，且可对迭代器任意加减某个数。</li>
@@ -516,8 +509,8 @@ cin
 <li>default construction: the construction takes no parameters</li>
 <li>copy construction: use an object to construct another construction as the copy</li>
 </ol>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">vector&lt;int&gt; vec&#123;&#125; &#x2F;&#x2F; default construction
-vector&lt;int&gt; vec&#123;1,2,3&#125; &#x2F;&#x2F; regular construction<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">vector&lt;int&gt; vec{} // default construction
+vector&lt;int&gt; vec{1,2,3} // regular construction<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 
 
@@ -528,23 +521,23 @@ vector&lt;int&gt; vec&#123;1,2,3&#125; &#x2F;&#x2F; regular construction<span ar
 <li><p>拷贝构造器，拷贝赋值，析构函数要么全用默认，要么全部自定义。</p>
 </li>
 <li><p>应显示指明子类的构造函数，默认会使用基类的构造函数。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class Drink &#123;
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class Drink {
     private:
     	std::string _flavor
     
 	public:
-		Drink() &#x3D; default; &#x2F;&#x2F; 显式指明默认构造器
-    	Drink(std::string flavor) : _flavor(flavor) &#123;&#125;
-&#125;
+		Drink() = default; // 显式指明默认构造器
+    	Drink(std::string flavor) : _flavor(flavor) {}
+}
 
-class Tea : public Drink &#123;
+class Tea : public Drink {
     public:
-    	Tea() &#x3D; default;
-	    Tea(string flavor) : Drink(flavor) &#123;&#125; &#x2F;&#x2F; invoke base constructor
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+    	Tea() = default;
+	    Tea(string flavor) : Drink(flavor) {} // invoke base constructor
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 <p>若构造器使用explicit修饰，则该构造器不能对参数作隐式的类型转换，也不能用拷贝初始化。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">explicit HashMap(size_t bucket_count, const H&amp; hash &#x3D; H());<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">explicit HashMap(size_t bucket_count, const H&amp; hash = H());<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>对于声明了noexcept的函数，编译器会对其进行优化，但此类函数一旦抛出异常，就会终止程序。</p>
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void func() noexcept<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -552,12 +545,12 @@ class Tea : public Drink &#123;
 
 
 <p>Initializer_list constructor</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">myvector(const myvector&lt;T&gt;&amp; other) : t_size(other.t_size), length(other.length) &#123;
-        datas &#x3D; new T[length];
-        for (int i &#x3D; 0; i &lt; t_size; i++) &#123;
-            datas[i] &#x3D; other.datas[i];
-        &#125;
-    &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">myvector(const myvector&lt;T&gt;&amp; other) : t_size(other.t_size), length(other.length) {
+        datas = new T[length];
+        for (int i = 0; i &lt; t_size; i++) {
+            datas[i] = other.datas[i];
+        }
+    }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -570,20 +563,20 @@ class Tea : public Drink &#123;
 <p>初始化列表</p>
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">private:
 	int logicalSize;
-StringVector::StringVector() : logicalSize(0) &#123;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+StringVector::StringVector() : logicalSize(0) {}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 
 
 <h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>语法</p>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">class A &#123;
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">class A {
     public:
-    	virtual void make() &#x3D; 0; &#x2F;&#x2F; The class implementing A must define this method
-&#125;;
+    	virtual void make() = 0; // The class implementing A must define this method
+};
 
-&#x2F;&#x2F; 此处的public代表B中所有由A继承来的方法与属性的访问限制照旧
-class B : public A &#123; &#x2F;&#x2F; B implement A
+// 此处的public代表B中所有由A继承来的方法与属性的访问限制照旧
+class B : public A { // B implement A
     ...
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -598,19 +591,19 @@ class B : public A &#123; &#x2F;&#x2F; B implement A
 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">template &lt;typename It, typename Type&gt;
 requires Input_Iterator&lt;It&gt; &amp;&amp; Iterator_of&lt;It&gt; 
 	&amp;&amp; Equality_comparable&lt;Value_type&lt;It&gt;, Type&gt;
-int count(It it, Type val)&#123;
+int count(It it, Type val){
     ...
-&#125;
+}
 
 template &lt;typename It, typename Type&gt;
-concept DerivedFrom &#x3D; Input_Iterator&lt;It&gt; &amp;&amp; Iterator_of&lt;It&gt; 
+concept DerivedFrom = Input_Iterator&lt;It&gt; &amp;&amp; Iterator_of&lt;It&gt; 
 	&amp;&amp; Equality_comparable&lt;Value_type&lt;It&gt;, Type&gt;
 
 template &lt;class D, class B&gt;
 int count(It it, Type val) requires DerivedFrom&lt;D, B&gt;
-&#123;
+{
     
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -638,12 +631,12 @@ int count(It it, Type val) requires DerivedFrom&lt;D, B&gt;
 
 
 <p>const pointer</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; read from right to left
-&#x2F;&#x2F; const iterator 类似于常量指针
-int * const p; &#x2F;&#x2F; constant pointer to a non-const int
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">// read from right to left
+// const iterator 类似于常量指针
+int * const p; // constant pointer to a non-const int
 
-const int * p; &#x2F;&#x2F; non-const pointer to a const int
-&#x2F;&#x2F; const_iterator 类似于指针常量<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+const int * p; // non-const pointer to a const int
+// const_iterator 类似于指针常量<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -695,12 +688,12 @@ const int * p; &#x2F;&#x2F; non-const pointer to a const int
 </blockquote>
 <p>在构造器中获取所有资源</p>
 <p>在析构函数中释放所有资源</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;&#x2F; you don&#39;t need to invoke close
-ifstream input(&quot;xxx.txt&quot;);
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">// you don't need to invoke close
+ifstream input("xxx.txt");
 
-&#x2F;&#x2F; you must invoke close
+// you must invoke close
 ifstream input();
-input.open(&quot;xxx.txt&quot;);
+input.open("xxx.txt");
 input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
@@ -715,7 +708,7 @@ input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><s
 </blockquote>
 <p>内存资源可以被多个指针指向，在最后一个指向的指针消失时，摧毁对象。</p>
 <p>相关构造器 (用这个)</p>
-<p>make_XXX<class>(args)</p>
+<p>make_XXX<class>(args)</class></p>
 <h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>当要进行多线程时，使用原子数据类型</p>
 <p>相关库</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/C%2B%2B20220630105430.png"></p>
@@ -1243,7 +1236,7 @@ input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><s
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">50.8k</span>
+                        class="white-color">51.4k</span>
             
             <br>
             <span id="sitetime"></span>
@@ -1485,6 +1478,7 @@ $(function () {
     <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
     <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
     <script src="/js/matery.js"></script>
+    <script src="/js/FunnyTitle.js"></script>
 
     
 

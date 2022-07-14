@@ -26,6 +26,15 @@ RESULT(s,">
 
 
     
+    <style>
+        body{
+            background-image: url(https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/blog20220714125351.png);
+            background-repeat:no-repeat;
+            background-size: 100% 100%;
+            background-attachment:fixed;
+        }
+    </style>
+
 
     <title>Remake | CS50 AI入门笔记 | 狂奔的蜗牛</title>
     <link rel="icon" type="image/png" href="/favicon.png">
@@ -40,10 +49,16 @@ RESULT(s,">
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"></head>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
 
 
 <body>
+    
+
     <header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
@@ -111,17 +126,6 @@ RESULT(s,">
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
     </a>
     
   </li>
@@ -212,17 +216,6 @@ RESULT(s,">
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
 		</a>
           
         </li>
@@ -529,7 +522,7 @@ RESULT(s,">
 </blockquote>
 <p>某事件的发生不会影响其他事件发生的可能性。</p>
 <p>即某两个事件相互之间没有关联。</p>
-<h3 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h3><p>P(b | a) &#x3D; P(a | b) * P(b) &#x2F; P(a)</p>
+<h3 id="贝叶斯公式"><a href="#贝叶斯公式" class="headerlink" title="贝叶斯公式"></a>贝叶斯公式</h3><p>P(b | a) = P(a | b) * P(b) / P(a)</p>
 <p>可以通过该公式，可以推算出一些难以观测的情况的发生概率</p>
 <p>已知在某未知原因下某件有明显影响事件的发生概率，就可以推算出在该明显影响下，对应的未知原因发生的概率。</p>
 <p>例如，每一份疾病报告的正确性难以观测，但在疾病发生的前提下，对应报告的正确率容易采集，这样就可以推算出一份报告检测出疾病的概率。</p>
@@ -553,7 +546,7 @@ RESULT(s,">
 <li>Evidence variables E：已知的事件e的变量</li>
 <li>Hidden variable Y：不是以上二者的变量</li>
 </ul>
-<p>$$<br>P(X|e) &#x3D; αP(X,e)&#x3D;α\sum_yP(X,e,y)<br>$$</p>
+<p>$$<br>P(X|e) = αP(X,e)=α\sum_yP(X,e,y)<br>$$</p>
 <ol start="2">
 <li><p>样本</p>
 <p>生成一定数量的样本，在样本中筛选出符合条件的样本用于计算概率。</p>
@@ -1118,7 +1111,7 @@ RESULT(s,">
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">50.8k</span>
+                        class="white-color">51.4k</span>
             
             <br>
             <span id="sitetime"></span>
@@ -1360,6 +1353,7 @@ $(function () {
     <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
     <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
     <script src="/js/matery.js"></script>
+    <script src="/js/FunnyTitle.js"></script>
 
     
 

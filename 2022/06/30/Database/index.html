@@ -25,6 +25,15 @@ limit [Integer]
 
 
     
+    <style>
+        body{
+            background-image: url(https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/blog20220714125351.png);
+            background-repeat:no-repeat;
+            background-size: 100% 100%;
+            background-attachment:fixed;
+        }
+    </style>
+
 
     <title>Remake | 数据库 (未完待续) | 狂奔的蜗牛</title>
     <link rel="icon" type="image/png" href="/favicon.png">
@@ -39,10 +48,16 @@ limit [Integer]
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"></head>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
 
 
 <body>
+    
+
     <header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
@@ -110,17 +125,6 @@ limit [Integer]
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
     </a>
     
   </li>
@@ -211,17 +215,6 @@ limit [Integer]
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
 		</a>
           
         </li>
@@ -408,14 +401,14 @@ limit [Integer]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.2k
+                    6.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    23 分
+                    24 分
                 </div>
                 
 
@@ -446,7 +439,7 @@ limit [Integer]
 </blockquote>
 <p>将表切分成多个组，并以表为单位进行相关操作。</p>
 <p>group by不允许直接查询非group by参数的字段。</p>
-<p>re: group by会将许多记录作为整体操作，但非group by参数字段在分类后其数量在同一组中也势必&gt;&#x3D;1 无法成为一个整体被反映到表中，因此不被允许。</p>
+<p>re: group by会将许多记录作为整体操作，但非group by参数字段在分类后其数量在同一组中也势必&gt;=1 无法成为一个整体被反映到表中，因此不被允许。</p>
 <p>所有的聚合函数都需要针对一个组来使用，如果不显式指明，则整张表作为一个组。</p>
 <p>Having对查询出的组根据给定条件进行过滤。</p>
 <blockquote>
@@ -505,7 +498,7 @@ limit [Integer]
 <ol>
 <li>FROM  确认要查询的表</li>
 <li>WHERE  筛选满足条件的记录</li>
-<li>SELECT  保留所需要(出现在SELECT&#x2F;GROUP BY&#x2F; HAVING)的字段</li>
+<li>SELECT  保留所需要(出现在SELECT/GROUP BY/ HAVING)的字段</li>
 <li>GROUP BY  形成需要的组</li>
 <li>HAVING  筛选满足条件的组</li>
 <li>DISTINCT  去除冗余的记录</li>
@@ -513,7 +506,7 @@ limit [Integer]
 <blockquote>
 <p>Division</p>
 </blockquote>
-<p> 查找拥有所有船只的船员 &#x3D;&#x3D;&gt;  查找没有哪艘船不持有的船员</p>
+<p> 查找拥有所有船只的船员 ==&gt;  查找没有哪艘船不持有的船员</p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">select</span> s<span class="token punctuation">.</span>sname
 <span class="token keyword">from</span> Sailors s
 <span class="token keyword">where</span> <span class="token operator">not</span> <span class="token keyword">exists</span> <span class="token punctuation">(</span>
@@ -601,7 +594,7 @@ limit [Integer]
 <ol>
 <li><p>打包</p>
 <p>让记录稠密分布，类似链表的形式。</p>
-<p>Record id &#x3D; (pageId, record number in page)</p>
+<p>Record id = (pageId, record number in page)</p>
 <p>添加元素十分容易，但删除需要重组数据，让后面的数据填补被删数据的空白。</p>
 </li>
 </ol>
@@ -647,7 +640,7 @@ limit [Integer]
 <p>但B+树可以实现动态索引，保持树永远是平衡的，并且支持更高效的插入和删除，因为增长都体现在根节点而非叶子节点。</p>
 <p>约束条件：</p>
 <ol>
-<li>每一个<strong>内部结点</strong>至少被填满一半，d &lt;&#x3D; #entry &lt;&#x3D; 2d</li>
+<li>每一个<strong>内部结点</strong>至少被填满一半，d &lt;= #entry &lt;= 2d</li>
 <li>d称为B树的阶数，结点最大扇出数为2d+1</li>
 </ol>
 <p>B+树的叶子结点之间必须做逻辑连接，因为他不像ISAM一样在物理层面就连在一起，但这也方便它进行动态分配。</p>
@@ -687,7 +680,7 @@ limit [Integer]
 <p>因此聚合索引往往能提供比较好的查询性能。同时顺序的磁盘访问也有助于进行类似prefetching之类的优化工作，并且也方便进行压缩操作。</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220602203353495.png" alt="聚合索引 vs. 非聚合索引"></p>
 <p>对于聚合索引，它在查询时要涉及的页明显少于非聚合索引。</p>
-<p>但聚合索引的维护成本相对较高，并且由于其在初始插入时会预留1&#x2F;3空间给之后的插入操作，会带来一定的空间浪费。</p>
+<p>但聚合索引的维护成本相对较高，并且由于其在初始插入时会预留1/3空间给之后的插入操作，会带来一定的空间浪费。</p>
 <p>Variable Length Keys &amp; Records</p>
 <p>当字段为变长时，顺序就失去了意义（难以比较），不同的结点会存储不同长度的条目。与此同时，不同索引存储的记录引用个数也会产生较大的差距，不利于高效查询。</p>
 <p>因此针对变长的字段，我们在要求填充超过半数时，是从字节数的角度进行衡量。</p>
@@ -787,7 +780,7 @@ limit [Integer]
 <p>尽可能地减少RAM的使用（映射函数需要让产出的结果占用空间小于其对应的记录），降低IO使用率。</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220459995.png" alt="单缓冲"></p>
 <h4 id="Double-Buffer"><a href="#Double-Buffer" class="headerlink" title="Double Buffer"></a>Double Buffer</h4><p>主线程利用一对输入输出缓冲区进行常规的映射操作。</p>
-<p>另加一个IO线程，向目前没有使用的输入输出缓冲区填充&#x2F;释放数据。</p>
+<p>另加一个IO线程，向目前没有使用的输入输出缓冲区填充/释放数据。</p>
 <p>当主线程完成操作，等待缓冲区时，直接交换缓冲区。</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220755064.png" alt="双缓冲"></p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220804636.png" alt="双缓冲(翻转后)"></p>
@@ -803,7 +796,7 @@ limit [Integer]
 </blockquote>
 <p>拥有&gt;3个缓冲区</p>
 <p>Pass 0:</p>
-<p>使用B个缓冲区，每次导入B页数据，总共需要N&#x2F;B（上取）个runs，每一个runs里运行一个排序进程。</p>
+<p>使用B个缓冲区，每次导入B页数据，总共需要N/B（上取）个runs，每一个runs里运行一个排序进程。</p>
 <p>Pass 1：</p>
 <p>每个runs的数据长度为B，本轮可以进行B-1个runs的归并</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611224041793.png" alt="2路外部归并流程"></p>
@@ -823,29 +816,29 @@ limit [Integer]
 </ol>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611230641780.png" alt="内存中哈希"></p>
 <p>若划分之后的数据块还是很大，则进行递归划分操作，满足条件后再进行Conquer。</p>
-<h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><h3 id="关系操作符和查询规划"><a href="#关系操作符和查询规划" class="headerlink" title="关系操作符和查询规划"></a>关系操作符和查询规划</h3><p>假设有一查询<br>$$<br>𝜋_{sname}(𝜋_{sid}(𝜋_{bid}(𝜎_{color}&#x3D;’red’(Boats)) ⋈ Res) ⋈ Sailors)<br>$$<br>则其对应的数据流图为</p>
+<h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><h3 id="关系操作符和查询规划"><a href="#关系操作符和查询规划" class="headerlink" title="关系操作符和查询规划"></a>关系操作符和查询规划</h3><p>假设有一查询<br>$$<br>𝜋_{sname}(𝜋_{sid}(𝜋_{bid}(𝜎_{color}=’red’(Boats)) ⋈ Res) ⋈ Sailors)<br>$$<br>则其对应的数据流图为</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220630213659.png"></p>
 <p>其中每一条边都代表数据的流向</p>
 <p>结点代表关系运算符</p>
 <p>源代表某个关系</p>
 <h3 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h3><p>对于每一个关系运算符要做的操作都会有一个对应的迭代器。筛选传入数据流中符合条件的元素，再传递到下一个操作的迭代器中。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> iterator <span class="token punctuation">&#123;</span>
-    <span class="token keyword">void</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Iterator</span><span class="token punctuation">></span></span> inputs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> iterator <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">setup</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Iterator</span><span class="token punctuation">&gt;</span></span> inputs<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
     tuple <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>init和next操作可以采取流式或批量算法</p>
 <p>流式：每次调用只有少量，有限的工作。</p>
 <p>批量：每次执行一系列的工作，在完成之前不会产生输出。</p>
 <h4 id="Select"><a href="#Select" class="headerlink" title="Select"></a>Select</h4><pre class="line-numbers language-none"><code class="language-none">init(predicate): 
     child.init()
-    pred &#x3D; predicate;
-    current &#x3D; NULL;
+    pred = predicate;
+    current = NULL;
 next(): 
-    while (current !&#x3D; EOF &amp;&amp; !pred(current))
-        current &#x3D; child.next();
+    while (current != EOF &amp;&amp; !pred(current))
+        current = child.next();
     return current; 
 close(): 
     child.close()
@@ -855,21 +848,21 @@ close():
 <p>next():不断循环直至到达文件末尾或是当前字段满足断言条件</p>
 <h4 id="Heap-Scan"><a href="#Heap-Scan" class="headerlink" title="Heap Scan"></a>Heap Scan</h4><p>该迭代器不可能有孩子，因为其处于最底层，负责从磁盘中读取指定关系的数据。</p>
 <pre class="line-numbers language-none"><code class="language-none">init(relation): 
-    heap &#x3D; open heap file for this relation;
-    cur_page &#x3D; heap.first_page(); &#x2F;&#x2F; first page
-    cur_slot &#x3D; cur_page.first_slot(); &#x2F;&#x2F; first slot on that page
+    heap = open heap file for this relation;
+    cur_page = heap.first_page(); // first page
+    cur_slot = cur_page.first_slot(); // first slot on that page
     
 next(): 
-    if (cur_page &#x3D;&#x3D; NULL) return EOF;  &#x2F;&#x2F; End Of Fun
-    current &#x3D; [cur_page, cur_slot]; &#x2F;&#x2F; we will return this recordId
-    &#x2F;&#x2F; advance the slot
-    cur_slot &#x3D; cur_slot.next();
-    if (cur_slot &#x3D;&#x3D; NULL) &#123;
-      &#x2F;&#x2F; advance to next page, first slot
-      cur_page &#x3D; cur_page.next();
-      if (cur_page !&#x3D; NULL)
-         cur_slot &#x3D; cur_page.first_slot();
-    &#125;
+    if (cur_page == NULL) return EOF;  // End Of Fun
+    current = [cur_page, cur_slot]; // we will return this recordId
+    // advance the slot
+    cur_slot = cur_slot.next();
+    if (cur_slot == NULL) {
+      // advance to next page, first slot
+      cur_page = cur_page.next();
+      if (cur_page != NULL)
+         cur_slot = cur_page.first_slot();
+    }
     return current; 
     
 close(): 
@@ -877,14 +870,14 @@ close():
 
 
 
-<h4 id="Sort"><a href="#Sort" class="headerlink" title="Sort"></a>Sort</h4><pre class="line-numbers language-none"><code class="language-none">init(keys):                &#x2F;&#x2F; all of pass 0 in init, a blocking call
+<h4 id="Sort"><a href="#Sort" class="headerlink" title="Sort"></a>Sort</h4><pre class="line-numbers language-none"><code class="language-none">init(keys):                // all of pass 0 in init, a blocking call
     child.init()
     repeatedly call child.next() and generate the sorted runs on disk, until child gives EOF
-    &#x2F;&#x2F; set up for pass 1, assumes enough buffers to merge
+    // set up for pass 1, assumes enough buffers to merge
     open each sorted run file and load into input buffer for pass 1
     
-next():              &#x2F;&#x2F; pass 1 (assumes enough buffers to merge)
-    output &#x3D; min tuple across all buffers
+next():              // pass 1 (assumes enough buffers to merge)
+    output = min tuple across all buffers
     if min tuple was last one in its buffer, fetch next page from that run into buffer
     return output (or EOF -- “End of Fun” -- if no tuples remain)
 close(): 
@@ -895,19 +888,19 @@ close():
 <p>首先初始化所有的子节点，确保他们以及准备好了下一步操作。然后获取子节点的所有数据，并照上一章所讲的排序方法进行第0轮排序。完成后将所有的数据载入缓冲区进行归并。</p>
 <h4 id="Group-By"><a href="#Group-By" class="headerlink" title="Group By"></a>Group By</h4><pre class="line-numbers language-none"><code class="language-none">init(group_keys, aggs):
     child.init()
-    cur_group &#x3D; NULL;
+    cur_group = NULL;
 next():
-    result &#x3D; NULL
-    do &#123;
-        tup &#x3D; child.next();
-        if (group(tup) !&#x3D; cur_group) &#123; &#x2F;&#x2F; New group!
-            if (cur_group !&#x3D; NULL)     &#x2F;&#x2F; Form a result for current group
-                result &#x3D; [cur_group, final() of all aggs]
-            cur_group &#x3D; group(tup);
+    result = NULL
+    do {
+        tup = child.next();
+        if (group(tup) != cur_group) { // New group!
+            if (cur_group != NULL)     // Form a result for current group
+                result = [cur_group, final() of all aggs]
+            cur_group = group(tup);
             call init() on all the aggs
-        &#125; 	
+        } 	
         call merge(tup) on all the aggs 
-    &#125; while (!result);
+    } while (!result);
     return result;
 close():
 	child.close()
@@ -929,7 +922,7 @@ close():
 <p>此时开销降低为 1000 + 1000 * 500(R为驱动表)</p>
 <p>演化：Chunk Nested-Loop Join</p>
 <p>一次IO从驱动表中获取几页数据，其余操作同上。</p>
-<p>开销可降低为 1000 + (1000 &#x2F; N) * 500 N为一次性获取的页数，一般为缓冲区数-2</p>
+<p>开销可降低为 1000 + (1000 / N) * 500 N为一次性获取的页数，一般为缓冲区数-2</p>
 <h3 id="Index-Nested-Loop-Join"><a href="#Index-Nested-Loop-Join" class="headerlink" title="Index Nested-Loop Join"></a>Index Nested-Loop Join</h3><p>驱动表在拿到数据后，直接根据关联字段的索引进行查找。和上述的方法相比，该方法每从驱动表取出一条记录，都只要去查询被驱动表的索引，查询次数为索引的高度。</p>
 <p>开销为：驱动表页数 + 驱动表记录数 * 索引树高度</p>
 <h3 id="Sort-Merge-Join"><a href="#Sort-Merge-Join" class="headerlink" title="Sort-Merge Join"></a>Sort-Merge Join</h3><p>条件：有相同字段(自然连接)或指定的判定条件</p>
@@ -938,28 +931,28 @@ close():
 <li>将驱动表和被驱动表按照join key排序</li>
 <li>归并扫描排序后的表并提取出满足条件的元组</li>
 </ol>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">do &#123;
-  if (!mark) &#123;
-    while (r &lt; s) &#123; advance r &#125;
-    while (r &gt; s) &#123; advance s &#125;
-    &#x2F;&#x2F; mark start of “block” of S
-    mark &#x3D; s
-  &#125;
-  if (r &#x3D;&#x3D; s) &#123;
-    result &#x3D; &lt;r, s&gt;
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">do {
+  if (!mark) {
+    while (r &lt; s) { advance r }
+    while (r &gt; s) { advance s }
+    // mark start of “block” of S
+    mark = s
+  }
+  if (r == s) {
+    result = &lt;r, s&gt;
     advance s
     return result
-  &#125;
-  else &#123;
+  }
+  else {
     reset s to mark
     advance r
-    mark &#x3D; NULL
-  &#125;
-&#125; while(r)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    mark = NULL
+  }
+} while(r)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>开销：R和S排序的IO开销，加上归并时，读取一遍R和S的开销</p>
 <h3 id="Grace-Hash-Join"><a href="#Grace-Hash-Join" class="headerlink" title="Grace Hash Join"></a>Grace Hash Join</h3><p>与SNL的区别仅为预处理阶段。</p>
-<p>将R表映射到B-1个分区，每个分区的页数都&lt;&#x3D;B-2，然后将R表的各个分区都读进内存建立哈希映射，然后将S表读入并进行匹配。</p>
+<p>将R表映射到B-1个分区，每个分区的页数都&lt;=B-2，然后将R表的各个分区都读进内存建立哈希映射，然后将S表读入并进行匹配。</p>
 <p>以上的做法会导致磁盘扫描次数过多，无法起到减小开销的目的。</p>
 <p>Grace Hash Join的操作：</p>
 <ol>
@@ -1022,6 +1015,39 @@ close():
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709172320.png"></p>
 <h4 id="Broadcast-Join"><a href="#Broadcast-Join" class="headerlink" title="Broadcast Join"></a>Broadcast Join</h4><p>如果R表很小，那就将它传送给每一个获得S表分块的机器上</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709172436.png"></p>
+<h3 id="Query-Optimization"><a href="#Query-Optimization" class="headerlink" title="Query Optimization"></a>Query Optimization</h3><h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220710154252.png"></p>
+<blockquote>
+<p>Query parser</p>
+</blockquote>
+<p>检查SQL语句正确性，并鉴权。</p>
+<p>生成语法树</p>
+<blockquote>
+<p>Query rewriter</p>
+</blockquote>
+<p>将查询转换为规范格式：</p>
+<ul>
+<li>扁平视图</li>
+<li>将子查询分解为更少的查询块</li>
+</ul>
+<h4 id="优化手段"><a href="#优化手段" class="headerlink" title="优化手段"></a>优化手段</h4><ol>
+<li><p>选择操作：在获得了相关的字段之后，就先对其进行选择操作。使得进入之后操作的数据量减少。</p>
+<p>需要注意的是，如果是提前被驱动表的选择操作，则对IO不会有什么提升。在进行join操作时，每次驱动表发起探索，都要去提取整个被驱动表，不会减少被驱动表要检索的记录数。但放在驱动表前可以有效减少参与探索的记录数。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220710160112.png"></p>
+</li>
+<li><p>投影操作：只保留下流操作需要用到的字段。使得单个record变小，page能存下更多record。</p>
+</li>
+<li><p>两表连接时，选择需要发起探索的记录数少的表作为驱动表。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220710160152.png"></p>
+</li>
+<li><p>物化临时表到内存中：上文提到被驱动表提前进行选择操作无优化作用的原因是每次都会重新提取一整张被驱动表。但如果在做完选择操作后，将该临时表物化到内存中，就可以让驱动表与该临时表进行join，大大减少要探索的记录数。</p>
+<p><img src="C:\Users\Faust\AppData\Roaming\Typora\typora-user-images\image-20220710160212176.png" alt="image-20220710160212176"></p>
+</li>
+<li><p>选取更加高效的Join算法。</p>
+</li>
+<li><p>只考虑使用左深树，即每次join的结果都作为左表，新加入的表作为右表。使得join操作可以流水线式操作，中途不需要将临时表物化进内存，减少物化带来的额外io开销。</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220714152230.png"></p>
 
                 
             </div>
@@ -1318,15 +1344,15 @@ close():
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="字节青训 | Go语言基本特质">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="字节青训整合笔记">
                         
-                        <span class="card-title">字节青训 | Go语言基本特质</span>
+                        <span class="card-title">字节青训整合笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            啥都听不懂的青训营 摸鱼笔记之Go语言基本特质
+                            啥都听不懂的青训营 摸鱼笔记
                         
                     </div>
                     <div class="publish-info">
@@ -1350,6 +1376,22 @@ close():
                     
                     <a href="/tags/Go/">
                         <span class="chip bg-color">Go</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%9E%B6%E6%9E%84/">
+                        <span class="chip bg-color">架构</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%AB%98%E6%80%A7%E8%83%BD/">
+                        <span class="chip bg-color">高性能</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%AB%98%E8%B4%A8%E9%87%8F%E7%BC%96%E7%A8%8B/">
+                        <span class="chip bg-color">高质量编程</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+                        <span class="chip bg-color">计算机网络</span>
                     </a>
                     
                 </div>
@@ -1546,7 +1588,7 @@ close():
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">50.8k</span>
+                        class="white-color">51.4k</span>
             
             <br>
             <span id="sitetime"></span>
@@ -1788,6 +1830,7 @@ $(function () {
     <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
     <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
     <script src="/js/matery.js"></script>
+    <script src="/js/FunnyTitle.js"></script>
 
     
 

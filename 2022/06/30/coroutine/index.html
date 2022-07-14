@@ -4,18 +4,17 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="字节青训 | Go语言基本特质, 狂奔的蜗牛">
-    <meta name="description" content="啥都听不懂的青训营 摸鱼笔记之Go语言基本特质
+    <meta name="keywords" content="字节青训整合笔记, 狂奔的蜗牛">
+    <meta name="description" content="啥都听不懂的青训营 摸鱼笔记
 
-
-协程协程：用户态，轻量级线程，栈MB级别
+Go语言基本特质协程协程：用户态，轻量级线程，栈MB级别
 线程：内核态，线程中可以运行多个协程，栈KB级别
 协程主要通信方式通过通信共享内存，类似生产者消费者模型
 
 
 Channel 通道
 
-make(c">
+make(cha">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -28,8 +27,17 @@ make(c">
 
 
     
+    <style>
+        body{
+            background-image: url(https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/blog20220714125351.png);
+            background-repeat:no-repeat;
+            background-size: 100% 100%;
+            background-attachment:fixed;
+        }
+    </style>
 
-    <title>字节青训 | Go语言基本特质 | 狂奔的蜗牛</title>
+
+    <title>字节青训整合笔记 | 狂奔的蜗牛</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -42,10 +50,16 @@ make(c">
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"></head>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
 
 
 <body>
+    
+
     <header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
@@ -113,17 +127,6 @@ make(c">
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
     </a>
     
   </li>
@@ -220,17 +223,6 @@ make(c">
         
         <li class="m-nav-item">
 	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
 		<a href="/friends" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-address-book"></i>
@@ -256,12 +248,12 @@ make(c">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">字节青训 | Go语言基本特质</h1>
+                    <h1 class="description center-align post-title">字节青训整合笔记</h1>
                 </div>
             </div>
         </div>
@@ -381,6 +373,22 @@ make(c">
                                 <span class="chip bg-color">Go</span>
                             </a>
                         
+                            <a href="/tags/%E6%9E%B6%E6%9E%84/">
+                                <span class="chip bg-color">架构</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%AB%98%E6%80%A7%E8%83%BD/">
+                                <span class="chip bg-color">高性能</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%AB%98%E8%B4%A8%E9%87%8F%E7%BC%96%E7%A8%8B/">
+                                <span class="chip bg-color">高质量编程</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+                                <span class="chip bg-color">计算机网络</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -411,14 +419,14 @@ make(c">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    677
+                    3.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    11 分
                 </div>
                 
 
@@ -436,10 +444,9 @@ make(c">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>啥都听不懂的青训营 摸鱼笔记之Go语言基本特质</p>
+                <p>啥都听不懂的青训营 摸鱼笔记</p>
 <span id="more"></span>
-
-<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p>协程：用户态，轻量级线程，栈MB级别</p>
+<h1 id="Go语言基本特质"><a href="#Go语言基本特质" class="headerlink" title="Go语言基本特质"></a>Go语言基本特质</h1><h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p>协程：用户态，轻量级线程，栈MB级别</p>
 <p>线程：内核态，线程中可以运行多个协程，栈KB级别</p>
 <h3 id="协程主要通信方式"><a href="#协程主要通信方式" class="headerlink" title="协程主要通信方式"></a>协程主要通信方式</h3><p>通过通信共享内存，类似生产者消费者模型</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/coroutine2022-05-08%2019-45-09%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="协程通信"></p>
@@ -466,7 +473,7 @@ make(c">
 <p>缺陷：无法处理项目代码依赖不同版本的情况</p>
 </li>
 </ul>
-<h3 id="2-GoVendor"><a href="#2-GoVendor" class="headerlink" title="2. GoVendor"></a>2. GoVendor</h3><p>项目目录下新增vendor文件，所有依赖包副本形式放在$ProjectRoot&#x2F;vendor</p>
+<h3 id="2-GoVendor"><a href="#2-GoVendor" class="headerlink" title="2. GoVendor"></a>2. GoVendor</h3><p>项目目录下新增vendor文件，所有依赖包副本形式放在$ProjectRoot/vendor</p>
 <p>依赖寻址：有先到vendor下，再到GoPath下</p>
 <p>问题：</p>
 <ul>
@@ -499,6 +506,259 @@ make(c">
 <li>(1)提高 A 的测试覆盖率。A 依赖 B，本质上依赖的是 B 的返回结果，也就是说 B 的返回结果会影响 A 的行为。通过 mock B 我们可以构造各种正常和异常的来自 B 的返回结果，从而更充分测试 A 的行为。</li>
 <li>(2)避免 B 的因素从而对 A 产生影响。依赖真实的 B 去测试 A 可能有很多问题：B 的开发没有完成时无法测试 A;B 有阻塞性bug 时无法测试 A;B 的依赖 C 有阻塞性 bug 时无法测试 A;</li>
 <li>(3)提高 A 的测试效率。B 的真实行为可能很慢，而 B 的模拟行为是非常快的，因此可以加快 A 的测试执行速度。</li>
+</ul>
+<h1 id="高性能Go语言发行版优化与落地实践"><a href="#高性能Go语言发行版优化与落地实践" class="headerlink" title="高性能Go语言发行版优化与落地实践"></a>高性能Go语言发行版优化与落地实践</h1><h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><blockquote>
+<p>业务层优化</p>
+</blockquote>
+<ul>
+<li>针对特定场景，具体问题，具体分析</li>
+<li>容易获得较大性能收益</li>
+</ul>
+<blockquote>
+<p>语言运行时优化</p>
+</blockquote>
+<ul>
+<li>解决更通用的性能问题</li>
+<li>考虑更多场景</li>
+<li>tradeoffs</li>
+</ul>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><h3 id="自动内存管理"><a href="#自动内存管理" class="headerlink" title="自动内存管理"></a>自动内存管理</h3><p>由程序语言的运行时系统回收动态内存</p>
+<ul>
+<li>避免手动内存管理，专注于业务逻辑</li>
+<li>保证内存使用的正确性和安全性</li>
+</ul>
+<blockquote>
+<p> 三个任务</p>
+</blockquote>
+<ul>
+<li>为新对象分配空间</li>
+<li>找到存活对象</li>
+<li>回收死亡对象的内存空间</li>
+</ul>
+<blockquote>
+<p>相关概念</p>
+</blockquote>
+<ul>
+<li>Mutator:业务线程，分配新对象，修改对象指向关系</li>
+<li>Collector:GC线程，找到存活对象，回收死亡对象的内存空间</li>
+<li>Serial GC: 只有一个Collector，每次进行GC操作时需要暂停程序</li>
+<li>Parallel GC: 支持多个Collector同时回收GC算法</li>
+<li>Concurrent GC:业务代码与垃圾回收同时执行（Collector必须感知对象指向关系的改变）</li>
+</ul>
+<h3 id="追踪垃圾回收"><a href="#追踪垃圾回收" class="headerlink" title="追踪垃圾回收"></a>追踪垃圾回收</h3><p>对象被回收的条件：指针指向关系不可达的对象</p>
+<p>标记根对象：静态变量，全局变量，常量，线程栈等（所有在程序运行时永远存活的对象）</p>
+<p>标记：找到可达对象</p>
+<p>清理：所有不可达对象（根据对象的生命周期，使用不同的标记和清理策略）</p>
+<ul>
+<li>将存活对象复制到另外的内存空间</li>
+<li>将死亡对象的内存标记为“可分配”</li>
+<li>移动并整理存活对象</li>
+</ul>
+<h3 id="分代GC"><a href="#分代GC" class="headerlink" title="分代GC"></a>分代GC</h3><p>Intution:很多对象在分配出来后很快就不再使用了</p>
+<p>每个对象的年龄：经历过GC的次数</p>
+<p>不同年龄的对象处于heap的不同区域</p>
+<ol>
+<li><p>年轻代</p>
+<p>常规的对象分配</p>
+<p>由于存活对象很少，可以直接复制到其他空间</p>
+<p>GC吞吐率高</p>
+</li>
+<li><p>老年代</p>
+<p>对象趋向于一直活着，反复复制开销大</p>
+<p>可以采用标记对象的方法。</p>
+</li>
+</ol>
+<h3 id="引用计数"><a href="#引用计数" class="headerlink" title="引用计数"></a>引用计数</h3><p>每个对象都有一个与之关联的引用数目</p>
+<p>对象存活的条件：当且仅当引用数大于0</p>
+<p>优点：</p>
+<ol>
+<li>内存管理的操作被平摊到程序执行过程中</li>
+<li>内存管理不需要了解runtime的实现细节</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>维护引用计数的开销较大：通过原子操作保证对引用技术操作的原子性和可见性</li>
+<li>无法回收环形数据结构 （所有对象相互之间会引用，虽然该数据结构已经不可达，但因为其中每个对象的引用数不会降为0，所以无法被回收）</li>
+<li>内存开销：每个对象都引入的额外内存空间存储引用数目</li>
+<li>回收内存依然可能引发暂停</li>
+</ol>
+<h3 id="Balanced-GC"><a href="#Balanced-GC" class="headerlink" title="Balanced GC"></a>Balanced GC</h3><p>GAB对于Go内存管理来说是个对象</p>
+<p>本质：将多个小对象的分配合并成一次对象的分配</p>
+<p>利用三个指针标记内存块的起点和终点，以及下一块可用内存的地址</p>
+<p>问题：GAB的对象分配方式会导致内存被延迟释放。例如，GAB中仅存活了1个小对象，此时GAB无法释放，但又浪费了大量内存。</p>
+<p>解决：当GAB总大小超过一定阈值时，将GAB中存活的对象复制到另外分配的GAB中（用copying GC 的算法管理小对象）</p>
+<h2 id="编译优化"><a href="#编译优化" class="headerlink" title="编译优化"></a>编译优化</h2><h3 id="编译器的结构"><a href="#编译器的结构" class="headerlink" title="编译器的结构"></a>编译器的结构</h3><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/high_performance2022-05-14%2022-00-44%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></p>
+<h3 id="函数内联"><a href="#函数内联" class="headerlink" title="函数内联"></a>函数内联</h3><p>将被调用函数的函数体的副本替换到调用位置，同时重写代码以反映参数的绑定</p>
+<p>优点：</p>
+<ol>
+<li>消除函数调用开销，例如传递参数，保存寄存器等</li>
+<li>将过程间分析转化为过程内分析，帮助其他优化</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>函数体变大，(icache)不友好</li>
+<li>编译生成的Go镜像变大</li>
+</ol>
+<h3 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h3><p>分析代码中指针的动态作用域，指针在何处可以被访问</p>
+<p>思路：</p>
+<p>从对象分配处出发，沿着控制流，观察对象的数据流</p>
+<p>若发现指针p在当前作用域s：</p>
+<ol>
+<li><p>作为参数传递给其他函数</p>
+</li>
+<li><p>传递给全局变量</p>
+</li>
+<li><p>传递给其他的goroutine</p>
+</li>
+<li><p>传递给已逃逸的指针指向的对象</p>
+<p>即，若该对象可以被外部函数调用，则称其逃逸出s</p>
+</li>
+</ol>
+<p>优化：增加函数的内联，扩大函数边界，使得原本逃逸的对象只能作用在当前作用域。而未逃逸的对象可以在栈上分配，并且无论是分配还是回收都很快，同时也减少了在heap上的分配，减小GC负担。</p>
+<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><p>网络接入 —— 路由</p>
+<p>路由不是对称的，根据当前的网络情况，响应包的路径也可能跟请求包不同</p>
+<p>路由也不会修改IP地址，在数据包传输过程中，源IP与目的IP均不会发生变化，只会修改MAC地址，同时在发出数据包时不仅要知道目的MAC，还要知道发出的端口。</p>
+<p>ARP请求不会跨网段发送，若目的与源不在同一网段，则会先寻找下一跳的MAC地址，利用ARP逐级跳转。</p>
+<blockquote>
+<p>免费ARP</p>
+</blockquote>
+<p>发送一个包含新IP的ARP数据包，提示所有服务器刷新ARP表</p>
+<ul>
+<li>当网段中新增了一台机器时，可以通过这种方式让其余机器刷新ARP表，而避免在使用时临时刷新。</li>
+<li>当服务器有新增IP时，可以通过免费ARP检测IP冲突。</li>
+</ul>
+<p>PS：Mac地址不能替代IP地址 -&gt; IP地址的存在实际上就是为了解决二层协议（包括Mac）的兼容问题。</p>
+<blockquote>
+<p>SSL/TLS非对称加密</p>
+</blockquote>
+<p>将数据进行加密之后再传输，并且使用的加密算法也进行加密，接收方通过与发送方协商获知所使用的加密算法。</p>
+<h2 id="网络提速"><a href="#网络提速" class="headerlink" title="网络提速"></a>网络提速</h2><p>对于静态资源，使用CDN缓存</p>
+<p>对于动态API，优化网络路径</p>
+<h3 id="网络容灾"><a href="#网络容灾" class="headerlink" title="网络容灾"></a>网络容灾</h3><p>故障发生-&gt;故障感知-&gt;自动切换-&gt;服务恢复</p>
+<ol>
+<li>外网容灾<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/high_performance2022-05-19%2020-30-07%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></li>
+</ol>
+<p>内部专线出现故障后，切换为外网连接</p>
+<ol start="2">
+<li>降级容灾</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/high_performance2022-05-19%2020-32-53%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></p>
+<p>网址会被映射到两个机房，其中一个机房出现问题时，首先进行故障感知，然后判断机房B能否承受住那部分流量，最后才进行切换。</p>
+<ol start="3">
+<li>缓存</li>
+</ol>
+<p>当程序故障后，就用缓存先响应用户请求</p>
+<h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><h3 id="DNS记录类型"><a href="#DNS记录类型" class="headerlink" title="DNS记录类型"></a>DNS记录类型</h3><ol>
+<li>A/AAAA：IP指向记录，前者指向IPv4, 后者指向IPv6</li>
+<li>CNAME：别名记录，配置值为别名或主机名，客户端根据别名继续解析以提取IP地址</li>
+<li>TXT：文本记录，购买证书时需要</li>
+<li>MX：邮件交换记录，用于指向邮件交换服务器</li>
+<li>NS：解析服务器记录，用于指定哪台服务器对于该域名解析</li>
+<li>SOA：起始授权机构记录</li>
+</ol>
+<h2 id="HTTP接入协议"><a href="#HTTP接入协议" class="headerlink" title="HTTP接入协议"></a>HTTP接入协议</h2><h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><p>对称加密：使用相同的秘钥来加密传输内容，一端加密后，对端收到数据会用相同的秘钥来解密</p>
+<p>非对称加密：如果用公钥对数据进行加密，只有用对应的私钥才能解密；如果用私钥对数据进行加密，那么只有用对应的公钥才能解密。</p>
+<h1 id="高质量编程与性能调优"><a href="#高质量编程与性能调优" class="headerlink" title="高质量编程与性能调优"></a>高质量编程与性能调优</h1><blockquote>
+<p>编程原则</p>
+</blockquote>
+<ol>
+<li><p>简单性</p>
+<p>消除“多余的复杂性”，以简单清晰的逻辑编写代码</p>
+</li>
+<li><p>可读性</p>
+</li>
+<li><p>生产力</p>
+</li>
+</ol>
+<h2 id="编码规范"><a href="#编码规范" class="headerlink" title="编码规范"></a>编码规范</h2><p>   注释：</p>
+<ol>
+<li><p>注释应该解释代码作用， 适合注释公共符号</p>
+</li>
+<li><p>注释应该解释代码如何做的，适合注释实现过程</p>
+</li>
+<li><p>注释应该解释代码实现的原因，适合解释代码的外部因素，提供额外的上下文。</p>
+</li>
+<li><p>注释应该解释代码什么情况会出错，适合解释代码的限制条件。</p>
+</li>
+<li><p>公共符号始终需要注释</p>
+<p>PS：代码是最好的注释，注释应提供代码未表达出的上下文信息。</p>
+</li>
+</ol>
+<p>变量命名：</p>
+<ol>
+<li>简洁</li>
+<li>缩略词全部大写，当其位于变量开头其不需要导出时，全部小写</li>
+<li>变量与实际使用位置距离越远，需要携带的上下文信息越多</li>
+</ol>
+<p>函数命名：</p>
+<ol>
+<li>函数名不携带包名的上下文信息</li>
+<li>简短</li>
+<li>当名为foo的包某个函数返回类型Foo时，可以省略类型信息。</li>
+</ol>
+<p>包名：</p>
+<ol>
+<li>只由小写字母组成。不包含大写字母和下划线等字符</li>
+<li>简短并包含一定上下文信息</li>
+<li>不要与标准库同名</li>
+</ol>
+<p>控制流程：</p>
+<ol>
+<li>线性原理，避免嵌套</li>
+<li>正常代码最小缩进</li>
+</ol>
+<h2 id="性能优化-1"><a href="#性能优化-1" class="headerlink" title="性能优化"></a>性能优化</h2><p>Go提供benchmark工具进行基准性能测试</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">go <span class="token builtin class-name">test</span> -bench<span class="token operator">=</span>. -benchmen<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h3 id="性能优化建议"><a href="#性能优化建议" class="headerlink" title="性能优化建议"></a>性能优化建议</h3><h3 id="预分配"><a href="#预分配" class="headerlink" title="预分配"></a>预分配</h3><p>尽量在make阶段确定切片/对象大小</p>
+<p>slice进行扩容时会在已有切片基础上创建切片，不会创建新的底层数组。</p>
+<blockquote>
+<p>场景</p>
+</blockquote>
+<ol>
+<li>原切片较大，代码在原切片基础上新建小切片</li>
+<li>原底层数组在内存中有引用，得不到释放</li>
+</ol>
+<p>此时可以使用copy代替re-slice</p>
+<h3 id="空结构体"><a href="#空结构体" class="headerlink" title="空结构体"></a>空结构体</h3><p>使用空结构体节省内存</p>
+<p>空结构体struct{}实例不占据任何的内存空间</p>
+<p>使用场景：</p>
+<ul>
+<li>节省资源</li>
+<li>空结构体本身具备很强的语义，可以作为占位符使用</li>
+</ul>
+<h3 id="atomic"><a href="#atomic" class="headerlink" title="atomic"></a>atomic</h3><p>锁是通过操作系统来实现，属于系统调用</p>
+<p>atomic操作通过硬件实现，效率更高</p>
+<p>sync.Mutex应该用于保护一段逻辑，而不仅仅是用于保护一个变量</p>
+<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><p>架构的定义</p>
+<ul>
+<li>是有关软件整体结构与组件的抽象描述</li>
+<li>用于指导软件系统各个方面的设计</li>
+</ul>
+<h2 id="架构的演进"><a href="#架构的演进" class="headerlink" title="架构的演进"></a>架构的演进</h2><h3 id="单机"><a href="#单机" class="headerlink" title="单机"></a>单机</h3><p>把所有功能都实现在一个进程里，并部署在一台机器上</p>
+<p>优点：简单</p>
+<p>缺点：能提供的服务有限，运维需要停服。</p>
+<h3 id="单体、垂直应用-垂直切分"><a href="#单体、垂直应用-垂直切分" class="headerlink" title="单体、垂直应用 | 垂直切分"></a>单体、垂直应用 | 垂直切分</h3><p>单体架构：分布式部署</p>
+<p>垂直应用架构：按应用垂直切分的单体</p>
+<p>优点：水平扩容，运维不需要停服</p>
+<p>缺点：职责太多，开发效率不高。爆炸半径大（个体出现问题，容易导致整条链停摆）</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/architecture2022-05-22%2021-51-39%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="单体架构"></p>
+<h3 id="SOA"><a href="#SOA" class="headerlink" title="SOA"></a>SOA</h3><p>service-oriented architecture</p>
+<ol>
+<li>将应用的不同功能单元抽象为服务</li>
+<li>定义服务之间的通信标准（核心要点）</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/architecture2022-05-22%2022-07-28%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="SOA"></p>
+<h3 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h3><p>SOA的去中心化演进方向</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/architecture2022-05-22%2022-09-21%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="微服务"></p>
+<p>问题：</p>
+<ul>
+<li>数据一致性</li>
+<li>高可用，不同服务之间如何高效交互</li>
+<li>治理，如何容灾</li>
+<li>解耦 vs 运维  收益是否大于提高的运维成本</li>
 </ul>
 
                 
@@ -566,6 +826,22 @@ make(c">
                             
                                 <a href="/tags/Go/">
                                     <span class="chip bg-color">Go</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%9E%B6%E6%9E%84/">
+                                    <span class="chip bg-color">架构</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%AB%98%E6%80%A7%E8%83%BD/">
+                                    <span class="chip bg-color">高性能</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%AB%98%E8%B4%A8%E9%87%8F%E7%BC%96%E7%A8%8B/">
+                                    <span class="chip bg-color">高质量编程</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+                                    <span class="chip bg-color">计算机网络</span>
                                 </a>
                             
                         </div>
@@ -792,31 +1068,30 @@ make(c">
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/06/30/Architecture/">
+                <a href="/2022/06/29/Java/">
                     <div class="card-image">
                         
+                        <img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/JavaCupLogo.png" class="responsive-img" alt="Java">
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="字节青训 | 架构">
-                        
-                        <span class="card-title">字节青训 | 架构</span>
+                        <span class="card-title">Java</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            啥都听不懂的青训营 摸鱼笔记之架构
+                            一份关于Java基本操作的笔记
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-29
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9D%92%E8%AE%AD%E6%91%B8%E9%B1%BC%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    青训摸鱼笔记
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" class="post-category">
+                                    编程语言
                                 </a>
                             
                             
@@ -826,8 +1101,8 @@ make(c">
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%9E%B6%E6%9E%84/">
-                        <span class="chip bg-color">架构</span>
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
                     </a>
                     
                 </div>
@@ -1024,7 +1299,7 @@ make(c">
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">50.8k</span>
+                        class="white-color">51.4k</span>
             
             <br>
             <span id="sitetime"></span>
@@ -1266,6 +1541,7 @@ $(function () {
     <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
     <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
     <script src="/js/matery.js"></script>
+    <script src="/js/FunnyTitle.js"></script>
 
     
 

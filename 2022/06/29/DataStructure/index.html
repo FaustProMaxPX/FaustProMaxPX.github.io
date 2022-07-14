@@ -26,6 +26,15 @@
 
 
     
+    <style>
+        body{
+            background-image: url(https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/blog20220714125351.png);
+            background-repeat:no-repeat;
+            background-size: 100% 100%;
+            background-attachment:fixed;
+        }
+    </style>
+
 
     <title>Remake | 数据结构 | 狂奔的蜗牛</title>
     <link rel="icon" type="image/png" href="/favicon.png">
@@ -40,10 +49,16 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 6.2.0"></head>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
 
 
 <body>
+    
+
     <header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
@@ -111,17 +126,6 @@
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
     </a>
     
   </li>
@@ -212,17 +216,6 @@
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
 		</a>
           
         </li>
@@ -413,7 +406,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.2k
+                    5.1k
                 </div>
                 
 
@@ -477,69 +470,69 @@
 <p>封装被破坏的直接体现：模组中的方法不再以整体的形式被调用</p>
 <h2 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h2><h3 id="合并排序-选择排序"><a href="#合并排序-选择排序" class="headerlink" title="合并排序 (+ 选择排序)"></a>合并排序 (+ 选择排序)</h3><p>合并排序在处理有序数组时仅有O(N)的复杂度，因此可以选择将无序数组切分成若干部分，对其分别调用选择排序，再进行合并，实现排序加速。</p>
 <p>但若将数组切分到只剩单个元素的小块，则可直接用合并排序实现一切，复杂度为O(NlogN)，代价是内存占用较大。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sort</span> <span class="token punctuation">&#123;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sort</span> <span class="token punctuation">{</span>
 
     <span class="token comment">/**
      * merge two sorted array to a sorted array
-     * @param &lt;T> type of data
+     * @param &lt;T&gt; type of data
      * @param datas1 a sorted array and all of its elements are not null
      * @param datas2 a sorted array and all of its elements are not null
      * @param c The comparator of type T
      * @return a sorted array containing all elements in datas1 and datas2
      */</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">merge</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> datas1<span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> datas2<span class="token punctuation">,</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> cc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token function">merge</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> datas1<span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> datas2<span class="token punctuation">,</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> cc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">int</span> i<span class="token punctuation">,</span> j<span class="token punctuation">;</span>
         i <span class="token operator">=</span> j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
         <span class="token comment">// ret = (T[])(new Object[datas1.length + datas2.length]);</span>
-        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> ret <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> ret <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">int</span> idx <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-        <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>i <span class="token operator">&lt;</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">int</span> cmp <span class="token operator">=</span> cc<span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>datas1<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">,</span> datas2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>cmp <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>cmp <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 ret<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>datas1<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token operator">++</span>i<span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">else</span> <span class="token punctuation">{</span>
                 ret<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>datas2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token operator">++</span>j<span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">}</span>
             idx<span class="token operator">++</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">!=</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">!=</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             ret<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>datas1<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> datas1<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>j <span class="token operator">!=</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>j <span class="token operator">!=</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             ret<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>datas2<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span>j<span class="token punctuation">,</span> datas2<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> ret<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">void</span> <span class="token function">insertSort</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> datas<span class="token punctuation">,</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> cc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token keyword">void</span> <span class="token function">insertSort</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> datas<span class="token punctuation">,</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> cc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token class-name">T</span> elem <span class="token operator">=</span> datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">int</span> j<span class="token punctuation">;</span>
-            <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> i<span class="token punctuation">;</span> j <span class="token operator">></span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> cc<span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> elem<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> i<span class="token punctuation">;</span> j <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> cc<span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> elem<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">;</span> j<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 datas<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>j<span class="token punctuation">,</span> datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>j <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">}</span>
             datas<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>j<span class="token punctuation">,</span> elem<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">mergeSort</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> datas<span class="token punctuation">,</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> cc<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token function">mergeSort</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> datas<span class="token punctuation">,</span> <span class="token class-name">Comparator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> cc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token function">insertSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">return</span> datas<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token punctuation">{</span>
             <span class="token keyword">int</span> mid <span class="token operator">=</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">;</span>
-            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> sort1 <span class="token operator">=</span> <span class="token function">mergeSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> mid<span class="token punctuation">)</span><span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> sort2 <span class="token operator">=</span> <span class="token function">mergeSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span>mid<span class="token punctuation">,</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> ret <span class="token operator">=</span> <span class="token function">merge</span><span class="token punctuation">(</span>sort1<span class="token punctuation">,</span> sort2<span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> sort1 <span class="token operator">=</span> <span class="token function">mergeSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> mid<span class="token punctuation">)</span><span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> sort2 <span class="token operator">=</span> <span class="token function">mergeSort</span><span class="token punctuation">(</span>datas<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span>mid<span class="token punctuation">,</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> ret <span class="token operator">=</span> <span class="token function">merge</span><span class="token punctuation">(</span>sort1<span class="token punctuation">,</span> sort2<span class="token punctuation">,</span> cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token keyword">return</span> ret<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -554,7 +547,7 @@
 </blockquote>
 <ol>
 <li>使用随机算法进行枢纽元选取，有大概率会选到在中间大小的元素</li>
-<li>当数组元素数量不大时，切换为稳定的排序算法（插排&#x2F;归并），避免树的深度在最后大幅增加</li>
+<li>当数组元素数量不大时，切换为稳定的排序算法（插排/归并），避免树的深度在最后大幅增加</li>
 </ol>
 <blockquote>
 <p>Hora partition</p>
@@ -575,14 +568,14 @@
 <p>此时需要考虑在合并时应将小的集合并到大的集合来减少树的深度。</p>
 <p>-&gt; 使用一个数组来追踪集合大小，确保每一次都是小的往大的合，这样树的深度永远被控制在logN。</p>
 <p>路径压缩：在执行isConnect时，将单个集合中的所有结点指向其最高父结点。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Union</span> <span class="token punctuation">&#123;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Union</span> <span class="token punctuation">{</span>
     
     <span class="token class-name">Integer</span><span class="token punctuation">[</span><span class="token punctuation">]</span> parent<span class="token punctuation">;</span>
     <span class="token class-name">Integer</span><span class="token punctuation">[</span><span class="token punctuation">]</span> size<span class="token punctuation">;</span>
 
     <span class="token comment">/*
         AF(n) : a union containing n elements, 
-        their parent nodes are stored in &#123;parent&#125;
+        their parent nodes are stored in {parent}
         every set's size is stored in size
 
         Rep invarient:
@@ -590,14 +583,14 @@
         size != null, elements in size are not less than 1
     */</span>
 
-    <span class="token keyword">public</span> <span class="token class-name">Union</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Union</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         parent <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">;</span>
         size <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             parent<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span>
             size<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
 
     <span class="token comment">/**
      * check if p and q are belong to the same set
@@ -606,57 +599,57 @@
      * @param q node q
      * @return if they are belong to the same set
      */</span>
-    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isConnect</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">,</span> <span class="token keyword">int</span> q<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isConnect</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">,</span> <span class="token keyword">int</span> q<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>q<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> i <span class="token operator">==</span> j<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
     <span class="token comment">/**
      * find parent of p
      * @param p node p
      * @return its parent
      */</span>
-    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">find</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">find</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span> p<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">find</span><span class="token punctuation">(</span>parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
     <span class="token comment">/**
      * connect set containing p and set containing q together
      * @param p node p
      * @param q node q
      */</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">,</span> <span class="token keyword">int</span> q<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token keyword">int</span> p<span class="token punctuation">,</span> <span class="token keyword">int</span> q<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
         <span class="token keyword">int</span> i <span class="token operator">=</span> parent<span class="token punctuation">[</span>p<span class="token punctuation">]</span><span class="token punctuation">;</span>
         <span class="token keyword">int</span> j <span class="token operator">=</span> parent<span class="token punctuation">[</span>q<span class="token punctuation">]</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">==</span> j<span class="token punctuation">)</span>
             <span class="token keyword">return</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>size<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">>=</span> size<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>size<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">&gt;=</span> size<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             parent<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span>
             size<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+=</span> size<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token punctuation">{</span>
             parent<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> j<span class="token punctuation">;</span>
             size<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">+=</span> size<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
 <h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><blockquote>
-<p>前&#x2F;中&#x2F;后序遍历时间复杂度</p>
+<p>前/中/后序遍历时间复杂度</p>
 </blockquote>
 <p>因为该遍历算法针对每一个结点作处理，其时间复杂度增长与结点个数有关。一次遍历要考虑N个节点，因此时间复杂度为O(N)</p>
 <blockquote>
 <p>层序遍历</p>
 </blockquote>
 <p>层序遍历的区别在于，该算法时间复杂度的增长与层数有关，假设层数为H，操作次数为1 + 2^1 + 2^2 + …</p>
-<p>因此其时间复杂度为O(2^H)，而H&#x3D;logN，所以时间复杂度为O(N)</p>
+<p>因此其时间复杂度为O(2^H)，而H=logN，所以时间复杂度为O(N)</p>
 <h3 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h3><p>对于一张有序的顺序表，可以通过不断的将其二分来进行压缩，BST就是二分查找的显式表现。</p>
 <p>根节点的左子树这种的元素均小于根节点的元素，右子树的均大于根节点元素。</p>
 <blockquote>
@@ -666,121 +659,121 @@
 <p>对于有单个孩子的结点，用其孩子结点顶替当前结点。</p>
 <p>对于有两个孩子的结点，找到其左子树中最大的结点或右子树中最小的结点(必然是叶子结点或只有一个孩子的结点)来顶替它，然后删除用于顶替的结点。</p>
 <p>tip：但是删除操作做的越多，树的高度就会不断增高，因为每次删除都相当于让树的某一端的结点数量减少，最后失去平衡。</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BinSearchTree</span> <span class="token punctuation">&#123;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BinSearchTree</span> <span class="token punctuation">{</span>
 
     <span class="token keyword">private</span> <span class="token class-name">Node</span> root<span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token keyword">int</span> size<span class="token punctuation">;</span>
     
-    <span class="token keyword">public</span> <span class="token class-name">Integer</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Integer</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">private</span> <span class="token class-name">Integer</span> <span class="token function">getHelper</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Integer</span> <span class="token function">getHelper</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">==</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">==</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span> troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
         
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Integer</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Node</span> <span class="token function">insert</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Integer</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         root <span class="token operator">=</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> root<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Integer</span> value<span class="token punctuation">,</span> <span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Integer</span> value<span class="token punctuation">,</span> <span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             size<span class="token operator">++</span><span class="token punctuation">;</span>
             <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Pair</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">></span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&gt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 troot<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 troot<span class="token punctuation">.</span>right <span class="token operator">=</span> <span class="token function">insertHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">}</span>
             <span class="token keyword">return</span> troot<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">containsKey</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">containsKey</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token function">getHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> root<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">deleteHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&lt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             troot<span class="token punctuation">.</span>right <span class="token operator">=</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">></span> key<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key <span class="token operator">&gt;</span> key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             troot<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> troot<span class="token punctuation">.</span>right <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> troot<span class="token punctuation">.</span>right <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                 <span class="token class-name">Node</span> tmp <span class="token operator">=</span> <span class="token function">findMax</span><span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
                 troot<span class="token punctuation">.</span>elem <span class="token operator">=</span> tmp<span class="token punctuation">.</span>elem<span class="token punctuation">;</span>
                 troot<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token function">deleteHelper</span><span class="token punctuation">(</span>troot<span class="token punctuation">.</span>elem<span class="token punctuation">.</span>key<span class="token punctuation">,</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">&#125;</span>
-            <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>left <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                     troot <span class="token operator">=</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">;</span>
-                <span class="token punctuation">&#125;</span>
-                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>right <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>right <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
                     troot <span class="token operator">=</span> troot<span class="token punctuation">.</span>left<span class="token punctuation">;</span>
-                <span class="token punctuation">&#125;</span>
-            <span class="token punctuation">&#125;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
             size<span class="token operator">--</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> troot<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">findMax</span><span class="token punctuation">(</span><span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Node</span> <span class="token function">findMax</span><span class="token punctuation">(</span><span class="token class-name">Node</span> troot<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>troot <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-        <span class="token keyword">while</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>right <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>troot<span class="token punctuation">.</span>right <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             troot <span class="token operator">=</span> troot<span class="token punctuation">.</span>right<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> troot<span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Node</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Node</span> <span class="token punctuation">{</span>
         <span class="token keyword">private</span> <span class="token class-name">Pair</span> elem<span class="token punctuation">;</span>
         <span class="token keyword">private</span> <span class="token class-name">Node</span> left<span class="token punctuation">;</span>
         <span class="token keyword">private</span> <span class="token class-name">Node</span> right<span class="token punctuation">;</span>
-        <span class="token keyword">public</span> <span class="token class-name">Node</span><span class="token punctuation">(</span><span class="token class-name">Pair</span> elem<span class="token punctuation">,</span> <span class="token class-name">BinSearchTree<span class="token punctuation">.</span>Node</span> left<span class="token punctuation">,</span> <span class="token class-name">BinSearchTree<span class="token punctuation">.</span>Node</span> right<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">public</span> <span class="token class-name">Node</span><span class="token punctuation">(</span><span class="token class-name">Pair</span> elem<span class="token punctuation">,</span> <span class="token class-name">BinSearchTree<span class="token punctuation">.</span>Node</span> left<span class="token punctuation">,</span> <span class="token class-name">BinSearchTree<span class="token punctuation">.</span>Node</span> right<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">this</span><span class="token punctuation">.</span>elem <span class="token operator">=</span> elem<span class="token punctuation">;</span>
             <span class="token keyword">this</span><span class="token punctuation">.</span>left <span class="token operator">=</span> left<span class="token punctuation">;</span>
             <span class="token keyword">this</span><span class="token punctuation">.</span>right <span class="token operator">=</span> right<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>       
-    <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>       
+    <span class="token punctuation">}</span>
 
-    <span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Pair</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Pair</span> <span class="token punctuation">{</span>
 
         <span class="token keyword">private</span> <span class="token class-name">Integer</span> key<span class="token punctuation">;</span>
         <span class="token keyword">private</span> <span class="token class-name">Integer</span> value<span class="token punctuation">;</span>
-        <span class="token keyword">public</span> <span class="token class-name">Pair</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Integer</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">public</span> <span class="token class-name">Pair</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> key<span class="token punctuation">,</span> <span class="token class-name">Integer</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">this</span><span class="token punctuation">.</span>key <span class="token operator">=</span> key<span class="token punctuation">;</span>
             <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">}</span>
         
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -801,10 +794,10 @@
 <h2 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h2><p>将数据本身当作索引，仅仅把数据看作是位，而在数组对应的位置存储布尔值。</p>
 <p>但该方法会占用大量空间，且对于非数字类型不友好（但可以进行映射，确保任何值都会被分配到唯一的一个空间）。</p>
 <p>将元素转换为下标的过程即为hash，注意不要让hash生成负数，或对其进行特殊处理。</p>
-<p>对于超过2亿的数据量，必然会有多个元素共享空间的情况，因此我们不在数组中存储true&#x2F;false,而是对应的元素</p>
-<p>哈希的速度取决于它存储的数据量（越多的数据量代表越多的冲突），N个数据分布在M个桶里时，其平均访问速度为O(N&#x2F;M), L&#x3D;N&#x2F;M即为装在因子。当装载因子超过阈值时，就要进行rehash操作，通过使用更多的桶来减少冲突。</p>
+<p>对于超过2亿的数据量，必然会有多个元素共享空间的情况，因此我们不在数组中存储true/false,而是对应的元素</p>
+<p>哈希的速度取决于它存储的数据量（越多的数据量代表越多的冲突），N个数据分布在M个桶里时，其平均访问速度为O(N/M), L=N/M即为装在因子。当装载因子超过阈值时，就要进行rehash操作，通过使用更多的桶来减少冲突。</p>
 <p>但装载因子不是唯一需要考虑的东西，当一系列数据共享同一个空间时，其装载因子也可能非常小，因此哈希函数的涉及应确保哈希表中的数据分散存放。</p>
-<h2 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h2><p>可以追踪或移除最大&#x2F;最小元素</p>
+<h2 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h2><p>可以追踪或移除最大/最小元素</p>
 <p>堆用树的形式体现具有如下特质：</p>
 <ol>
 <li>所有的结点都要小于等于它的子节点</li>
@@ -828,9 +821,9 @@
 <p>父节点与子节点的下标关系：</p>
 <p>从1开始存储</p>
 <ul>
-<li>parent &#x3D; k&#x2F;2</li>
-<li>left child &#x3D; 2 * k</li>
-<li>right child &#x3D; 2 *</li>
+<li>parent = k/2</li>
+<li>left child = 2 * k</li>
+<li>right child = 2 *</li>
 </ul>
 </li>
 </ol>
@@ -878,7 +871,7 @@
 <p>树的特性：</p>
 <ol>
 <li>没有环路(最短路径问题本身需要满足的条件)</li>
-<li>每一个节点都最多只有一个父节点(对于图中的每一个节点来说，到达它的最短路径数永远&lt;&#x3D;1)</li>
+<li>每一个节点都最多只有一个父节点(对于图中的每一个节点来说，到达它的最短路径数永远&lt;=1)</li>
 </ol>
 <p>Dijkstra算法</p>
 <p>按照当前已知最短路的顺序访问各个节点，然后对该节点拥有的边进行松弛操作。</p>
@@ -1200,35 +1193,51 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+                本篇&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/2022/06/12/hello-world/">
+                <a href="/2022/06/29/DataStructure/">
                     <div class="card-image">
                         
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Remake | 数据结构">
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
-                        
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">Remake | 数据结构</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            菜狗的Remake之路 – 数据结构篇
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-29
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Faustxc
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Remake/" class="post-category">
+                                    Remake
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+                        <span class="chip bg-color">数据结构</span>
+                    </a>
+                    
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -1423,7 +1432,7 @@
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">50.8k</span>
+                        class="white-color">51.4k</span>
             
             <br>
             <span id="sitetime"></span>
@@ -1665,6 +1674,7 @@ $(function () {
     <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
     <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
     <script src="/js/matery.js"></script>
+    <script src="/js/FunnyTitle.js"></script>
 
     
 
