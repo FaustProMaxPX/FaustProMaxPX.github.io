@@ -401,14 +401,14 @@ limit [Integer]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.6k
+                    7.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    24 分
+                    28 分
                 </div>
                 
 
@@ -1048,6 +1048,54 @@ close():
 </li>
 </ol>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220714152230.png"></p>
+<h2 id="DB-Design"><a href="#DB-Design" class="headerlink" title="DB Design"></a>DB Design</h2><h3 id="ER-Models"><a href="#ER-Models" class="headerlink" title="ER Models"></a>ER Models</h3><p>Data Model：描述数据定义的概念集合<br>Schema：基于使用数据模型，对特定一组数据集合的描述</p>
+<blockquote>
+<p>Levels  of  Abstraction </p>
+</blockquote>
+<p>External  schema：描述用户看到的数据<br>Conceptul schema：设计逻辑结构<br>Physical schema：描述文件和索引的使用</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720144434.png"></p>
+<blockquote>
+<p>key constraints</p>
+</blockquote>
+<p>键约束，持有键约束的实体类，代表它的每一个对象在对应的关系中至多参与一次，也就是说该实体类在1-many中为many的一方。<br>箭头代表该实体在这个关系中持有键约束。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720145316.png"></p>
+<blockquote>
+<p>participation constraints</p>
+</blockquote>
+<p>参与约束，描述某一个实体在该关系中是全部参与(不可为null)还是部分参与，将连接实体与关系的线加粗代表该实体在本关系中全部参与。</p>
+<blockquote>
+<p>弱实体</p>
+</blockquote>
+<p>一个弱实体只能借助其依赖的强实体的主键标识。其具备如下特征：</p>
+<ul>
+<li>对应的强实体和弱实体必须构成一对多关系。</li>
+<li>弱实体必须是全部参与</li>
+<li>弱实体可以包含部分键，用来进一步唯一标识该弱实体。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720152706.png"></li>
+</ul>
+<p>Aggregation<br>允许某一个关系成为另一个关系的参与者。<br>例如，下图表示员工监管部门对项目的投资。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720154642.png"></p>
+<h3 id="FDs-and-normalization"><a href="#FDs-and-normalization" class="headerlink" title="FDs and normalization"></a>FDs and normalization</h3><p>函数依赖的定义：若有X -&gt; Y (-&gt;可以读作决定)，则当X相等时，Y必然相等。</p>
+<p>关键术语：</p>
+<ol>
+<li>超键：一系列决定表中所有字段的字段集合。</li>
+<li>候选键：决定表中所有字段的最小字段集合。</li>
+<li>主键：被选取的某个候选键。</li>
+<li>索引键：用于索引的某个键（与本章探讨的内容无关）</li>
+</ol>
+<p>表中存在对非键属性的依赖存在的问题（数据冗余）</p>
+<ol>
+<li>更新：每次更新必须对涉及的所有元组进行修改，否则会导致数据不一致。</li>
+<li>插入：若插入时依赖的属性错误或不确定就会破坏数据一致性。</li>
+<li>删除：如果删除了非键属性特定值的记录，那么我们就会失去该属性对应的指定值。例如：r=5 -&gt; y=7，若删除r=5的所有记录，则我们会丢失r=5时y的值。<br>但对键的依赖不会导致数据冗余，因为键本身具备唯一性。</li>
+</ol>
+<h4 id="Decomposition"><a href="#Decomposition" class="headerlink" title="Decomposition"></a>Decomposition</h4><p>分解可能导致的问题</p>
+<ol>
+<li>可能导致原始关系无法重建(破坏性的分解)。</li>
+<li>依赖的检查可能会需要join。</li>
+<li>一些查询可能会变的非常昂贵。<br>以上是在分解时需要考虑的问题，分解带来的好处是否能够超过上述问题带来的弊端。</li>
+</ol>
+<h5 id="Lossless-Join-Decomposition"><a href="#Lossless-Join-Decomposition" class="headerlink" title="Lossless Join Decomposition"></a>Lossless Join Decomposition</h5><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720171607.png" alt="破坏性的分解"></p>
+<p>无损的分解：如果将关系R分解为X和Y，对于每一个满足函数依赖F的实例r，都要求$π_x(r) ⋈ π_y(r) = r$。<br>通俗来说就是要求，分解后作为拼接两个关系的字段，必须能唯一标识某一张表中其余被拆分的信息。例如，本例中将ABC -&gt; AB和BC，就要求B能够唯一标识A或C，在本例中明显做不到。如果我们使用将其拆分成AC和BC，则可以达成这个目标，但就会导致另一个问题，A-&gt;B这个函数依赖没有被保存在任何一个拆分后的关系中，也就是每次检查该依赖都要进行join，这就引出了另一个问题：保留依赖的分解。</p>
+<h5 id="Dependency-Preserving-Decomposition"><a href="#Dependency-Preserving-Decomposition" class="headerlink" title="Dependency Preserving Decomposition"></a>Dependency Preserving Decomposition</h5><p>保留依赖的分解，要求分解后每一个关系中函数依赖的并集等于原先的函数依赖集合（简单理解）。这就要求每一次分解之后，每一个函数依赖涉及的字段必须存在同一张表中。</p>
+<p>eg. BCNF的分解<br>对任意违反BCNF的函数依赖X-&gt;Y，都可以将其分解为R-Y和，XY，其中X可以唯一标识Y，因此一定是无损依赖。<br>但是未必可以做到保留函数依赖，例如R={C,S,Z}, F={CS -&gt; Z, Z-&gt;C}(切分一个首尾相连的结构必然破坏其结构特性)。</p>
 
                 
             </div>
@@ -1588,7 +1636,7 @@ close():
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">52.8k</span>
+                        class="white-color">53.8k</span>
             
             <br>
             <span id="sitetime"></span>
