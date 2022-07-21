@@ -401,14 +401,14 @@ limit [Integer]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.6k
+                    8.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    28 分
+                    31 分
                 </div>
                 
 
@@ -1096,6 +1096,34 @@ close():
 <p>无损的分解：如果将关系R分解为X和Y，对于每一个满足函数依赖F的实例r，都要求$π_x(r) ⋈ π_y(r) = r$。<br>通俗来说就是要求，分解后作为拼接两个关系的字段，必须能唯一标识某一张表中其余被拆分的信息。例如，本例中将ABC -&gt; AB和BC，就要求B能够唯一标识A或C，在本例中明显做不到。如果我们使用将其拆分成AC和BC，则可以达成这个目标，但就会导致另一个问题，A-&gt;B这个函数依赖没有被保存在任何一个拆分后的关系中，也就是每次检查该依赖都要进行join，这就引出了另一个问题：保留依赖的分解。</p>
 <h5 id="Dependency-Preserving-Decomposition"><a href="#Dependency-Preserving-Decomposition" class="headerlink" title="Dependency Preserving Decomposition"></a>Dependency Preserving Decomposition</h5><p>保留依赖的分解，要求分解后每一个关系中函数依赖的并集等于原先的函数依赖集合（简单理解）。这就要求每一次分解之后，每一个函数依赖涉及的字段必须存在同一张表中。</p>
 <p>eg. BCNF的分解<br>对任意违反BCNF的函数依赖X-&gt;Y，都可以将其分解为R-Y和，XY，其中X可以唯一标识Y，因此一定是无损依赖。<br>但是未必可以做到保留函数依赖，例如R={C,S,Z}, F={CS -&gt; Z, Z-&gt;C}(切分一个首尾相连的结构必然破坏其结构特性)。</p>
+<h2 id="Concurrency"><a href="#Concurrency" class="headerlink" title="Concurrency"></a>Concurrency</h2><h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事务是一系列操作组成的工作单元，该工作单元内的操作是不可分割的，即要么所有操作都做，要么所有操作都不做，这就是事务。</p>
+<h4 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h4><p>automic:原子性，事务中的操作要么全部执行，要么都不执行<br>Consistency:一致性，事务应当维护数据库的完整性约束<br>Isolation:隔离性，并行的事务不应当相互影响<br>Durability:持久性，事务一旦被提交，所产生的更改是永久性的</p>
+<h4 id="可串行化"><a href="#可串行化" class="headerlink" title="可串行化"></a>可串行化</h4><p>并行出现问题的最明显特征：针对某一数据A，事务1的读取发生在事务2的写入之前，而写入发生在之后（如果事务1仅仅做读取操作，则不会有问题）。</p>
+<p>可串行化调度：如果一段并行调度产生的结果和串行调度产生的结果一致，则称为可串行化调度。</p>
+<p>冲突可串行化调度：在可串行化调度的基础上，满足交换没有冲突的操作可以变成串行调度。</p>
+<p>冲突：</p>
+<ol>
+<li>在同一事务中的对同一数据的所有操作都相互冲突。</li>
+<li>在不同事务间，对同一数据的读写，写写操作冲突。</li>
+</ol>
+<h4 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h4><h5 id="两段锁协议"><a href="#两段锁协议" class="headerlink" title="两段锁协议"></a>两段锁协议</h5><p>共享锁：事务获取该锁后得到读取权限<br>互斥锁：事务获取该锁后得到读写权限</p>
+<p>两个阶段<br>获取锁阶段：取得事务需要的所有锁，期间不能释放锁<br>释放锁阶段：释放之前获取的所有锁，期间不能获得新的锁</p>
+<p>问题：普通的两段锁协议不能处理事务回滚导致的一致性被破坏</p>
+<p>严格两段锁协议：只有在事务提交之后锁才被允许释放</p>
+<p>更加严格的协议：获取的锁都为互斥锁</p>
+<h5 id="多粒度锁"><a href="#多粒度锁" class="headerlink" title="多粒度锁"></a>多粒度锁</h5><p>我们可以将锁针对的对象大小称为锁的粒度，细粒度的锁可以帮助实现更加高效的并发，但相对的我们要创建大量的锁来确保对数据的精确操控，需要的空间更多。粗粒度锁虽然不能对数据进行细致的操作，但是相对来说它的数量并不需要太多，占用的空间更小。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220721155144.png" alt="不同粒度锁组成的树状结构"></p>
+<h5 id="意向锁"><a href="#意向锁" class="headerlink" title="意向锁"></a>意向锁</h5><p>当某个事务获取指定一个结点的锁时，它将隐式地锁定该节点的所有子节点。意向锁协议便是为了解决这个问题。<br>在本协议中，多了3中额外的锁：</p>
+<ol>
+<li>IS：代表有意向获取共享锁的意向锁。</li>
+<li>IX：代表有意向获取互斥锁的意向锁。</li>
+<li>SIX：同时获取共享锁和IX。这类锁主要用于更新，既要读取结点的内容，又要表现出修改的意向。<br>在本协议中，如果想要锁定某一个结点，则必须获取该结点所有父节点对应类型的意向锁。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220721160700.png" alt="锁之间的互斥性"></p>
+<h4 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h4><p>Undo Log: 在操作任何数据之前，先将原始数据拷贝一份，系统可以在崩溃后利用它恢复宕机前的状态。</p>
+<p>Undo Log可以保持事务的原子性和持久性，若事务提交阶段宕机，则数据库可以依据日志恢复，若在此之前宕机则数据库内仍旧为原先的数据。</p>
+<p>缺陷：每次事务提交都需要IO操作，但如果添加缓存会破坏持久性</p>
+<p>redo Log: 更改数据时，保留更改后的数据。</p>
+<p>redo log让事务提交后修改的数据可以暂时缓存在内存中而非直接提交。若事务崩溃，可以根据redo log还原事务</p>
 
                 
             </div>
@@ -1636,7 +1664,7 @@ close():
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">53.8k</span>
+                        class="white-color">57.8k</span>
             
             <br>
             <span id="sitetime"></span>

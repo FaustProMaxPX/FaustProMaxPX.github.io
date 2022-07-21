@@ -403,14 +403,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    2.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    10 分
                 </div>
                 
 
@@ -535,6 +535,175 @@
 <span class="token keyword">void</span> <span class="token function">obtrudeValue</span><span class="token punctuation">(</span><span class="token class-name">T</span><span class="token punctuation">)</span> <span class="token comment">// 将对应cf的结果修改为指定值</span>
 <span class="token class-name">Integer</span> <span class="token function">getNumberOfDependents</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">// 获取当前cf的依赖项数量 依赖项为正在等待该cf完成的cf的预估数量。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p>CompletableFuture 使用案例</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Batter</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Egg</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Milk</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Sugar</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Flour</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">T</span> <span class="token function">prepare</span><span class="token punctuation">(</span><span class="token class-name">T</span> ingredient<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+           <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> ingredient<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">&gt;</span></span> <span class="token function">prep</span><span class="token punctuation">(</span><span class="token class-name">T</span> ingredient<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token class-name">CompletableFuture</span>
+                <span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>ingredient<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span><span class="token class-name">Batter</span><span class="token operator">::</span><span class="token function">prepare</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Batter</span><span class="token punctuation">&gt;</span></span> <span class="token function">mix</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Egg</span><span class="token punctuation">&gt;</span></span> eggs <span class="token operator">=</span> <span class="token function">prep</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Egg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Milk</span><span class="token punctuation">&gt;</span></span> milk <span class="token operator">=</span> <span class="token function">prep</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Milk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Sugar</span><span class="token punctuation">&gt;</span></span> sugar <span class="token operator">=</span> <span class="token function">prep</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Sugar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Flour</span><span class="token punctuation">&gt;</span></span> flour <span class="token operator">=</span> <span class="token function">prep</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Flour</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 等待所有的材料都完成后再继续执行</span>
+        <span class="token class-name">CompletableFuture</span>
+                <span class="token punctuation">.</span><span class="token function">allOf</span><span class="token punctuation">(</span>eggs<span class="token punctuation">,</span> milk<span class="token punctuation">,</span> sugar<span class="token punctuation">,</span> flour<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token class-name">CompletableFuture</span><span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Batter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Baked</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Pan</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token class-name">Pan</span> <span class="token function">pan</span><span class="token punctuation">(</span><span class="token class-name">Batter</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Pan</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token class-name">Baked</span> <span class="token function">heat</span><span class="token punctuation">(</span><span class="token class-name">Pan</span> d<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Baked</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Baked</span><span class="token punctuation">&gt;</span></span> <span class="token function">bake</span><span class="token punctuation">(</span><span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Batter</span><span class="token punctuation">&gt;</span></span> cfb<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> cfb
+                <span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span><span class="token class-name">Baked</span><span class="token operator">::</span><span class="token function">pan</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">thenApplyAsync</span><span class="token punctuation">(</span><span class="token class-name">Baked</span><span class="token operator">::</span><span class="token function">heat</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Stream</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">CompletableFuture</span><span class="token punctuation">&lt;</span><span class="token class-name">Baked</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> <span class="token function">batch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Batter</span><span class="token punctuation">&gt;</span></span> batter <span class="token operator">=</span> <span class="token class-name">Batter</span><span class="token punctuation">.</span><span class="token function">mix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token function">bake</span><span class="token punctuation">(</span>batter<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">bake</span><span class="token punctuation">(</span>batter<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">bake</span><span class="token punctuation">(</span>batter<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">bake</span><span class="token punctuation">(</span>batter<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">Frosting</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">Frosting</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Frosting</span><span class="token punctuation">&gt;</span></span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token class-name">CompletableFuture</span><span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Frosting</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FrostedCake</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token class-name">FrostedCake</span><span class="token punctuation">(</span><span class="token class-name">Baked</span> baked<span class="token punctuation">,</span> <span class="token class-name">Frosting</span> frosting<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"FrostedCake"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// combineAsync() 当baked和frosting的cf完成后，再执行传入的函数</span>
+        <span class="token class-name">Baked</span><span class="token punctuation">.</span><span class="token function">batch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>baked <span class="token operator">-&gt;</span> baked
+                <span class="token punctuation">.</span><span class="token function">thenCombineAsync</span><span class="token punctuation">(</span><span class="token class-name">Frosting</span><span class="token punctuation">.</span><span class="token function">make</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> 
+                <span class="token punctuation">(</span>cake<span class="token punctuation">,</span> frosting<span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token keyword">new</span> <span class="token class-name">FrostedCake</span><span class="token punctuation">(</span>cake<span class="token punctuation">,</span> frosting<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">thenAcceptAsync</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token operator">::</span><span class="token function">println</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>CompletableFuture大体的设计思想应该是将某一个对象按照流水线的方式进行一系列处理，并且程序在整个过程中异步执行。</p>
+<h3 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h3><p><code>CompletableFuture</code>在执行过程中产生的异常并不会立即抛出，而是会暂时缓存起来，只有当调用<code>get()</code>获取结果时才会将异常抛出。也可以使用<code>isCompletedExceptionally()</code>来检查是否正常完成，但是对于在最后一次执行时抛出异常的任务，该方法也会算作完成，它只能检查任务是否被异常中断。<br>对异常的处理方法：</p>
+<ol>
+<li>使用<code>exceptionally()</code>，只有在出现异常时，该方法才会被调用，该方法的限制是，Function返回值的类型必须与传入类型相同。将一个正确的对象插回到流，可以使流恢复到正常状态。</li>
+<li><code>handle()</code>和<code>whenComplete()</code>每次都会被调用，因此必须检查fail是否为true，来确定是否有异常发生。但<code>handle()</code>可以生成新的类型，允许程序员执行对应的处理(可以修改它接收到的结果对象)。而<code>whenComplete()</code>只能做一定的逻辑处理，无法修改结果对象。</li>
+</ol>
+<h3 id="构造器的线程安全"><a href="#构造器的线程安全" class="headerlink" title="构造器的线程安全"></a>构造器的线程安全</h3><p>对象的构造在绝大多数的情况下是不存在线程安全问题的，因为在对象构造出来之前，根本不可能被获取，也就不存在对它的竞争。因此，将构造器设为同步没有实际意义，反而会阻塞正在构造的对象，导致在对象的所有构造器完成之前，其他线程无法使用该对象。<br>但要强调的一点是，构造器能够避免的是线程对当前正在构造的对象的竞争。如果构造器本身要去竞争一个共享资源，便会导致线程安全问题。例如，构造器竞争一个生成id的对象，可能会导致有许多对象出现重复id。<br>由于在语言层面并不支持synchronized修饰构造器，但我们可以通过在构造器中添加<code>synchronized</code>修饰的同步代码块来实现。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// concurrent/SynchronizedConstructor.java</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>atomic<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">SyncConstructor</span> <span class="token keyword">implements</span> <span class="token class-name">HasID</span><span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">Object</span> constructorLock <span class="token operator">=</span>
+        <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">SyncConstructor</span><span class="token punctuation">(</span><span class="token class-name">SharedArg</span> sa<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>constructorLock<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            id <span class="token operator">=</span> sa<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>此外，也可以将构造器设为私有，并实现一个静态工厂类来实现</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">// concurrent/SynchronizedFactory.java</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>atomic<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+<span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">SyncFactory</span> <span class="token keyword">implements</span> <span class="token class-name">HasID</span><span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">SyncFactory</span><span class="token punctuation">(</span><span class="token class-name">SharedArg</span> sa<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        id <span class="token operator">=</span> sa<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">synchronized</span> <span class="token class-name">SyncFactory</span> <span class="token function">factory</span><span class="token punctuation">(</span><span class="token class-name">SharedArg</span> sa<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">SyncFactory</span><span class="token punctuation">(</span>sa<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>Stream和CompletableFuture的比较</p>
+</blockquote>
+<p>并行流方案更适合解决可以无脑并行的问题（容易将数据拆分成无差别、易处理片段的问题）。它更多的面向数据的处理。而CompletableFuture则面向任务，某种程度上来说，是以高效的流水线模式去完成某一特定的任务。</p>
 
                 
             </div>
@@ -874,6 +1043,10 @@
                         <span class="chip bg-color">数据库</span>
                     </a>
                     
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -1068,7 +1241,7 @@
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">53.8k</span>
+                        class="white-color">57.8k</span>
             
             <br>
             <span id="sitetime"></span>
