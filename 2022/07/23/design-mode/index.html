@@ -4,24 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="C++, 狂奔的蜗牛">
-    <meta name="description" content="C++极简笔记
+    <meta name="keywords" content="design-mode, 狂奔的蜗牛">
+    <meta name="description" content="更加高效的搬砖方法
 
 
-C++Stream
-ostream
-
-只能使用&amp;lt;&amp;lt;运算符
-将任何类型的数据转换成字符串并传输给流
-
-istream
-
-只能使用&amp;gt;&amp;gt;运算符
-将流中的字符串转换成对应的数据类型
-
-cin
-
-每一次读取">
+设计模式Adapter模式适配器：在实际情况和需求之间，填补两者之间的差异。因此适配器模式就是用于填补现有程序和需要程序之间的差异，提高代码的复用性。通俗来说，就是在不修改现有代码的情况下，在适配器里添加新的业务逻辑">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -44,7 +31,7 @@ cin
     </style>
 
 
-    <title>C++ | 狂奔的蜗牛</title>
+    <title>design-mode | 狂奔的蜗牛</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -255,12 +242,12 @@ cin
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">C++</h1>
+                    <h1 class="description center-align post-title">design-mode</h1>
                 </div>
             </div>
         </div>
@@ -376,8 +363,12 @@ cin
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/C/">
-                                <span class="chip bg-color">C++</span>
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
+                            </a>
+                        
+                            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                                <span class="chip bg-color">设计模式</span>
                             </a>
                         
                     </div>
@@ -401,7 +392,7 @@ cin
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-06-30
+                    2022-07-23
                 </div>
                 
 
@@ -410,14 +401,14 @@ cin
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    7 分
+                    4 分
                 </div>
                 
 
@@ -435,284 +426,138 @@ cin
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>C++极简笔记</p>
+                <p>更加高效的搬砖方法</p>
 <span id="more"></span>
 
-<h1 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h1><h2 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h2><blockquote>
-<p>ostream</p>
-</blockquote>
-<p>只能使用<code>&lt;&lt;</code>运算符</p>
-<p><strong>将任何类型的数据转换成字符串并传输给流</strong></p>
-<blockquote>
-<p>istream</p>
-</blockquote>
-<p>只能使用<code>&gt;&gt;</code>运算符</p>
-<p><strong>将流中的字符串转换成对应的数据类型</strong></p>
-<blockquote>
-<p>cin</p>
-</blockquote>
-<p>每一次读取数据只会读取到下一个空白符为止。所有没有被读走的数据会保留在缓冲区。</p>
-<blockquote>
-<p>4种表示流状态的的bit</p>
-</blockquote>
-<p>Good bit : 准备好读写</p>
-<p>Fail bit : 之前的操作失败，之后的所有bit都被冻结</p>
-<p>EOF bit :  之前的bit已经到达文件尾部</p>
-<p>Bad bit : 外部错误，无法从外部数据源读取数据到缓冲区，通常无法恢复</p>
-<h2 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h2><blockquote>
-<p>vector</p>
-</blockquote>
-<p>若直接使用下标访问，会将数组超限错误静默处理。建议使用at()方法。</p>
-<blockquote>
-<p>deque</p>
-</blockquote>
-<p>头插速度更加快，但是访问元素速度相对较慢。</p>
-<blockquote>
-<p>map/set</p>
-</blockquote>
-<p>数据按照键排序存储（排序方式自定义），在迭代访问一系列元素时速度较快</p>
-<blockquote>
-<p>unordered_map/unordered_set</p>
-</blockquote>
-<p>数据无序存储，访问单个元素时较快。</p>
-<blockquote>
-<p>multimap</p>
-</blockquote>
-<p>一个键可以对应多个值</p>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">unordered_multimap&lt;string,int&gt; map;
-    map.insert({"cxc", 1});
-    map.insert({"cxc", 10});<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="Adapter模式"><a href="#Adapter模式" class="headerlink" title="Adapter模式"></a>Adapter模式</h2><p>适配器：在实际情况和需求之间，填补两者之间的差异。因此适配器模式就是用于填补现有程序和需要程序之间的差异，提高代码的复用性。通俗来说，就是在不修改现有代码的情况下，在适配器里添加新的业务逻辑，使其满足现有的需求。</p>
+<h3 id="类适配器模式"><a href="#类适配器模式" class="headerlink" title="类适配器模式"></a>类适配器模式</h3><p>在这种模式中，会让Adapter直接继承Adaptee，然后再根据Target需要的方法进行一定的适配。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode20220723102235.png" alt="类适配器模式的类图"></p>
+<p>例如，假设我们现在已经有了<code>Banner</code>类，它可以输出由<code>()</code>或<code>*</code>包裹的指定字符串。而我们现在希望有的功能是，在输出字符串前后添加提示语句。这时候我们就可以用适配器，在不修改Banner的情况下完成业务条件。</p>
+<p>担任Adaptee的<code>Banner</code>，代表了我们已有的代码</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Banner</span> <span class="token punctuation">{</span>
+    
+    <span class="token keyword">private</span> <span class="token class-name">String</span> str<span class="token punctuation">;</span>
 
+    <span class="token keyword">public</span> <span class="token class-name">Banner</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>str <span class="token operator">=</span> str<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showWithParen</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"("</span> <span class="token operator">+</span> str <span class="token operator">+</span> <span class="token string">")"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-<blockquote>
-<p>iterator</p>
-</blockquote>
-<p>分类：</p>
-<ul>
-<li>输入/输出迭代器</li>
-<li>Forward iterator : 同时具备写入与读取的功能</li>
-<li>Bidirectional iterator : 具有以上所有功能，且既可以向前也可以向后移动，接受<code>--</code>运算符</li>
-<li>Random Access iterator : 具有以上所有功能，且可对迭代器任意加减某个数。</li>
-</ul>
-<h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><p>struct 就是一个特殊的类，但是他的所有属性都是公开的。</p>
-<h4 id="修饰词"><a href="#修饰词" class="headerlink" title="修饰词"></a>修饰词</h4><blockquote>
-<p>private</p>
-</blockquote>
-<p>通常包含所有的类属性。并且用户不能直接访问或修改被<code>private</code> 修饰的内容。</p>
-<blockquote>
-<p>public</p>
-</blockquote>
-<p>可以被用户直接访问。通常定义了一系列与私有内容实现交互的内容。</p>
-<p>tips:C++中的this是指向当前对象的一个指针，不是引用。</p>
-<h4 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h4><ol>
-<li>default construction: the construction takes no parameters</li>
-<li>copy construction: use an object to construct another construction as the copy</li>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showWithStar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"*"</span> <span class="token operator">+</span> str <span class="token operator">+</span> <span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>担任Target的<code>Print</code>接口，规定了我们希望实现的业务功能。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Print</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">printWeak</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">printStrong</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>本场主角，担任<code>Adapter</code>的PrintBanner类，它继承了Banner，获取了已有的方法，并实现接口Print，完成现阶段的任务。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PrintBanner</span> <span class="token keyword">extends</span> <span class="token class-name">Banner</span> <span class="token keyword">implements</span> <span class="token class-name">Print</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">PrintBanner</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printWeak</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"invoke printWeak()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">showWithParen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStrong</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"invoke printStrong()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">showWithStar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="对象适配器模式"><a href="#对象适配器模式" class="headerlink" title="对象适配器模式"></a>对象适配器模式</h3><p>对象适配器模式在思想上和类适配器模式没有区别，主要差异在于，类适配器模式通过继承的方式来获取原有代码的方法，而对象适配器模式则通过委托，即让适配器持有原有方法。此时适配器可以直接继承Target的抽象类。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode20220723102737.png" alt="对象适配器类图"></p>
+<p>在本设计模式中，有如下登场角色：</p>
+<ol>
+<li>Target：该角色负责定义需要的方法，也就是要满足的新业务逻辑。</li>
+<li>Client：使用Target提供的方法进行具体处理。</li>
+<li>Adaptee：一个持有既定方法的角色，并且这些方法不能直接被应用于新的业务。</li>
+<li>Adapter：利用Adaptee提供的方法来满足Target的需求。</li>
 </ol>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">vector&lt;int&gt; vec{} // default construction
-vector&lt;int&gt; vec{1,2,3} // regular construction<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="Template-Method模式"><a href="#Template-Method模式" class="headerlink" title="Template Method模式"></a>Template Method模式</h2><p>这是一种带有模板功能的设计模式（废话），在父类中定义组成模板的方法，并将他们设为抽象方法，交给子类去实现。同时在父类中实现一个表达抽象方法执行流程的方法。通俗来说就是父类制定好某个程序的运行流程，但将内部的具体实现交给子类实现。(父类是提要求的甲方，子类是满足要求的苦逼乙方)</p>
+<p>利用模板设计模式，我们就可以做到处理逻辑的通用化，在父类中定义了程序的运行逻辑，子类中实现运行细节。这样即使运行逻辑出现问题，也只需要修改父类中的方法，而不需要大规模的改动子类。不过要注意的是，虽然将部分方法的实现放在父类中可以让子类的实现更加轻松，但也降低了子类的灵活性；如果父类中的方法实现过少，子类又会变得臃肿。因此哪些处理交给父类，哪些交给子类，是在开发中要着重考虑的，避免造成设计模式的滥用。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode20220723105602.png" alt="template method类图"></p>
+<p>在父类中定义模板方法，并实现程序运行模板。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AbstractDisplay</span> <span class="token punctuation">{</span>
 
+    <span class="token comment">/** 将模板方法声明为final，防止子类修改 */</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
+    <span class="token comment">/** 将子类要实现的方法声明为protected，防止被无关的类调用 */</span>
+    <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>做深拷贝时要注意，若拷贝对象中存储的是指针类型，则应深拷贝指针指向的对象而非指针本身。直接调用STL库中的拷贝构造只会深拷贝存储的对象。</p>
-<p>copy assignment: <em>删除旧的对象</em>，将其变量名用于另一个变量的拷贝。首先确保<code>另一个变量</code>不是自己本身。</p>
-<p>tips: </p>
-<ul>
-<li><p>拷贝构造器，拷贝赋值，析构函数要么全用默认，要么全部自定义。</p>
-</li>
-<li><p>应显示指明子类的构造函数，默认会使用基类的构造函数。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class Drink {
-    private:
-    	std::string _flavor
+<p>以下是两种子类的实现</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CharDisplay</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractDisplay</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">char</span> ch<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">CharDisplay</span><span class="token punctuation">(</span><span class="token keyword">char</span> ch<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>ch <span class="token operator">=</span> ch<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"&lt;&lt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"&gt;&gt;\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
     
-	public:
-		Drink() = default; // 显式指明默认构造器
-    	Drink(std::string flavor) : _flavor(flavor) {}
-}
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-class Tea : public Drink {
-    public:
-    	Tea() = default;
-	    Tea(string flavor) : Drink(flavor) {} // invoke base constructor
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-<p>若构造器使用explicit修饰，则该构造器不能对参数作隐式的类型转换，也不能用拷贝初始化。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">explicit HashMap(size_t bucket_count, const H&amp; hash = H());<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StringDisplay</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractDisplay</span> <span class="token punctuation">{</span>
 
-<p>对于声明了noexcept的函数，编译器会对其进行优化，但此类函数一旦抛出异常，就会终止程序。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void func() noexcept<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> str<span class="token punctuation">;</span>
 
+    <span class="token keyword">public</span> <span class="token class-name">StringDisplay</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>str <span class="token operator">=</span> str<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"=======start======="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-<p>Initializer_list constructor</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">myvector(const myvector&lt;T&gt;&amp; other) : t_size(other.t_size), length(other.length) {
-        datas = new T[length];
-        for (int i = 0; i &lt; t_size; i++) {
-            datas[i] = other.datas[i];
-        }
-    }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+    <span class="token punctuation">}</span>
 
-
-
-<h4 id="折构函数"><a href="#折构函数" class="headerlink" title="折构函数"></a>折构函数</h4><p>删除单个对象关键字：delete</p>
-<p>删除数组关键字：delete []</p>
-<p>折构函数声明：ClassName::~ClassName()</p>
-<p>折构函数不必显示调用，在离开作用域时会被自动调用。</p>
-<p><strong>若一个类要被继承，则必须将其析构函数设置为虚函数</strong></p>
-<h4 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h4><p>允许类外的对象访问类内的私有对象</p>
-<p>初始化列表</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">private:
-	int logicalSize;
-StringVector::StringVector() : logicalSize(0) {}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>语法</p>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">class A {
-    public:
-    	virtual void make() = 0; // The class implementing A must define this method
-};
-
-// 此处的public代表B中所有由A继承来的方法与属性的访问限制照旧
-class B : public A { // B implement A
-    ...
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<p>对于一个接口，其只能包含纯虚函数。</p>
-<p>对于非虚成员，所有的在父类中与子类成员同名的成员都会被隐藏。</p>
-<p>只有声明为虚函数的方法会被动态绑定到子类上，其余方法一概到编译类型中去寻找。</p>
-<blockquote>
-<p>concept (only C++20)</p>
-</blockquote>
-<p>concept是一个在编译期间进行判定的断言，属于接口的一类</p>
-<p>对模板类的类型参数进行一定的约束。</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">template &lt;typename It, typename Type&gt;
-requires Input_Iterator&lt;It&gt; &amp;&amp; Iterator_of&lt;It&gt; 
-	&amp;&amp; Equality_comparable&lt;Value_type&lt;It&gt;, Type&gt;
-int count(It it, Type val){
-    ...
-}
-
-template &lt;typename It, typename Type&gt;
-concept DerivedFrom = Input_Iterator&lt;It&gt; &amp;&amp; Iterator_of&lt;It&gt; 
-	&amp;&amp; Equality_comparable&lt;Value_type&lt;It&gt;, Type&gt;
-
-template &lt;class D, class B&gt;
-int count(It it, Type val) requires DerivedFrom&lt;D, B&gt;
-{
-    
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="Lambada"><a href="#Lambada" class="headerlink" title="Lambada"></a>Lambada</h2><p>语法：</p>
-<p>[capture clause] (parameter) -&gt; returnType {function body}</p>
-<p>capture clause:give access to outside variables</p>
-<p>stable_partition()</p>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">BidirectionalIterator stable_partition (BidirectionalIterator first,
-                                        BidirectionalIterator last,
-                                        UnaryPredicate pred);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>将集合中的元素分成两组，一组符合pred要求，一组不符合，并且不改变各元素相对位置。</p>
-<p>tips：如果调用非STL内置的方法对容器进行操作，该方法只能操作容器内容，但容器大小不会动态变化。</p>
-<h2 id="Const"><a href="#Const" class="headerlink" title="Const"></a>Const</h2><p> 被const修饰的变量不可被修改，包括该变量中的内容。同时若一个函数的参数为const，则在该函数调用的所有函数中都必须满足const，(即不能将一个const参数传递给非const参数)。</p>
-<blockquote>
-<p> const on objects</p>
-</blockquote>
-<p>只允许调用const function 并且将所有的public成员当作被const修饰</p>
-<blockquote>
-<p>const on functions</p>
-</blockquote>
-<p>保证这个函数不会调用除const functions之外的函数，并且不允许修改任何非静态，非可变的成员</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void fun() const;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-
-<p>const pointer</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">// read from right to left
-// const iterator 类似于常量指针
-int * const p; // constant pointer to a non-const int
-
-const int * p; // non-const pointer to a const int
-// const_iterator 类似于指针常量<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<p>tips：一个被const修饰的对象同样不能调用非const方法，因此建议在实现一个类的时候，同时实现const和非const两个版本。</p>
-<h2 id="lvalue-and-rvalue"><a href="#lvalue-and-rvalue" class="headerlink" title="lvalue and rvalue"></a>lvalue and rvalue</h2><p>lvalue:被变量名(地址)标识的表达式，可以用<code>&amp;</code>取到地址</p>
-<p>rvalue:临时变量，无法用&amp;取到地址， 无法被保存。</p>
-<p>右值只出现在寄存器中，而在堆栈中没有空间。</p>
-<p><code>&amp;</code>为左值引用，只能绑定左值</p>
-<p><code>&amp;&amp;</code>为右值引用，只能绑定右值</p>
-<p>tips:</p>
-<ul>
-<li>被const修饰的左值引用可以绑定右值。 re：非const修饰的左值引用可以修改指向对象的内容，但右值明显是不可以被修改的。</li>
-<li>右值引用绑定右值，但右值引用本身是个左值。</li>
-</ul>
-<h2 id="RAII"><a href="#RAII" class="headerlink" title="RAII"></a>RAII</h2><p>使用new申请的存储空间位于堆中，若在指向它的指针消失前，其存储空间没有被释放，则其永远在堆中占有那部分空间，但无法被访问到，造成内存泄漏。</p>
-<p>在程序中需要被手动释放的资源</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Acquire</th>
-<th>Release</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Heap memory</td>
-<td>new</td>
-<td>delete</td>
-</tr>
-<tr>
-<td>Files</td>
-<td>open</td>
-<td>close</td>
-</tr>
-<tr>
-<td>Locks</td>
-<td>try_clock</td>
-<td>unlock</td>
-</tr>
-<tr>
-<td>Sockets</td>
-<td>socket</td>
-<td>close</td>
-</tr>
-</tbody></table>
-<p>tips: 我们无法保证当异常抛出时，delete会被正常执行。因此需要妥善处理异常，避免内存泄漏。</p>
-<blockquote>
-<p>RAII</p>
-</blockquote>
-<p>在构造器中获取所有资源</p>
-<p>在析构函数中释放所有资源</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">// you don't need to invoke close
-ifstream input("xxx.txt");
-
-// you must invoke close
-ifstream input();
-input.open("xxx.txt");
-input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="SmartPointer"><a href="#SmartPointer" class="headerlink" title="SmartPointer"></a>SmartPointer</h2><blockquote>
-<p>std::unique_pointer</p>
-</blockquote>
-<p>唯一指向某一块内存资源，并在指针超出作用域时删除对象。</p>
-<p>因此该指针不允许拷贝。</p>
-<blockquote>
-<p>std::shared_pointer</p>
-</blockquote>
-<p>内存资源可以被多个指针指向，在最后一个指向的指针消失时，摧毁对象。</p>
-<p>相关构造器 (用这个)</p>
-<p>make_XXX<class>(args)</class></p>
-<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>当要进行多线程时，使用原子数据类型</p>
-<p>相关库</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/C%2B%2B20220630105430.png"></p>
-
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"=========end======="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -738,7 +583,7 @@ input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><s
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FaustProMaxPX.github.io/2022/06/30/Cpp/">http://FaustProMaxPX.github.io/2022/06/30/Cpp/</a>
+                    <a href="http://FaustProMaxPX.github.io/2022/07/23/design-mode/">http://FaustProMaxPX.github.io/2022/07/23/design-mode/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -776,8 +621,12 @@ input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><s
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/C/">
-                                    <span class="chip bg-color">C++</span>
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
+                                </a>
+                            
+                                <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                                    <span class="chip bg-color">设计模式</span>
                                 </a>
                             
                         </div>
@@ -951,46 +800,52 @@ input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><s
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/06/30/git/">
+                <a href="/2022/07/23/design-mode/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Remake | git">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="design-mode">
                         
-                        <span class="card-title">Remake | git</span>
+                        <span class="card-title">design-mode</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            git极简指南
+                            更加高效的搬砖方法
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-23
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Remake/" class="post-category">
-                                    Remake
+                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
+                                    笔记
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/git/">
-                        <span class="chip bg-color">git</span>
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <span class="chip bg-color">设计模式</span>
                     </a>
                     
                 </div>
@@ -1004,31 +859,31 @@ input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><s
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/06/30/Database/">
+                <a href="/2022/07/15/on%20java/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Remake | 数据库 (未完待续)">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="On java">
                         
-                        <span class="card-title">Remake | 数据库 (未完待续)</span>
+                        <span class="card-title">On java</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            菜狗的Remake之路 – 数据库篇
+                            菜狗于某次面试中被问到不少并发问题，结果一问三不知，恰好cs186也快看到并发控制，遂开坑《on java》学习一下java进阶知识。
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-15
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Remake/" class="post-category">
-                                    Remake
+                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
+                                    笔记
                                 </a>
                             
                             
@@ -1038,8 +893,12 @@ input.close();<span aria-hidden="true" class="line-numbers-rows"><span></span><s
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">数据库</span>
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
+                        <span class="chip bg-color">并发编程</span>
                     </a>
                     
                 </div>

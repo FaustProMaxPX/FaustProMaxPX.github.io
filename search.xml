@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>design-mode</title>
+      <link href="/2022/07/23/design-mode/"/>
+      <url>/2022/07/23/design-mode/</url>
+      
+        <content type="html"><![CDATA[<p>更加高效的搬砖方法</p><span id="more"></span><h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="Adapter模式"><a href="#Adapter模式" class="headerlink" title="Adapter模式"></a>Adapter模式</h2><p>适配器：在实际情况和需求之间，填补两者之间的差异。因此适配器模式就是用于填补现有程序和需要程序之间的差异，提高代码的复用性。通俗来说，就是在不修改现有代码的情况下，在适配器里添加新的业务逻辑，使其满足现有的需求。</p><h3 id="类适配器模式"><a href="#类适配器模式" class="headerlink" title="类适配器模式"></a>类适配器模式</h3><p>在这种模式中，会让Adapter直接继承Adaptee，然后再根据Target需要的方法进行一定的适配。</p><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode20220723102235.png" alt="类适配器模式的类图"></p><p>例如，假设我们现在已经有了<code>Banner</code>类，它可以输出由<code>()</code>或<code>*</code>包裹的指定字符串。而我们现在希望有的功能是，在输出字符串前后添加提示语句。这时候我们就可以用适配器，在不修改Banner的情况下完成业务条件。</p><p>担任Adaptee的<code>Banner</code>，代表了我们已有的代码</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Banner</span> <span class="token punctuation">{</span>        <span class="token keyword">private</span> <span class="token class-name">String</span> str<span class="token punctuation">;</span>    <span class="token keyword">public</span> <span class="token class-name">Banner</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">this</span><span class="token punctuation">.</span>str <span class="token operator">=</span> str<span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showWithParen</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"("</span> <span class="token operator">+</span> str <span class="token operator">+</span> <span class="token string">")"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showWithStar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"*"</span> <span class="token operator">+</span> str <span class="token operator">+</span> <span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>担任Target的<code>Print</code>接口，规定了我们希望实现的业务功能。</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Print</span> <span class="token punctuation">{</span>    <span class="token keyword">void</span> <span class="token function">printWeak</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">void</span> <span class="token function">printStrong</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><p>本场主角，担任<code>Adapter</code>的PrintBanner类，它继承了Banner，获取了已有的方法，并实现接口Print，完成现阶段的任务。</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PrintBanner</span> <span class="token keyword">extends</span> <span class="token class-name">Banner</span> <span class="token keyword">implements</span> <span class="token class-name">Print</span> <span class="token punctuation">{</span>    <span class="token keyword">public</span> <span class="token class-name">PrintBanner</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">super</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printWeak</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"invoke printWeak()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token function">showWithParen</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printStrong</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"invoke printStrong()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token function">showWithStar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="对象适配器模式"><a href="#对象适配器模式" class="headerlink" title="对象适配器模式"></a>对象适配器模式</h3><p>对象适配器模式在思想上和类适配器模式没有区别，主要差异在于，类适配器模式通过继承的方式来获取原有代码的方法，而对象适配器模式则通过委托，即让适配器持有原有方法。此时适配器可以直接继承Target的抽象类。</p><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode20220723102737.png" alt="对象适配器类图"></p><p>在本设计模式中，有如下登场角色：</p><ol><li>Target：该角色负责定义需要的方法，也就是要满足的新业务逻辑。</li><li>Client：使用Target提供的方法进行具体处理。</li><li>Adaptee：一个持有既定方法的角色，并且这些方法不能直接被应用于新的业务。</li><li>Adapter：利用Adaptee提供的方法来满足Target的需求。</li></ol><h2 id="Template-Method模式"><a href="#Template-Method模式" class="headerlink" title="Template Method模式"></a>Template Method模式</h2><p>这是一种带有模板功能的设计模式（废话），在父类中定义组成模板的方法，并将他们设为抽象方法，交给子类去实现。同时在父类中实现一个表达抽象方法执行流程的方法。通俗来说就是父类制定好某个程序的运行流程，但将内部的具体实现交给子类实现。(父类是提要求的甲方，子类是满足要求的苦逼乙方)</p><p>利用模板设计模式，我们就可以做到处理逻辑的通用化，在父类中定义了程序的运行逻辑，子类中实现运行细节。这样即使运行逻辑出现问题，也只需要修改父类中的方法，而不需要大规模的改动子类。不过要注意的是，虽然将部分方法的实现放在父类中可以让子类的实现更加轻松，但也降低了子类的灵活性；如果父类中的方法实现过少，子类又会变得臃肿。因此哪些处理交给父类，哪些交给子类，是在开发中要着重考虑的，避免造成设计模式的滥用。</p><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode20220723105602.png" alt="template method类图"></p><p>在父类中定义模板方法，并实现程序运行模板。</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AbstractDisplay</span> <span class="token punctuation">{</span>    <span class="token comment">/** 将模板方法声明为final，防止子类修改 */</span>    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token comment">/** 将子类要实现的方法声明为protected，防止被无关的类调用 */</span>    <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">protected</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>以下是两种子类的实现</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CharDisplay</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractDisplay</span> <span class="token punctuation">{</span>    <span class="token keyword">private</span> <span class="token keyword">char</span> ch<span class="token punctuation">;</span>    <span class="token keyword">public</span> <span class="token class-name">CharDisplay</span><span class="token punctuation">(</span><span class="token keyword">char</span> ch<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">this</span><span class="token punctuation">.</span>ch <span class="token operator">=</span> ch<span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"&lt;&lt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"&gt;&gt;\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StringDisplay</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractDisplay</span> <span class="token punctuation">{</span>    <span class="token keyword">private</span> <span class="token class-name">String</span> str<span class="token punctuation">;</span>    <span class="token keyword">public</span> <span class="token class-name">StringDisplay</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">this</span><span class="token punctuation">.</span>str <span class="token operator">=</span> str<span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"=======start======="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span>    <span class="token annotation punctuation">@Override</span>    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"=========end======="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> 设计模式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>On java</title>
       <link href="/2022/07/15/on%20java/"/>
       <url>/2022/07/15/on%20java/</url>
@@ -20,7 +47,7 @@
       
         <tags>
             
-            <tag> java </tag>
+            <tag> Java </tag>
             
             <tag> 并发编程 </tag>
             
@@ -47,9 +74,9 @@
       
         <tags>
             
-            <tag> 数据库 </tag>
+            <tag> Java </tag>
             
-            <tag> java </tag>
+            <tag> 数据库 </tag>
             
         </tags>
       
@@ -92,7 +119,7 @@
       
       <categories>
           
-          <category> 编程语言 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -119,7 +146,7 @@
       
       <categories>
           
-          <category> 操作系统 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -129,6 +156,8 @@
             <tag> Linux </tag>
             
             <tag> Shell </tag>
+            
+            <tag> 操作系统 </tag>
             
         </tags>
       
@@ -171,7 +200,7 @@
       
       <categories>
           
-          <category> 编程语言 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -221,7 +250,7 @@
       
       <categories>
           
-          <category> 青训摸鱼笔记 </category>
+          <category> 笔记 </category>
           
       </categories>
       
@@ -254,7 +283,7 @@
       
       <categories>
           
-          <category> 编程语言 </category>
+          <category> 笔记 </category>
           
       </categories>
       
