@@ -403,14 +403,14 @@ Joins and Query OptimizationJoin AlgorithmTask 1：BNLJ本阶段要实现的方�
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.8k
+                    8.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    34 分
+                    37 分
                 </div>
                 
 
@@ -1454,6 +1454,91 @@ Joins and Query OptimizationJoin AlgorithmTask 1：BNLJ本阶段要实现的方�
     <span class="token punctuation">}</span>  
     <span class="token keyword">return</span><span class="token punctuation">;</span>  
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="Task-4-LockUtil"><a href="#Task-4-LockUtil" class="headerlink" title="Task 4: LockUtil"></a>Task 4: LockUtil</h4><p>拥有了以上基础，我们就可以着手将请求锁的方法封装为一个工具类。该工具类需要具备如下功能：</p>
+<ol>
+<li>永远只在已有锁的基础上，做最小程度的升级来满足新的要求。</li>
+<li>只能升级锁，不能降级。</li>
+<li>如果父级结点不满足新锁的前置条件，则为父级结点请求需要的前置锁。</li>
+</ol>
+<p>因此我们可以将本题划分为两个部分：</p>
+<ol>
+<li>确保所有的父级结点持有的锁都满足了前置条件。</li>
+<li>根据现有的锁，最小幅度地提升锁的粒度来满足条件。</li>
+</ol>
+<p>我们可以将碰到的情况分为如下几种：</p>
+<ol>
+<li>现有的锁已经满足了请求锁的要求，函数不做任何处理。</li>
+<li>现有的锁为IX锁，请求锁为S锁，由于本方法不能让锁的粒度降低，但又要满足新的要求，所以此时分配SIX锁。</li>
+<li>当前的锁为意向锁，继续请求锁必然意味着粒度提高，不再是意向锁(特殊情况就是第2种情况)，此时需要子结点放弃持有的锁，然后升级。</li>
+<li>其余情况，如果没有当前结点没有锁，就请求新锁，已有锁就升级。</li>
+</ol>
+<p>分析完毕之后，先开始实现本题的第一部分，确保所有的父级结点都满足条件。鉴于粒度结构属于树状结构，因此使用递归来实现。<br>递归的终止条件设定为遍历到达根节点，或者当前结点的条件已经满足要求，否则就请求需要的锁并继续递归访问父节点。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">ensureAncestorLock</span><span class="token punctuation">(</span><span class="token class-name">LockContext</span> parent<span class="token punctuation">,</span> <span class="token class-name">LockType</span> requestType<span class="token punctuation">,</span> <span class="token class-name">TransactionContext</span> transaction<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>parent <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> requestType <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>
+	<span class="token class-name">LockType</span> effectiveLockType <span class="token operator">=</span> parent<span class="token punctuation">.</span><span class="token function">getEffectiveLockType</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">LockType</span> explicitLockType <span class="token operator">=</span> parent<span class="token punctuation">.</span><span class="token function">getExplicitLockType</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">LockType</span><span class="token punctuation">.</span><span class="token function">substitutable</span><span class="token punctuation">(</span>explicitLockType<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span><span class="token function">substitutable</span><span class="token punctuation">(</span>effectiveLockType<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span><span class="token punctuation">;</span>
+	<span class="token class-name">LockContext</span> grandContext <span class="token operator">=</span> parent<span class="token punctuation">.</span><span class="token function">parentContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">LockType</span> grandLock <span class="token operator">=</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span><span class="token function">parentLock</span><span class="token punctuation">(</span>requestType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">ensureAncestorLock</span><span class="token punctuation">(</span>grandContext<span class="token punctuation">,</span> grandLock<span class="token punctuation">,</span> transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>explicitLockType <span class="token operator">==</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span>NL<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		parent<span class="token punctuation">.</span><span class="token function">acquire</span><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		parent<span class="token punctuation">.</span><span class="token function">promote</span><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来就可以轻松实现<code>ensureSufficientLockHeld()</code></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">ensureSufficientLockHeld</span><span class="token punctuation">(</span><span class="token class-name">LockContext</span> lockContext<span class="token punctuation">,</span> <span class="token class-name">LockType</span> requestType<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+    <span class="token comment">// requestType must be S, X, or NL  </span>
+    <span class="token keyword">assert</span> <span class="token punctuation">(</span>requestType <span class="token operator">==</span> <span class="token class-name">LockType<span class="token punctuation">.</span>S</span> <span class="token operator">||</span> requestType <span class="token operator">==</span> <span class="token class-name">LockType<span class="token punctuation">.</span>X</span> <span class="token operator">||</span> requestType <span class="token operator">==</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span>NL<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+  
+    <span class="token comment">// Do nothing if the transaction or lockContext is null  </span>
+    <span class="token class-name">TransactionContext</span> transaction <span class="token operator">=</span> <span class="token class-name">TransactionContext</span><span class="token punctuation">.</span><span class="token function">getTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>transaction <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> lockContext <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token keyword">return</span><span class="token punctuation">;</span>  
+  
+    <span class="token comment">// You may find these variables useful  </span>
+    <span class="token class-name">LockContext</span> parentContext <span class="token operator">=</span> lockContext<span class="token punctuation">.</span><span class="token function">parentContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token class-name">LockType</span> effectiveLockType <span class="token operator">=</span> lockContext<span class="token punctuation">.</span><span class="token function">getEffectiveLockType</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token class-name">LockType</span> explicitLockType <span class="token operator">=</span> lockContext<span class="token punctuation">.</span><span class="token function">getExplicitLockType</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+  
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">LockType</span><span class="token punctuation">.</span><span class="token function">substitutable</span><span class="token punctuation">(</span>explicitLockType<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">return</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token comment">// 如果当前隐式的锁类型已经满足需要，就不做任何操作  </span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">LockType</span><span class="token punctuation">.</span><span class="token function">substitutable</span><span class="token punctuation">(</span>effectiveLockType<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">return</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token comment">// 确保父级已经获取了前置锁  </span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>parentContext <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token class-name">LockType</span> parentLock <span class="token operator">=</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span><span class="token function">parentLock</span><span class="token punctuation">(</span>requestType<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token function">ensureAncestorLock</span><span class="token punctuation">(</span>parentContext<span class="token punctuation">,</span> parentLock<span class="token punctuation">,</span> transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>explicitLockType <span class="token operator">==</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span>IX <span class="token operator">&amp;&amp;</span> requestType <span class="token operator">==</span> <span class="token class-name">LockType<span class="token punctuation">.</span>S</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        lockContext<span class="token punctuation">.</span><span class="token function">promote</span><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span>SIX<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">return</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>explicitLockType<span class="token punctuation">.</span><span class="token function">isIntent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        lockContext<span class="token punctuation">.</span><span class="token function">escalate</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">return</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>explicitLockType <span class="token operator">==</span> <span class="token class-name">LockType</span><span class="token punctuation">.</span>NL<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        lockContext<span class="token punctuation">.</span><span class="token function">acquire</span><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>  
+        lockContext<span class="token punctuation">.</span><span class="token function">promote</span><span class="token punctuation">(</span>transaction<span class="token punctuation">,</span> requestType<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>   
+    <span class="token keyword">return</span><span class="token punctuation">;</span>  
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>Task5非常简单，就不多赘述了。</p>
+
                 
             </div>
             <hr/>
@@ -1978,7 +2063,7 @@ Joins and Query OptimizationJoin AlgorithmTask 1：BNLJ本阶段要实现的方�
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">60.5k</span>
+                        class="white-color">61.2k</span>
             
             <br>
             <span id="sitetime"></span>
