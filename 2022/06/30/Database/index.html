@@ -401,14 +401,14 @@ limit [Integer]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    8.6k
+                    9.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    31 分
+                    35 分
                 </div>
                 
 
@@ -1119,11 +1119,79 @@ close():
 <li>SIX：同时获取共享锁和IX。这类锁主要用于更新，既要读取结点的内容，又要表现出修改的意向。<br>在本协议中，如果想要锁定某一个结点，则必须获取该结点所有父节点对应类型的意向锁。</li>
 </ol>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220721160700.png" alt="锁之间的互斥性"></p>
-<h4 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h4><p>Undo Log: 在操作任何数据之前，先将原始数据拷贝一份，系统可以在崩溃后利用它恢复宕机前的状态。</p>
-<p>Undo Log可以保持事务的原子性和持久性，若事务提交阶段宕机，则数据库可以依据日志恢复，若在此之前宕机则数据库内仍旧为原先的数据。</p>
-<p>缺陷：每次事务提交都需要IO操作，但如果添加缓存会破坏持久性</p>
-<p>redo Log: 更改数据时，保留更改后的数据。</p>
-<p>redo log让事务提交后修改的数据可以暂时缓存在内存中而非直接提交。若事务崩溃，可以根据redo log还原事务</p>
+<h4 id="恢复"><a href="#恢复" class="headerlink" title="恢复"></a>恢复</h4><p>数据库恢复只要为了维护原子性，持久性，以及回滚某些破坏一致性的事务。</p>
+<h5 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h5><p>No Steal Policy：不允许缓冲池中还未提交的脏页被页面置换算法替换。可以达成原子性，但由于未提交的脏页会长久待在缓冲池中，会拖慢效率。<br>Force Policy：在提交事务之前，确保所有的更新都已经被刷入数据库。可以达成持久性，但会产生随机琐碎的IO，也会拖慢运行效率。<br>以上两者虽然很好的维护了各自对应的特性，但是对系统性能的消耗较大，并且也没有真正意义地达成原子性（批量提交的构成中可能出现崩溃），因此现在更倾向于使用下面两种策略。<br>No Force：和强制策略想反，它的问题是系统可能在事务提交后崩溃，导致缓存中的修改丢失。但我们也因此可以在事务提交前，减少IO开销，同时可以通过redo操作来维护数据的持久性。<br>Steal：这种策略会允许脏页被提前刷入磁盘，空出缓冲区。它的问题是，系统可能会在事务提交前崩溃，事务也有可能在提交前被终止。对此我们可以利用undo来维护原子性。</p>
+<p>上面提到的redo和undo，可以通过日志来实现</p>
+<h5 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h5><blockquote>
+<p>Write-Ahead log</p>
+</blockquote>
+<p>数据被写入磁盘前，其对应的日志必须先被写入磁盘。</p>
+<p>每一个日志记录都会有一个属于自己的唯一编号，在RAM中有一个顺序文件，记录log，当日志编号达到了指定的flushLSN时，就将日志记录刷入磁盘。<br>每一个数据页也都有一个pageLSN，指向最近的一个涉及该数据页更新的记录。<br>同时日志也有一个prevLSN字段，指向当前事务的上一条日志记录。因此，每个事务的所有记录操作合起来可以看作一条链表。<br>    在内存中有两张与内存有关的表</p>
+<ol>
+<li><p>Transaction table</p>
+<table>
+<thead>
+<tr>
+<th>XID</th>
+<th>Status</th>
+<th>LastLSN</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>R</td>
+<td>33</td>
+</tr>
+<tr>
+<td>2</td>
+<td>C</td>
+<td>42</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>Dirty Page</p>
+<table>
+<thead>
+<tr>
+<th>PageID</th>
+<th>recLSN</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>46</td>
+<td>11</td>
+</tr>
+<tr>
+<td>recLSN：首个更新该表的日志编号</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<p>Undo Log: 在操作任何数据之前，先将原始数据拷贝一份，系统可以在崩溃后利用它恢复宕机前的状态。<br>Undo Log可以保持事务的原子性和持久性，若事务提交阶段宕机，则数据库可以依据日志恢复，若在此之前宕机则数据库内仍旧为原先的数据。<br>缺陷：每次事务提交都需要IO操作，但如果添加缓存会破坏持久性</p>
+<p>redo Log: 更改数据时，保留更改后的数据。<br>redo log让事务提交后修改的数据可以暂时缓存在内存中而非直接提交。若事务崩溃，可以根据redo log还原事务</p>
+<h5 id="崩溃恢复"><a href="#崩溃恢复" class="headerlink" title="崩溃恢复"></a>崩溃恢复</h5><p>三步骤：</p>
+<ol>
+<li>分析：检查哪些事务在检查点前已经提交，哪些没有提交。<br>从检查点开始往前查看日志，对于已经有End标识的事务，将其从事务表移除。对于有Update标记且不在脏表记录中的数据页，将其添加到相应记录中。当分析结束后，事务表中剩下的都是在崩溃时仍在活跃的事务，脏表记录中都是可能没有将数据更新到磁盘中的数据页。</li>
+<li>Redo：重复所有的操作。但有部分情况不需要重复。1. 受影响的表不在Dirty Page Table中，这代表涉及该表的更改已经全部写入磁盘。2. 受影响的表在Dirty Page Table中，但recLSN &gt; LSN，这说明该表的更新发生在记录点之后，需要舍弃，因此无需重做。 3. pageLSN &gt;= LSN，理由同上一条。</li>
+<li>Undo：撤销所有没有成功提交的事务。对于简单事务回滚，每回滚一条就记录一条CLR日志，CLR日志的作用是防止多次回滚。同时CLR日志还有一个额外字段指向下一条回滚日志，即日志记录中的 prevLSN。<pre class="line-numbers language-python" data-language="python"><code class="language-python">toUndo <span class="token operator">=</span> <span class="token punctuation">{</span>lastLSNs of <span class="token builtin">all</span> Xacts <span class="token keyword">in</span> the Xact Table<span class="token punctuation">}</span>
+<span class="token keyword">while</span> !toUndo<span class="token punctuation">.</span>empty<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	thisLR <span class="token operator">=</span> toUndo<span class="token punctuation">.</span>find_and_remove_largest_LSN<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> thisLR<span class="token punctuation">.</span><span class="token builtin">type</span> <span class="token operator">==</span> CLR<span class="token punctuation">:</span>
+		<span class="token keyword">if</span> thisLR<span class="token punctuation">.</span>undoNextLSN <span class="token operator">!=</span> NULL<span class="token punctuation">:</span>
+			toUndo<span class="token punctuation">.</span>insert<span class="token punctuation">(</span>thisLR<span class="token punctuation">.</span>undonextLSN<span class="token punctuation">)</span>
+		<span class="token keyword">else</span><span class="token punctuation">:</span> <span class="token operator">//</span> thisLR<span class="token punctuation">.</span>undonextLSN <span class="token operator">==</span> NULL
+			 write an End record <span class="token keyword">for</span> thisLR<span class="token punctuation">.</span>xid <span class="token keyword">in</span> the log
+	<span class="token keyword">else</span><span class="token punctuation">:</span> 
+	  	<span class="token keyword">if</span> thisLR<span class="token punctuation">.</span><span class="token builtin">type</span> <span class="token operator">==</span> UPDATE<span class="token punctuation">:</span>  
+			write a CLR <span class="token keyword">for</span> the undo <span class="token keyword">in</span> the log 
+			undo the update <span class="token keyword">in</span> the database
+		<span class="token keyword">if</span> thisLR<span class="token punctuation">.</span>prevLSN <span class="token operator">!=</span> NULL<span class="token punctuation">:</span>
+			toUndo<span class="token punctuation">.</span>insert<span class="token punctuation">(</span>thisLR<span class="token punctuation">.</span>prevLSN<span class="token punctuation">)</span>
+		<span class="token keyword">elif</span> thisLR<span class="token punctuation">.</span>prevLSN <span class="token operator">==</span> NULL<span class="token punctuation">:</span>
+			write an END record <span class="token keyword">for</span> thisLR<span class="token punctuation">.</span>xid
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ol>
 
                 
             </div>
@@ -1664,7 +1732,7 @@ close():
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">62.3k</span>
+                        class="white-color">63.3k</span>
             
             <br>
             <span id="sitetime"></span>
