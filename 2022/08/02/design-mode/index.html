@@ -392,7 +392,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-07-23
+                    2022-08-02
                 </div>
                 
 
@@ -401,14 +401,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.7k
+                    3.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    15 分
+                    16 分
                 </div>
                 
 
@@ -872,6 +872,8 @@
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
+<h2 id="类的层次结构"><a href="#类的层次结构" class="headerlink" title="类的层次结构"></a>类的层次结构</h2><p>在继续学习Bridge模式之前，首先要了解一下类的层次结构。</p>
+<h3 id="类的功能层次结构"><a href="#类的功能层次结构" class="headerlink" title="类的功能层次结构"></a>类的功能层次结构</h3><p>当我们希望为某一个类增添新的功能时，我们通常会选择写一个子类继承原先的类。这种添加功能的方式就形成了一个功能层次结构。父类具有基本功能，在子类中添加新的功能<br>Something<br>                  |_____  Something good<br>如果我们要进一步扩展 something good，就会再为他写一个子类，层次结构就又加深了，通常功能层次结构不宜过深。</p>
 <h3 id="类的实现层次结构"><a href="#类的实现层次结构" class="headerlink" title="类的实现层次结构"></a>类的实现层次结构</h3><p>功能层次结构是为了标识类功能的扩展，那么实现层次结构表现的就是类的不同实现，也就是父类声明抽象方法来定义接口，子类实现这些接口。他的作用是帮助我们拆分接口定义与接口实现这两个部分。</p>
 <p>通过上面两种结构，我们不难发现，子类存在的目的无外乎两种：对父类功能的扩展，对父类方法的实现。当类的层次结构只有一层时，两个层次结构都混杂在一起，很容易导致层次结构变复杂。因此我们需要将这两个层次结构分离开来，并使用Bridge模式连接二者。</p>
 <h2 id="Bridge-模式"><a href="#Bridge-模式" class="headerlink" title="Bridge 模式"></a>Bridge 模式</h2><p>Bridge模式的作用是将类的功能层次结构与类的实现层次结构连接起来。通过将功能层次与实现层次分离，确保各层次的类能作为组件使用，Bridge模式则可以帮助拼接这些组件，提高灵活性。</p>
@@ -998,7 +1000,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FaustProMaxPX.github.io/2022/07/23/design-mode/">http://FaustProMaxPX.github.io/2022/07/23/design-mode/</a>
+                    <a href="http://FaustProMaxPX.github.io/2022/08/02/design-mode/">http://FaustProMaxPX.github.io/2022/08/02/design-mode/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1215,52 +1217,46 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/07/23/design-mode/">
+                <a href="/2022/08/02/Database/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="design-mode">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Remake | 数据库 (未完待续)">
                         
-                        <span class="card-title">design-mode</span>
+                        <span class="card-title">Remake | 数据库 (未完待续)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            更加高效的搬砖方法
+                            菜狗的Remake之路 – 数据库篇
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-23
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-02
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
+                            <a href="/categories/Remake/" class="post-category">
+                                    Remake
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Java/">
-                        <span class="chip bg-color">Java</span>
-                    </a>
-                    
-                    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                        <span class="chip bg-color">设计模式</span>
+                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">数据库</span>
                     </a>
                     
                 </div>
@@ -1510,7 +1506,7 @@
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">68.7k</span>
+                        class="white-color">68.8k</span>
             
             <br>
             <span id="sitetime"></span>
