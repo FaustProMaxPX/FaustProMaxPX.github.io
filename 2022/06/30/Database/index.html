@@ -401,14 +401,14 @@ limit [Integer]
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9.5k
+                    10.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    35 分
+                    37 分
                 </div>
                 
 
@@ -1192,6 +1192,35 @@ close():
 			write an END record <span class="token keyword">for</span> thisLR<span class="token punctuation">.</span>xid
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
+<h2 id="Distributed-transactions"><a href="#Distributed-transactions" class="headerlink" title="Distributed transactions"></a>Distributed transactions</h2><p>分布式事务本质上属于 share-nothing prallel</p>
+<h3 id="锁的分配"><a href="#锁的分配" class="headerlink" title="锁的分配"></a>锁的分配</h3><p>一种典型的设计就是：根据数据的分区分配锁。这样每一个结点(数据页/元组)可以管理它自己的lock表，对于粗粒度锁，因为它很有可能涉及跨分区锁定，因此我们专门给它分配一种home锁。</p>
+<p>通过这种锁分配机制，可以简洁高效的管理锁，但死锁和commit/abort的问题依旧没有解决。<br>死锁的处理在此不多赘述，主要记录一下分布式提交的理解。</p>
+<h3 id="Distributed-Commit：2PC"><a href="#Distributed-Commit：2PC" class="headerlink" title="Distributed Commit：2PC"></a>Distributed Commit：2PC</h3><p>分布式系统的一大特点就是不同步，但如果我们希望提交某一个事务，那必然需要涉及的所有结点都已经准备好了提交，通俗来讲就是，想提交某个事务必须得到所有相关人士的同意。也就是类似投票的机制。<br>在面对信息传输延迟/失败的情况下，我们就需要2 Phase Commit来实现分布式投票。<br>在阶段1中，协调者会询问所有的结点是否准备好了投票/提交事务。</p>
+<ol>
+<li>协调者询问结点是否已就绪。</li>
+<li>参与者生成prepare/abort记录，并将其写入磁盘。</li>
+<li>参与者返回自己是否参与投票的应答。</li>
+<li>协调者生成提交记录(如果结点都同意)，并写入磁盘。</li>
+</ol>
+<p>在阶段2中，协调者就会根据投票结果选择对事务的操作，并将其广播。</p>
+<ol>
+<li>协调者广播投票结果。</li>
+<li>参与者生成有关结果的记录，并写入磁盘。</li>
+<li>参与者返回一个ack。</li>
+<li>协调者生成一个end记录，并写入磁盘，标志该事务完成操作。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220802152520.png" alt="2PC时序图"></li>
+</ol>
+<h3 id="Failure-handling"><a href="#Failure-handling" class="headerlink" title="Failure handling"></a>Failure handling</h3><p>如果协调者发现有参与者发生了故障：</p>
+<ul>
+<li>如果该参与者还没有参与投票，那就将该事务抛弃。</li>
+<li>如果已经参与了投票，那就交给恢复操作处理。<br>如果参与者发现协调者发生故障：</li>
+<li>如果还没有打prepare日志，就单方面拒绝。</li>
+<li>否则交给恢复过程处理。</li>
+</ul>
+<p>分析阶段操作：</p>
+<ul>
+<li>参与者：检测到prepare log时，将状态调整为commiting，让恢复进程询问协调者当前的状态，如果协调者响应了，就正常处理commit/abort。</li>
+<li>检测到Commit/Abort log后，将状态做出对于的修改，让恢复进程将状态信息发送给参与者，一旦所有的参与者都确认收到，就写入End记录。</li>
+</ul>
 
                 
             </div>
@@ -1732,7 +1761,7 @@ close():
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">67.3k</span>
+                        class="white-color">68.7k</span>
             
             <br>
             <span id="sitetime"></span>
