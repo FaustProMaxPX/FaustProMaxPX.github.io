@@ -3,11 +3,11 @@ var titleTime;
 document.addEventListener('visibilitychange', function () { 
     if (document.hidden) { 
         $('[rel="icon"]').attr('href', "/favicon.png"); 
-        document.title = '你一定会回来的！'; 
+        document.title = '如果我是DJ你会爱我吗'; 
         clearTimeout(titleTime); 
     } else { 
         $('[rel="icon"]').attr('href', "/favicon.png"); 
-        document.title = '哈哈，我就知道！' + OriginTitle; 
+        document.title = '爱情不是你想买，想买就能买' + OriginTitle; 
         titleTime = setTimeout(function () { 
             document.title = OriginTitle; 
         }, 
