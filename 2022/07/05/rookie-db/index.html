@@ -8,7 +8,7 @@
     <meta name="description" content="Rookie DB 实现cs186 project实现评价：这个project强度有点高，略微有些折磨。
 
 
-B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字节流中读取出来，首先阅读Lea">
+B+ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字节流中读取出来，首先阅读Leaf">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -429,7 +429,7 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
                 <h1 id="Rookie-DB-实现"><a href="#Rookie-DB-实现" class="headerlink" title="Rookie DB 实现"></a>Rookie DB 实现</h1><p>cs186 project实现<br>评价：这个project强度有点高，略微有些折磨。</p>
 <span id="more"></span>
 
-<h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B++ Tree"></a>B++ Tree</h2><h3 id="Task-1-LeafNode-fromBytes"><a href="#Task-1-LeafNode-fromBytes" class="headerlink" title="Task 1: LeafNode::fromBytes"></a>Task 1: LeafNode::fromBytes</h3><p>本题要实现将叶子节点的信息从字节流中读取出来，首先阅读<code>LeafNode::toBytes</code>了解叶子节点的字节流构成</p>
+<h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+ Tree"></a>B+ Tree</h2><h3 id="Task-1-LeafNode-fromBytes"><a href="#Task-1-LeafNode-fromBytes" class="headerlink" title="Task 1: LeafNode::fromBytes"></a>Task 1: LeafNode::fromBytes</h3><p>本题要实现将叶子节点的信息从字节流中读取出来，首先阅读<code>LeafNode::toBytes</code>了解叶子节点的字节流构成</p>
 <ol>
 <li>第1个字节用于表示结点类型，如果为1，代表该结点是叶子节点。</li>
 <li>之后8个字节用于表示右兄弟结点的page id，如果为-1则表示没有兄弟结点。</li>
@@ -948,8 +948,6 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Pair</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span>leftRecords<span class="token punctuation">,</span> rightRecords<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <blockquote>
 <p>GHJ失效</p>
 </blockquote>
@@ -968,8 +966,6 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Pair</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span>leftRecords<span class="token punctuation">,</span> rightRecords<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <h4 id="Task-3：External-Sort"><a href="#Task-3：External-Sort" class="headerlink" title="Task 3：External Sort"></a>Task 3：External Sort</h4><p>本题中要实现<code>sortRun</code>, <code>mergeSortedRuns</code>, <code>mergePass</code>, and <code>sort</code></p>
 <p>sortRun</p>
@@ -1071,8 +1067,6 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
     <span class="token keyword">return</span> runs<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <h4 id="Task-4：Sort-Merge-Join"><a href="#Task-4：Sort-Merge-Join" class="headerlink" title="Task 4：Sort Merge Join"></a>Task 4：Sort Merge Join</h4><p>本题要实现该Join方法的迭代器的获取下一条记录的部分</p>
 <p>用marked来标记当前是处于匹配阶段还是寻找阶段。</p>
 <p>若处于匹配阶段，则不断移动左右迭代器，保证每一次移动都能确保最后左表记录&lt;=右表。然后标记右迭代器当前元素，开始进入匹配阶段。</p>
@@ -1138,8 +1132,6 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
     <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
-
 <h3 id="Query-Optimization"><a href="#Query-Optimization" class="headerlink" title="Query Optimization"></a>Query Optimization</h3><h4 id="Task-5-Single-Table-Access-Selection-Pass-1"><a href="#Task-5-Single-Table-Access-Selection-Pass-1" class="headerlink" title="Task 5: Single Table Access Selection (Pass 1)"></a>Task 5: Single Table Access Selection (Pass 1)</h4><p>读取算法选择，在顺序遍历，以及索引遍历两种方法中，选取IO开销最小的来读取指定的表。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">QueryOperator</span> <span class="token function">minCostSingleAccess</span><span class="token punctuation">(</span><span class="token class-name">String</span> table<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token class-name">QueryOperator</span> minOp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SequentialScanOperator</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>transaction<span class="token punctuation">,</span> table<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1166,8 +1158,6 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
     minOp <span class="token operator">=</span> <span class="token function">addEligibleSelections</span><span class="token punctuation">(</span>minOp<span class="token punctuation">,</span> skipIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> minOp<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <h4 id="Task-6-Join-Selection-Pass-i-gt-1"><a href="#Task-6-Join-Selection-Pass-i-gt-1" class="headerlink" title="Task 6: Join Selection (Pass i > 1)"></a>Task 6: Join Selection (Pass i &gt; 1)</h4><p>此阶段要进行join操作，由于使用的是左深树，因此本题中使用prevMap，以及pass1Map存储表与对应操作的映射。</p>
 <p>prevMap&lt;Set&lt;String&gt;, QueryOperator&gt;：存储上一轮pass的join结果，字符串集合用于存储已经被拼接在一起的表。QueryOperator存储最后一次操作的操作符。</p>
@@ -1230,8 +1220,6 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> result<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 
 <h4 id="Task-7-Optimal-Plan-Selection"><a href="#Task-7-Optimal-Plan-Selection" class="headerlink" title="Task 7: Optimal Plan Selection"></a>Task 7: Optimal Plan Selection</h4><p>外部驱动方法实现</p>
 <p>首先获取读取数据页的最快速方法，接着循环调用Join，直到结果集中只剩下一个元素。</p>
@@ -2731,7 +2719,7 @@ B++ TreeTask 1: LeafNode::fromBytes本题要实现将叶子节点的信息从字
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">83.8k</span>
+                        class="white-color">87.1k</span>
             
             <br>
             <span id="sitetime"></span>
