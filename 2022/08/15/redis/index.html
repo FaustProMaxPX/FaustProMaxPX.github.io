@@ -4,12 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Linux, 狂奔的蜗牛">
-    <meta name="description" content="Linux基本知识及Shell基础用法
-
-
-Linux实质:内核应用场景:**服务器领域(最强的领域)**，桌面开发，嵌入式特性:免费稳定高效主要发行版:ubuntu, CentOS, RedHat
-Linux中一切皆文件隐藏文件以 . 打">
+    <meta name="keywords" content="Redis新手入门, 狂奔的蜗牛">
+    <meta name="description" content="实用主义的redis学习日志，使用的资料为《Redis实战》
+简介Redis是一个速度非常快的非关系型数据库，可以存储键与5种不同类型的值，可以将存储在内存的键值持久化到硬盘，可以使用复制特性来扩展读性能，还可以使用客户端分片来扩展写性能。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -32,7 +29,7 @@ Linux中一切皆文件隐藏文件以 . 打">
     </style>
 
 
-    <title>Linux | 狂奔的蜗牛</title>
+    <title>Redis新手入门 | 狂奔的蜗牛</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -243,12 +240,12 @@ Linux中一切皆文件隐藏文件以 . 打">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Linux</h1>
+                    <h1 class="description center-align post-title">Redis新手入门</h1>
                 </div>
             </div>
         </div>
@@ -364,16 +361,16 @@ Linux中一切皆文件隐藏文件以 . 打">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Linux/">
-                                <span class="chip bg-color">Linux</span>
+                            <a href="/tags/redis/">
+                                <span class="chip bg-color">redis</span>
                             </a>
                         
-                            <a href="/tags/Shell/">
-                                <span class="chip bg-color">Shell</span>
+                            <a href="/tags/python/">
+                                <span class="chip bg-color">python</span>
                             </a>
                         
-                            <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
-                                <span class="chip bg-color">操作系统</span>
+                            <a href="/tags/%E7%BC%93%E5%AD%98/">
+                                <span class="chip bg-color">缓存</span>
                             </a>
                         
                     </div>
@@ -397,7 +394,7 @@ Linux中一切皆文件隐藏文件以 . 打">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-06-30
+                    2022-08-15
                 </div>
                 
 
@@ -406,14 +403,14 @@ Linux中一切皆文件隐藏文件以 . 打">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.9k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    14 分
+                    8 分
                 </div>
                 
 
@@ -431,382 +428,189 @@ Linux中一切皆文件隐藏文件以 . 打">
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Linux基本知识及Shell基础用法</p>
-<span id="more"></span>
+                <p>实用主义的redis学习日志，使用的资料为《Redis实战》</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Redis是一个速度非常快的非关系型数据库，可以存储键与5种不同类型的值，可以将存储在内存的键值持久化到硬盘，可以使用复制特性来扩展读性能，还可以使用客户端分片来扩展写性能。</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>redis有五种数据结构：String, List, Set, Hash, ZSet(有序集合)</p>
+<table>
+<thead>
+<tr>
+<th>结构类型</th>
+<th>结构存储的值</th>
+<th>结构的读写能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>string</td>
+<td>字符串，整数或浮点数</td>
+<td>对整个字符串或字符串的一部分执行操作，可以对数字类型执行增减操作</td>
+</tr>
+<tr>
+<td>list</td>
+<td>一个链表，每个结点都包含一个字符串</td>
+<td>从链表的两端推入或弹出元素，根据偏移量对链表进行修剪；读取单个或多个元素，根据值查找或移除元素</td>
+</tr>
+<tr>
+<td>set</td>
+<td>包含字符串的无序收集器</td>
+<td>添加，获取，移除单个元素；检查一个元素是否存在；计算并交叉</td>
+</tr>
+<tr>
+<td>hash</td>
+<td>包含键值对的无序列表</td>
+<td>添加，获取单个键值对，获取所有键值对</td>
+</tr>
+<tr>
+<td>zset</td>
+<td>字符串成员与浮点数分值(score)之间的有序映射，元素的排列由分值决定</td>
+<td>添加，获取，删除单个元素；根据分值范围获取元素。</td>
+</tr>
+<tr>
+<td>在Redis中存储的基本思路：键名称为 xx:id, 冒号前表明这组数据属于的实体类，冒号之后用于分割实体类对应的不同对象(如果需要的话)。值使用的数据结构则要根据实际情况判断，例如hash适用于存储对象中字段和对应的值；set适用于需要去重/并交叉运算的情况；zset可以用于需要排序的情况。</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>一些例子.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814203913.png"></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814203946.png"></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814204014.png"></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="Redis在Web中的应用"><a href="#Redis在Web中的应用" class="headerlink" title="Redis在Web中的应用"></a>Redis在Web中的应用</h2><h3 id="管理用户登录会话"><a href="#管理用户登录会话" class="headerlink" title="管理用户登录会话"></a>管理用户登录会话</h3><p>每一个web服务都会使用cookie来记录访客的身份，并要求浏览器存储这些数据，在下一次登录时携带这些数据。</p>
+<table>
+<thead>
+<tr>
+<th>cookie类型</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>签名cookie</td>
+<td>验证cookie需要的一切信息都存储在cookie里，cookie也可以包含额外的信息，并且对这些信息签名也很容易</td>
+<td>正确处理签名很困难，容易造成安全漏洞</td>
+</tr>
+<tr>
+<td>令牌cookie</td>
+<td>添加信息非常容易。cookie体积非常小，可以有效提升访问速度</td>
+<td>需要在服务器中存储更多数据，用关系型数据库存储会带来较大的开销。</td>
+</tr>
+<tr>
+<td>下面假设一个场景：假如我们希望记录用户最近浏览的内容，由于这类数据一般都有微量，不定期的特质，如果使用关系型数据库会导致大量细碎的IO，严重拖慢运行速率。但是使用redis的话就可以有效解决在效率上的问题，但是内存的大小也同样不是无限的，因此我们需要定期对数据进行修剪。</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">update_token</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> token<span class="token punctuation">,</span> user<span class="token punctuation">,</span> item<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	timestamp <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	conn<span class="token punctuation">.</span>hset<span class="token punctuation">(</span><span class="token string">'login:'</span><span class="token punctuation">,</span> token<span class="token punctuation">,</span> user<span class="token punctuation">)</span> <span class="token comment"># 维护用户和令牌的映射关系</span>
+	conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'recent:'</span><span class="token punctuation">,</span> token<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span> <span class="token comment"># 记录token最后一次使用时间</span>
+	<span class="token keyword">if</span> item<span class="token punctuation">:</span>
+		conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'viewed:'</span> <span class="token operator">+</span> token<span class="token punctuation">,</span> item<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span> <span class="token comment"># 添加最近浏览的商品</span>
+		conn<span class="token punctuation">.</span>zremrangebyrank<span class="token punctuation">(</span><span class="token string">'viewed:'</span> <span class="token operator">+</span> token<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">26</span><span class="token punctuation">)</span> <span class="token comment"># 移除旧的记录，只保留最近的25个</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><p>实质:内核<br>应用场景:**服务器领域(最强的领域)**，桌面开发，嵌入式<br>特性:免费稳定高效<br>主要发行版:ubuntu, CentOS, RedHat</p>
-<p><strong>Linux中一切皆文件</strong><br>隐藏文件以 . 打头</p>
-<h2 id="Linux目录结构"><a href="#Linux目录结构" class="headerlink" title="Linux目录结构"></a>Linux目录结构</h2><p><img src="https://www.runoob.com/wp-content/uploads/2014/06/d0c50-linux2bfile2bsystem2bhierarchy.jpg" alt="目录结构"></p>
-<ol>
-<li><p>/bin [<strong>常用</strong>] (/usr/bin, /usr/local/bin)<br>存放经常使用的命令</p>
-</li>
-<li><p>/sbin (/usr/sbin, /usr/local/sbin)<br>存放系统管理员使用的系统管理程序</p>
-</li>
-<li><p>/home <strong>[常用]</strong><br>存放<strong>普通用户</strong>的主目录，在Linux中每个用户都有一个自己的目录。</p>
-</li>
-<li><p>/root <strong>[常用]</strong><br>该目录为系统管理员，也称作超级权限者的用户主目录。</p>
-</li>
-<li><p>/lib </p>
-<p>系统开机所需要最基本的动态连接共享库。</p>
-</li>
-<li><p>/etc <strong>[常用]</strong><br>所有的系统管理所需要的配置文件和子目录</p>
-</li>
-<li><p>/usr <strong>[常用]</strong><br>存放用户的应用程序和文件。</p>
-</li>
-<li><p>/boot <strong>[常用]</strong><br>存放的是启动Linux的核心文件，包括一些连接文件以及镜像文件。</p>
-</li>
-<li><p>/dev<br>类似于设备管理器， 把所有的硬件用文件的形式存储。</p>
-</li>
-<li><p>/media <strong>[常用]</strong><br>Linux系统会自动识别一些设备，当识别后，Linux会把识别的设备挂载到这个目录下。</p>
-</li>
-<li><p>/mnt <strong>[常用]</strong><br>系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将外部的存储挂在/mnt/上</p>
-</li>
-<li><p>/opt</p>
-<p>是给主机额外安装软件所存放的目录(尽量将安装软件存放到这)。</p>
-</li>
-<li><p>/usr/local <strong>[常用]</strong><br>给主机额外安装软件的目录，一般源码安装的软件在这。</p>
-</li>
-</ol>
-<h2 id="vi和vim"><a href="#vi和vim" class="headerlink" title="vi和vim"></a>vi和vim</h2><p>vi：Linux中内置的文本编辑器<br>vim：具有程序编辑的能力，可以看作是vi的增强版本，类似vscode</p>
-<h3 id="vi和vim常用的三种模式"><a href="#vi和vim常用的三种模式" class="headerlink" title="vi和vim常用的三种模式"></a>vi和vim常用的三种模式</h3><p>正常模式：<br>默认模式，可以移动光标，删除字符或删除整行类处理档案内容，也可以复制粘贴<br>包含操作：<br>(n)yy 拷贝当前开始n行<br>p:粘贴<br>(n)dd 删除当前开始n行<br>G:到最末行<br>gg:到首行<br>u:撤回上一步操作<br>行号 shift g:定位到对应行号</p>
-<p>插入模式：<br>按i进入编辑模式<br>命令行模式：<br>按:或/进入<br>包含操作：<br>wq(保存并推出)，q(退出)，q!(强制退出)<br>查找内容：命令行下 /关键字 回车， 输入n查找一个<br>设置行号：set nu 取消行号:set nonu<br>通过提供相关指令，完成读取，存盘，替换，离开vim，显示行号等动作。</p>
-<h2 id="文件基本属性"><a href="#文件基本属性" class="headerlink" title="文件基本属性"></a>文件基本属性</h2><p>chown(change owner):修改所属用户与组</p>
-<p>chmod(change mode):修改用户的权限</p>
-<h4 id="file-type"><a href="#file-type" class="headerlink" title="file type"></a>file type</h4><ul>
-<li>d:目录</li>
-<li>-:文件</li>
-<li>l:链接文档</li>
-<li>b:装置文件里面的可供储存的接口设备</li>
-<li>c:表示装装置文件里面的穿行端口设备</li>
-</ul>
-<h3 id="文件属主和属组"><a href="#文件属主和属组" class="headerlink" title="文件属主和属组"></a>文件属主和属组</h3><p>对于文件来说，都有一个特定的所有者。</p>
-<p>同时，在Linux中，用户是按组分类的，一个用户属于一个或多个组</p>
-<p>文件所有者以外的用户又可分为文件所有者的同组用户和其他用户</p>
-<h3 id="更改文件属性"><a href="#更改文件属性" class="headerlink" title="更改文件属性"></a>更改文件属性</h3><ol>
-<li><p>chgrp</p>
-<p>更改文件属组</p>
-<p>语法：chgrp [-R] 属组名  文件名</p>
-<p>-R:递归更改文件属组</p>
-</li>
-<li><p>chown</p>
-<p>更改文件属主，也可以同时更改文件属组</p>
-<p>语法：chown [-R] 属主名[:属组名] 文件名</p>
-</li>
-<li><p>chmod</p>
-<p>更改文件九个属性(owner/group/others的rwx权限)</p>
-<p>各权限的权值：</p>
-<p>​	r:4</p>
-<p>​	w:2</p>
-<p>​	x:1</p>
-<p>语法：chmod [-R] xyz 文件或目录</p>
-</li>
-</ol>
-<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><h4 id="硬连接"><a href="#硬连接" class="headerlink" title="硬连接"></a>硬连接</h4><p>硬链接指通过索引节点[文件的编号]来进行连接，可以理解为他们直接指向指定的数据。若有多个硬连接指向同一个文件，则删除其中一个并不会造成影响。</p>
-<p>意义：允许一个文件拥有多个有效路径名，可以避免误删重要文件。只有当所有的硬链接均被删除后，文件的数据块及目录才会被释放（有点类似Java对类的管理）</p>
-<h4 id="软连接"><a href="#软连接" class="headerlink" title="软连接"></a>软连接</h4><p>又称符号链接，该文件实际上是个文本文件，其中包含了另一文件的位置信息（类似于指针），可以理解为Windows中的快捷方式。删除符号链接不会对源文件造成影响，删除源文件会导致符号链接指向一个无效连接。</p>
-<h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p>ln [-s] src des  将desc连接到src上 </p>
-<p>-s:创建连接</p>
-<h2 id="文件目录指令"><a href="#文件目录指令" class="headerlink" title="文件目录指令"></a>文件目录指令</h2><p>绝对路径：由根目录**/**写起</p>
-<p>相对路径：不是由/写起</p>
-<p>功能描述：显示当前工作目录的绝对路径</p>
-<ul>
-<li><p>pwd指令</p>
-<p>显示当前所在目录</p>
-<p>常用选项：</p>
-<p>-P:显示出确实的路径，而非使用连结路径</p>
-</li>
-<li><p>ls指令<br>基本语法：ls  [选项] [目录或是文件]<br>常用选项：<br>-a：显示当前目录所有的文件和目录，包括隐藏的。<br>-l：以列表的方式显示信息，包含文件的属性与权限等等数据。<br>-h：更人性化的显示（一般与l合用）<br>-d：长数据串列输出，包含文件的属性与权限等等数据</p>
-</li>
-<li><p>cd指令<br>基本语法：cd [参数] （功能描述：切换到指定目录）<br>理解：绝对路径和相对路径<br>cd ~ 或者cd：回到自己的家目录<br>cd .. 回到目前目录的上一级目录</p>
-</li>
-<li><p>mkdir指令</p>
-<p>创建目录</p>
-<p>mkdir 目录 （默认只能创建一级<strong>目录</strong>）</p>
-<p>常用选项：</p>
-<p>-m 配置权限</p>
-<p>-p  递归创建文件夹</p>
-</li>
-<li><p>rmdir指令<br>rmdir [指令] 要删除的<strong>空目录</strong><br>rmdir删除的是<strong>空目录</strong>，若目录下有内容时无法删除<br>如果要删除非空目录，需要使用 rm -rf 要删除的目录。</p>
-<p>常用选项：</p>
-<p>-p：从该目录起，一次删除多级空目录</p>
-</li>
-<li><p>touch指令<br>创建空文件<br>touch 文件名称</p>
-</li>
-<li><p>cp指令<br>拷贝文件到指定目录<br>基本语法：cp [选项] source(原文件路径) dest(目标路径)<br>常用选项：</p>
-<ul>
-<li><p>-r 递归复制整个文件夹</p>
-</li>
-<li><p>-f 若目标档已存在且无法开启，则移除后再尝试一次</p>
-</li>
-<li><p>-p 连同文件的属性一起复制过去</p>
-</li>
-</ul>
-<p>强制覆盖指令 \cp</p>
-</li>
-<li><p>rm指令<br>移除文件或目录<br>基本语法：rm [选项] 要删除的文件或目录<br>常用选项：<br>-r：递归删除整个文件夹<br>-f：强制删除不提示</p>
-</li>
-<li><p>mv指令<br>移动或重命名文件<br>mv source destination<br>若两个文件处于用以文件夹下，且为同一类型，则表示重命名，否则表示移动</p>
-</li>
-<li><p>cat指令<br>查看文件内容 <strong>只能浏览文件而不能修改文件</strong><br>基本语法：<br>cat [选项] 要查看的文件<br>常用选项：-n 显示行号</p>
-</li>
-<li><p>echo指令<br>输出内容到控制台<br>基本语法：echo [选项]  [输出内容]<br>eg:输出环境变量：echo $PATH</p>
-</li>
-<li><p>head指令<br>用于显示文件的开头部分内容，默认情况下head指令显示文件的前10行内容<br>基本语法：<br>head 文件<br>head -n x 文件（查看文件头x行内容）</p>
-</li>
-<li><p>.tail 指令<br>用于显示文件的开头部分内容，默认情况下tail指令显示文件的最后10行内容<br>基本语法：<br>tail 文件<br>tail -n x 文件（查看文件尾x行内容）<br>tail -f 实时追踪文件的更新</p>
-</li>
-<li><p>&gt;指令和&gt;&gt;指令<br>&gt; 覆写， &gt;&gt; 追加</p>
-</li>
-</ul>
-<p><strong>软连接：存放了链接其他文件的路劲，相当于快捷方式</strong><br>创建软连接： ln -s [原文件或目录]  [软连接所处目录]</p>
-<p>history<br>查看已经执行过的历史命令，也可以执行历史命令<br>基本语法：<br>history 显示所有历史命令<br>history x 显示最近使用过的10个命令<br>!x 执行历史编号为x的命令</p>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p>帮助指令：<br>man 获得帮助信息<br>基本语法：man[命令或配置文件]（功能描述：获得帮助信息）</p>
-<p>help指令 获得shell内置命令的帮助信息<br>基本语法:help 命令</p>
-<h2 id="管理用户"><a href="#管理用户" class="headerlink" title="管理用户"></a>管理用户</h2><h3 id="用户登录和注销"><a href="#用户登录和注销" class="headerlink" title="用户登录和注销"></a>用户登录和注销</h3><p>切换用户 su - 用户名<br>注销用户 logout** (在运行级别3下有效)**</p>
-<h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><p>useradd 用户名 添加一个用户并在/home/中创建一个同名文件夹<br>useradd -d 文件路径 用户名 在指定路径中创建用户文件夹</p>
-<p>常用选项：</p>
-<ul>
-<li>-c comment   指定一段注释性描述</li>
-<li>-g 用户组   指定用户所属的用户组</li>
-<li>-G 用户组…   指定用户所属的附加组</li>
-<li>-s Shell文件  指定用户的登录Shell</li>
-</ul>
-<h3 id="指定-x2F-修改密码"><a href="#指定-x2F-修改密码" class="headerlink" title="指定/修改密码"></a>指定/修改密码</h3><p>passwd 用户名 (若不指定用户名默认修改当前用户密码)</p>
-<h3 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h3><p>删除用户但保留home中的文件夹 userdel 用户名<br>彻底删除 userdel -r 用户名</p>
-<h3 id="查询用户信息"><a href="#查询用户信息" class="headerlink" title="查询用户信息"></a>查询用户信息</h3><p>id 用户名<br>whoami 查看<strong>登录用户</strong></p>
-<h3 id="角色组"><a href="#角色组" class="headerlink" title="角色组"></a>角色组</h3><p>系统可以对有共性/权限的用户进行统一管理。</p>
-<p>添加组 groupadd 组名<br>删除组 groupdel 组名<br>往组中添加用户 useradd -g 用户组 用户名（若没有指定组，则默认会生成一个与用户同名的组，然后将用户放进去）<br>修改用户组别：usermod -g 用户组 用户名</p>
-<h3 id="用户和组相关文件"><a href="#用户和组相关文件" class="headerlink" title="用户和组相关文件"></a>用户和组相关文件</h3><p>/etc/passwd 文件<br>用户的配置文件，记录用户的各种信息<br>每行的含义：用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell</p>
-<p>/etc/shadow 文件<br>口令的配置文件<br>每行的含义：登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</p>
-<p>/etc/group 文件<br>组的配置文件，记录Linux包含的组的信息<br>每行含义：组名:口令:组标识号:组内用户列表</p>
-<h2 id="搜索查找指令"><a href="#搜索查找指令" class="headerlink" title="搜索查找指令"></a>搜索查找指令</h2><ul>
-<li><p>find指令</p>
-<ul>
-<li>从指定目录向下递归遍历各个子目录，将满足条件的文件或目录显示在终端</li>
-<li>基本语法：find [搜索范围] [选项]</li>
-<li>选项说明：<ul>
-<li><ol>
-<li>-name&lt;文件名&gt; 按照指定的文件名格式查找文件</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>-user &lt;用户名&gt; 查找属于指定用户名所有文件</li>
-</ol>
-</li>
-<li><ol start="3">
-<li>-size &lt;文件大小&gt;(单位：k,M,G) 按照指定的文件大小查找文件</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>locate指令</p>
-<ul>
-<li>locate指令可以快速定位文件路径。locate会利用<strong>事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件</strong>(不包含/tmp文件夹)。该指令**无需遍历整个系统文件 **，查询速度较快，但必须定期更新数据库。</li>
-<li>基本语法：locate 搜索文件             updatedb更新数据库</li>
-</ul>
-</li>
-<li><p>grep指令</p>
-<ul>
-<li>grep过滤查找</li>
-<li>基本语法： grep [选项] 查找内容 源文件</li>
-<li>常用选项：-n 显示匹配及行号  -j 忽略字母大小写</li>
-</ul>
-</li>
-<li><p>**管道符号 | **</p>
-<ul>
-<li>表示将前一个命令的处理结果传递给后面的命令处理。</li>
-</ul>
-</li>
-</ul>
-<h2 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h2><p>0：关机<br>1：单用户【找回丢失密码】<br>2：多用户状态没有网络服务<br>3：多用户状态有网络服务<br>4：系统未使用保留给用户（没什么用）<br>5：图形界面<br>6：系统重启</p>
-<p>调整运行级别：init [0123456]<br>查看当前运行级别：systemctl get-default<br>调整默认运行级别：systemctl set-default TARGET.target<br>multi-user.target:多用户级别<br>graphical.target:图形化级别</p>
-<h2 id="磁盘管理（待补全）"><a href="#磁盘管理（待补全）" class="headerlink" title="磁盘管理（待补全）"></a>磁盘管理（待补全）</h2><p>df</p>
-<p>列出文件系统的整体磁盘使用量</p>
-<table>
-<thead>
-<tr>
-<th>选项参数</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-a</td>
-<td>列出所有的文件系统</td>
-</tr>
-<tr>
-<td>-k</td>
-<td>以KBytes的容量显示各文件系统</td>
-</tr>
-<tr>
-<td>-m</td>
-<td>以MBytes的容量显示各文件系统</td>
-</tr>
-<tr>
-<td>-h</td>
-<td>以人们较易阅读的 GBytes, MBytes, KBytes 等格式自行显示</td>
-</tr>
-<tr>
-<td>-T</td>
-<td>显示文件系统类型</td>
-</tr>
-<tr>
-<td>-i</td>
-<td>不用硬盘容量，而以inode的数量来表示</td>
-</tr>
-</tbody></table>
-<p>du</p>
-<p>查询指定目录的磁盘占用情况</p>
-<table>
-<thead>
-<tr>
-<th>选项参数</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-a</td>
-<td>列出所有的文件系统</td>
-</tr>
-<tr>
-<td>-k</td>
-<td>以KBytes的容量显示各文件系统</td>
-</tr>
-<tr>
-<td>-m</td>
-<td>以MBytes的容量显示各文件系统</td>
-</tr>
-<tr>
-<td>-h</td>
-<td>以人们较易阅读的 GBytes, MBytes, KBytes 等格式自行显示</td>
-</tr>
-<tr>
-<td>-s</td>
-<td>列出总量而已，而不列出每个各别的目录占用容量</td>
-</tr>
-<tr>
-<td>-S</td>
-<td>不包括子目录下的总计</td>
-</tr>
-</tbody></table>
-<h2 id="任务调度-Crond"><a href="#任务调度-Crond" class="headerlink" title="任务调度 Crond"></a>任务调度 Crond</h2><h3 id="Crontab"><a href="#Crontab" class="headerlink" title="Crontab"></a>Crontab</h3><p>定时执行某项任务</p>
-<p> 语法：crontab [-u user] {-l | -r | -e}</p>
-<p>-u user  设定指定user的时程表</p>
-<table>
-<thead>
-<tr>
-<th>常用选项</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-e</td>
-<td>执行文字编辑器来设定时程表，内定的文字编辑器是 VI，如果你想用别的文字编辑器，则请先设定 VISUAL 环境变数来指定使用那个文字编辑器(比如说 setenv VISUAL joe)</td>
-</tr>
-<tr>
-<td>-r</td>
-<td>删除目前的时程表</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>列出目前的时程表</td>
-</tr>
-</tbody></table>
-<p>时间格式：</p>
-<pre class="line-numbers language-none"><code class="language-none">f1 f2 f3 f4 f5 program<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>只在服务端维持指定数量的token，每隔一段时间检查token数是否超标，如果超过阈值就将最老的token删除。<br>这里会存在一个竞争问题，如果要删除的token正在进行操作就会导致用户在操作中途被要求重新登陆。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">QUIT <span class="token operator">=</span> <span class="token boolean">False</span>
+LIMIT <span class="token operator">=</span> <span class="token number">1000000</span>
+<span class="token keyword">def</span> <span class="token function">clean_session</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">while</span> <span class="token keyword">not</span> QUIT<span class="token punctuation">:</span>
+		size <span class="token operator">=</span> conn<span class="token punctuation">.</span>zcard<span class="token punctuation">(</span><span class="token string">'recent:'</span><span class="token punctuation">)</span>
+		<span class="token keyword">if</span> size <span class="token operator">&lt;=</span> LIMIT<span class="token punctuation">:</span>
+			time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+			<span class="token keyword">continue</span>
+		end_index <span class="token operator">=</span> <span class="token builtin">min</span><span class="token punctuation">(</span>size <span class="token operator">-</span> LIMIT<span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span>
+		tokens <span class="token operator">=</span> conn<span class="token punctuation">.</span>zrange<span class="token punctuation">(</span><span class="token string">'recent:'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> end_index <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span>
+		session_keys <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+		<span class="token keyword">for</span> token <span class="token keyword">in</span> tokens<span class="token punctuation">:</span>
+			session_keys<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token string">'viewed:'</span> <span class="token operator">+</span> token<span class="token punctuation">)</span>
+		conn<span class="token punctuation">.</span>delete<span class="token punctuation">(</span><span class="token operator">*</span>session_keys<span class="token punctuation">)</span>
+		conn<span class="token punctuation">.</span>hdel<span class="token punctuation">(</span><span class="token string">'login:'</span><span class="token punctuation">,</span> <span class="token operator">*</span>tokens<span class="token punctuation">)</span>
+		conn<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span><span class="token string">'recent:'</span><span class="token punctuation">,</span> <span class="token operator">*</span>tokens<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<ul>
-<li>其中 f1 是表示分钟，f2 表示小时，f3 表示一个月份中的第几日，f4 表示月份，f5 表示一个星期中的第几天。program 表示要执行的程序。</li>
-<li>当 f1 为 * 时表示每分钟都要执行 program，f2 为 * 时表示每小时都要执行程序，其馀类推</li>
-<li>当 f1 为 a-b 时表示从第 a 分钟到第 b 分钟这段时间内要执行，f2 为 a-b 时表示从第 a 到第 b 小时都要执行，其馀类推</li>
-<li>当 f1 为 */n 时表示每 n 分钟个时间间隔执行一次，f2 为 */n 表示每 n 小时个时间间隔执行一次，其馀类推</li>
-<li>当 f1 为 a, b, c,… 时表示第 a, b, c,… 分钟要执行，f2 为 a, b, c,… 时表示第 a, b, c…个小时要执行，其馀类推</li>
-</ul>
-<p>重启Crond服务</p>
-<p>service crond restart</p>
-<h3 id="at"><a href="#at" class="headerlink" title="at"></a>at</h3><p>at命令是一次性定时计划任务，at的守护进程atd会以后台模式运行，检查作业队列来进行</p>
-<p>默认情况下，atd守护进程每60秒检查作业队列，有作业时，会检查作业运行时间，如果时间于当前时间匹配，则运行此作业</p>
-<p>语法：at [选项] [时间]</p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-m</td>
-<td>当 at 工作完成后，无论命令是否输出，都用 E-mail 通知执行 at 命令的用户。</td>
-</tr>
-<tr>
-<td>-c 工作标识号</td>
-<td>显示该 at 工作的实际内容。</td>
-</tr>
-<tr>
-<td>-t 时间</td>
-<td>在指定时间提交工作并执行，时间格式为 [[CC]YY]MMDDhhmm。</td>
-</tr>
-<tr>
-<td>-d</td>
-<td>删除某个工作，需要提供相应的工作标识号（ID），同 atrm 命令的作用相同。</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>列出当前所有等待运行的工作，和 atq 命令具有相同的额作用。</td>
-</tr>
-<tr>
-<td>-f 脚本文件</td>
-<td>指定所要提交的脚本文件。</td>
-</tr>
-</tbody></table>
-<p>时间格式</p>
-<table>
-<thead>
-<tr>
-<th>格式</th>
-<th>用法</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>HH:MM</td>
-<td>比如 04:00 AM。如果时间已过，则它会在第二天的同一时间执行。</td>
-</tr>
-<tr>
-<td>Midnight（midnight）</td>
-<td>代表 12:00 AM（也就是 00:00）。</td>
-</tr>
-<tr>
-<td>Noon（noon）</td>
-<td>代表 12:00 PM（相当于 12:00）。</td>
-</tr>
-<tr>
-<td>Teatime（teatime）</td>
-<td>代表 4:00 PM（相当于 16:00）。</td>
-</tr>
-<tr>
-<td>英文月名 日期 年份</td>
-<td>比如 January 15 2018 表示 2018 年 1 月 15 号，年份可有可无。</td>
-</tr>
-<tr>
-<td>MMDDYY、MM/DD/YY、MM.DD.YY</td>
-<td>比如 011518 表示 2018 年 1 月 15 号。</td>
-</tr>
-<tr>
-<td>now+时间</td>
-<td>以 minutes、hours、days 或 weeks 为单位，例如 now+5 days 表示命令在 5 天之后的此时此刻执行。</td>
-</tr>
-</tbody></table>
-<p>eg：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~J<span class="token comment"># at 02:00 2013-07-26</span>
-at<span class="token operator">&gt;</span> /bin/sync
-at<span class="token operator">&gt;</span> /sbin/shutdown -h now
-at<span class="token operator">&gt;</span> <span class="token operator">&lt;</span>EOT<span class="token operator">&gt;</span>
-job <span class="token number">9</span> at <span class="token number">2013</span>-07-26 02:00
-<span class="token comment">#在指定的时间关机。在一个at任务中是可以执行多个系统命令的</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="购物车功能"><a href="#购物车功能" class="headerlink" title="购物车功能"></a>购物车功能</h3><p>在过去，网站常常将购物车功能集成在cookie当中，这样做的缺点就是会导致cookie体积过大，拖慢请求速度；此外，网站对cookie的验证也会变得困难。<br>在上一节我们做到了将会话cookie以及用户最近浏览商品存储在redis中，接下来我们可以尝试将购物车也存储在redis中。<br>购物车的结构非常简单，使用散列存储商品id与数量的映射，利用cart与用户token形成命名空间。不过添加购物车之后在上面清理token的部分就需要添加对购物车的清理。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">add_to_cart</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> session<span class="token punctuation">,</span> item<span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">if</span> count <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+		conn<span class="token punctuation">.</span>hrem<span class="token punctuation">(</span><span class="token string">'cart:'</span> <span class="token operator">+</span> session<span class="token punctuation">,</span> item<span class="token punctuation">)</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		conn<span class="token punctuation">.</span>hset<span class="token punctuation">(</span><span class="token string">'cart:'</span> <span class="token operator">+</span> session<span class="token punctuation">,</span> item<span class="token punctuation">,</span> count<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>atq:查看当前等待运行的job</p>
-<p>atrm [工作号] 删除指定的job</p>
+
+<p>通过这一系列的优化，我们就可以通过较低的代价获取到用户最近浏览的商品，用户加入购物车的商品，用户下单的商品这些数据源，方便后续分析。</p>
+<h3 id="网页缓存"><a href="#网页缓存" class="headerlink" title="网页缓存"></a>网页缓存</h3><p>接下来就是最常用的缓存网页响应操作。对于大多数动态生成，但数据变化次数极少的网页，我们可以使用redis将请求的响应缓存下来，在下一次接收到请求之后直接调取缓存中的响应，减少响应时间也减轻了服务器的负担。<br>tip：中间件：能够在处理请求之前或之后添加层的框架</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">cache_request</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> request<span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">if</span> <span class="token keyword">not</span> can_cache<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">return</span> callback<span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+	page_key <span class="token operator">=</span> <span class="token string">'cache:'</span> <span class="token operator">+</span> hash_request<span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+	content <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span>page_key<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> <span class="token keyword">not</span> content<span class="token punctuation">:</span>
+		content <span class="token operator">=</span> callback<span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+		conn<span class="token punctuation">.</span>setex<span class="token punctuation">(</span>page_key<span class="token punctuation">,</span> content<span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">)</span>
+	<span class="token keyword">return</span> content<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="数据行缓存"><a href="#数据行缓存" class="headerlink" title="数据行缓存"></a>数据行缓存</h3><p>考虑到有一部分页面只需要表中的一部分数据行，这些页面势必无法整个缓存下来，但如果每次请求页面都去查询的话又会给数据库带来极大的压力。因此这里我们就要考虑缓存部分需要的数据行来提升效率。<br>如果上面的描述过于抽象的话就想一想淘宝的特价促销页面吧。<br>这方面优化的具体做法是：编写一个守护进程函数，让他定期将数据行更新到缓存中。这里数据行在redis中的数据结构为字符串，键为类型+商品id，值为JSON格式的商品属性。调度的处理方法为使用两个有序集合，一个负责记录何时进行调度，成员为数据行id，值为更新该数据的时间戳。另一个负责记录延时，成员为数据行id，值为更新数据的间隔。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">schedule_row_cache</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> row_id<span class="token punctuation">,</span> delay<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'delay:'</span><span class="token punctuation">,</span> row_id<span class="token punctuation">,</span> delay<span class="token punctuation">)</span> <span class="token comment"># 添加延迟</span>
+	conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'schedule:'</span><span class="token punctuation">,</span> row_id<span class="token punctuation">,</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># 立即进行调度</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">cache_rows</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">while</span> <span class="token keyword">not</span> QUIT<span class="token punctuation">:</span>
+		<span class="token comment"># 获取下一个调度的商品</span>
+		<span class="token builtin">next</span> <span class="token operator">=</span> conn<span class="token punctuation">.</span>zrange<span class="token punctuation">(</span><span class="token string">'schedule:'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> withscores<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+		now <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token comment"># 如果没有商品或还没轮到则休眠后继续</span>
+		<span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token builtin">next</span> <span class="token keyword">or</span> <span class="token builtin">next</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&gt;</span> row<span class="token punctuation">:</span>
+			time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">.05</span><span class="token punctuation">)</span>
+			<span class="token keyword">continue</span>
+		row_id <span class="token operator">=</span> <span class="token builtin">next</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+		delay <span class="token operator">=</span> conn<span class="token punctuation">.</span>zscore<span class="token punctuation">(</span><span class="token string">'delay:'</span><span class="token punctuation">,</span> row_id<span class="token punctuation">)</span>
+		<span class="token keyword">if</span> delay <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+			conn<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span><span class="token string">'delay:'</span><span class="token punctuation">,</span> row_id<span class="token punctuation">)</span>
+			conn<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span><span class="token string">'schedule:'</span><span class="token punctuation">,</span> row_id<span class="token punctuation">)</span>
+			conn<span class="token punctuation">.</span>delete<span class="token punctuation">(</span><span class="token string">'inv:'</span> <span class="token operator">+</span> row_id<span class="token punctuation">)</span>
+			<span class="token keyword">continue</span>
+		row <span class="token operator">=</span> Inventory<span class="token punctuation">.</span>get<span class="token punctuation">(</span>row_id<span class="token punctuation">)</span>
+		conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'schedule:'</span><span class="token punctuation">,</span> row_id<span class="token punctuation">,</span> now <span class="token operator">+</span> delay<span class="token punctuation">)</span>
+		conn<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span><span class="token string">'inv:'</span> <span class="token operator">+</span> row_id<span class="token punctuation">,</span> json<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>row<span class="token punctuation">.</span>to_dict<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>tip：redis不支持数据结构的嵌套，因为这会导致命令语法复杂性直线上升。如果希望达成类似的效果可以在命名空间尝试分割例如user:123存储用户信息，user:123:posts存储用户发表的文章。</p>
+<h3 id="网页分析"><a href="#网页分析" class="headerlink" title="网页分析"></a>网页分析</h3><p>上面我们通过缓存web页面来减少页面载入时间，但假如我们在内存大小有限的情况下，缓存所有的页面就不太现实了。这时候就需要有选择性的去缓存，比如缓存访问量前10000的商品。<br>这就需要我们再添加一个有序列表来记录各个商品的访问量，每当商品被访问后，它对应的分数就-1，这样访问量最多的商品就会排在列表的第一位。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">update_token</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> token<span class="token punctuation">,</span> user<span class="token punctuation">,</span> item<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	timestamp <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	conn<span class="token punctuation">.</span>hset<span class="token punctuation">(</span><span class="token string">'login:'</span><span class="token punctuation">,</span> token<span class="token punctuation">,</span> user<span class="token punctuation">)</span> <span class="token comment"># 维护用户和令牌的映射关系</span>
+	conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'recent:'</span><span class="token punctuation">,</span> token<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span> <span class="token comment"># 记录token最后一次使用时间</span>
+	<span class="token keyword">if</span> item<span class="token punctuation">:</span>
+		conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'viewed:'</span> <span class="token operator">+</span> token<span class="token punctuation">,</span> item<span class="token punctuation">,</span> timestamp<span class="token punctuation">)</span> <span class="token comment"># 添加最近浏览的商品</span>
+		conn<span class="token punctuation">.</span>zremrangebyrank<span class="token punctuation">(</span><span class="token string">'viewed:'</span> <span class="token operator">+</span> token<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">26</span><span class="token punctuation">)</span> <span class="token comment"># 移除旧的记录，只保留最近的25个</span>
+		conn<span class="token punctuation">.</span>zincrby<span class="token punctuation">(</span><span class="token string">'viewed:'</span><span class="token punctuation">,</span> item<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment"># 增加访问量 </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>同时为了减少内存的使用，我们只记录指定数量的商品。这需要一个守护进程函数去定期进行修剪。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">rescale_viewed</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">while</span> <span class="token keyword">not</span> QUIT<span class="token punctuation">:</span>
+		conn<span class="token punctuation">.</span>zremrangebyrank<span class="token punctuation">(</span><span class="token string">'viewed:'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">20001</span><span class="token punctuation">)</span> <span class="token comment"># 删除排名在2000后的商品</span>
+		conn<span class="token punctuation">.</span>zinterstore<span class="token punctuation">(</span><span class="token string">'viewed:'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">'viewed:'</span><span class="token punctuation">:</span><span class="token number">.5</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+		time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">300</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来就是修改can_cache，用新的逻辑来判断是否需要缓存</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">can_cache</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	item_id <span class="token operator">=</span> extract_item_id<span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> <span class="token keyword">not</span> item_id <span class="token keyword">or</span> is_dynamic<span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">return</span> <span class="token boolean">False</span>
+	rank <span class="token operator">=</span> conn<span class="token punctuation">.</span>zrank<span class="token punctuation">(</span><span class="token string">'viewed:'</span><span class="token punctuation">,</span> item_id<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> rank <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span> <span class="token keyword">and</span> rank <span class="token operator">&lt;</span> <span class="token number">10000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -833,7 +637,7 @@ job <span class="token number">9</span> at <span class="token number">2013</span
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FaustProMaxPX.github.io/2022/06/30/Linux/">http://FaustProMaxPX.github.io/2022/06/30/Linux/</a>
+                    <a href="http://FaustProMaxPX.github.io/2022/08/15/redis/">http://FaustProMaxPX.github.io/2022/08/15/redis/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -871,16 +675,16 @@ job <span class="token number">9</span> at <span class="token number">2013</span
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Linux/">
-                                    <span class="chip bg-color">Linux</span>
+                                <a href="/tags/redis/">
+                                    <span class="chip bg-color">redis</span>
                                 </a>
                             
-                                <a href="/tags/Shell/">
-                                    <span class="chip bg-color">Shell</span>
+                                <a href="/tags/python/">
+                                    <span class="chip bg-color">python</span>
                                 </a>
                             
-                                <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
-                                    <span class="chip bg-color">操作系统</span>
+                                <a href="/tags/%E7%BC%93%E5%AD%98/">
+                                    <span class="chip bg-color">缓存</span>
                                 </a>
                             
                         </div>
@@ -1054,29 +858,88 @@ job <span class="token number">9</span> at <span class="token number">2013</span
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/06/30/MySQL/">
+                <a href="/2022/08/15/redis/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="MySQL">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Redis新手入门">
                         
-                        <span class="card-title">MySQL</span>
+                        <span class="card-title">Redis新手入门</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            MySQL 简易笔记
+                            
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-15
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
+                                    笔记
+                                </a>
+                            
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/redis/">
+                        <span class="chip bg-color">redis</span>
+                    </a>
+                    
+                    <a href="/tags/python/">
+                        <span class="chip bg-color">python</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BC%93%E5%AD%98/">
+                        <span class="chip bg-color">缓存</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/08/11/design-mode/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="设计模式">
+                        
+                        <span class="card-title">设计模式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            更加高效的搬砖方法
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-11
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1092,61 +955,12 @@ job <span class="token number">9</span> at <span class="token number">2013</span
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">数据库</span>
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/MySQL/">
-                        <span class="chip bg-color">MySQL</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2022/06/30/git/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Remake | git">
-                        
-                        <span class="card-title">Remake | git</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            git极简指南
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-30
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Remake/" class="post-category">
-                                    Remake
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/git/">
-                        <span class="chip bg-color">git</span>
+                    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <span class="chip bg-color">设计模式</span>
                     </a>
                     
                 </div>
