@@ -401,14 +401,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    10.6k
+                    12.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    45 分
+                    51 分
                 </div>
                 
 
@@ -2065,7 +2065,186 @@
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>这个设计模式还有一个注意点就是由谁来管理状态迁移，在上面的例子中，我们让每一个具体状态类自己去判断当前的时间是否需要切换状态，如果需要修改就通知context。这种处理方式将什么时候切换类的信息集中到了一个类中，而缺点就是让每一个具体实现类都不可避免的要了解到其他类的状态信息，增加了耦合度。当然也可以将状态迁移的任务交给context来完成，但这样就要求context必须知道所有的具体状态类。</p>
+<h2 id="Flyweight-模式"><a href="#Flyweight-模式" class="headerlink" title="Flyweight 模式"></a>Flyweight 模式</h2><p>在英语中flyweight表示轻量级的意思，而在程序中，他指的就是减少对象的内存占用。通常情况下，我们会使用new来获得对象实例，但如果对象本身占用的空间比较大，若总是使用new来创建对象，就会消耗大量的内存空间。Flyweight模式就是通过共享实例来避免new出实例，减少内存的占用，同时也因为不需要生成新的实例，一定程度上提升了运行速度。<br>最典型的使用该设计模式的技术就是池化技术，用池来管理现有的昂贵资源，接收到请求后，尽量使用现有的资源。<br>不过一旦提到共享，我们就必须要想到，如果对某个实例进行了修改，那么修改的效果会在多个地方产生影响。这违背了我们在并发状况下的不共享原则，需要谨慎选择哪些信息可以被共享哪些不可以。<br>Intrinsic：表示应当被共享的信息，该单词的英文意思是“本质的”，“固有的”。从意思上我们就可以看出，这类信息并不依赖与某个单独的实例，它是某个类的共同特质，且不会被更改。这一类信息属于可以被共享的信息。<br>Extrinsic：表示不应当被共享的信息。与上面的Intrinsic相对的，这类信息依托于实例的状态，会随着状况改变而产生变化。在并发环境下，状况的变化会非常剧烈，因此这类信息的改动就会非常频繁，明显会对程序造成不好的影响。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode/20220814095410.png" alt="Flyweight 模式类图"></p>
+<p>登场角色：</p>
+<ol>
+<li>Flyweight：按照通常方式生成会占用大量空间的类，即要被共享实例的类。</li>
+<li>FlyweightFactory：生成轻量级角色的工厂，并在其中实现共享实例。</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BigChar</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">char</span> charname<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> fontdata<span class="token punctuation">;</span>
 
+    <span class="token keyword">public</span> <span class="token class-name">BigChar</span><span class="token punctuation">(</span><span class="token keyword">char</span> charname<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>charname <span class="token operator">=</span> charname<span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileReader</span><span class="token punctuation">(</span>charname <span class="token operator">+</span> <span class="token string">".txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
+            <span class="token class-name">StringBuffer</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuffer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                buffer<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                buffer<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>fontdata <span class="token operator">=</span> buffer<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>fontdata<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BigCharFactory</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">BigChar</span><span class="token punctuation">&gt;</span></span> pool <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">BigChar</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token class-name">BigCharFactory</span> instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BigCharFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">BigCharFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">BigCharFactory</span> <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// 生成/共享实例</span>
+    <span class="token comment">// 这里要保证线程安全，避免生成两个实例</span>
+    <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token class-name">BigChar</span> <span class="token function">getBigChar</span><span class="token punctuation">(</span><span class="token keyword">char</span> charname<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">BigChar</span> bc <span class="token operator">=</span> pool<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">""</span> <span class="token operator">+</span> charname<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>bc <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            bc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BigChar</span><span class="token punctuation">(</span>charname<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            pool<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">""</span> <span class="token operator">+</span> charname<span class="token punctuation">,</span> bc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> bc<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BigString</span> <span class="token punctuation">{</span>
+	<span class="token keyword">private</span> <span class="token class-name">BigChar</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bigchars<span class="token punctuation">;</span>
+	<span class="token keyword">public</span> <span class="token class-name">BigString</span><span class="token punctuation">(</span><span class="token class-name">String</span> string<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		bigchars <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BigChar</span><span class="token punctuation">[</span>string<span class="token punctuation">.</span>length<span class="token punctuation">]</span><span class="token punctuation">;</span>
+		<span class="token class-name">BigCharFactory</span> factory <span class="token operator">=</span> <span class="token class-name">BigCharFactory</span><span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> bigchars<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			bigchars<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> factory<span class="token punctuation">.</span><span class="token function">getBigChar</span><span class="token punctuation">(</span>string<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> bigchars<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			bigchars<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>垃圾回收：Java可以通过new关键字分配内存空间，当内存不足时就会开始垃圾回收处理。在堆空间中寻找没有被使用的实例，并释放掉他们。这里gc判断是否为垃圾的依据是：有没有其他对象引用了这个实例。在上面的示例中，生成的所有实例都交给pool托管，因此这些实例会长期贮存在内存中，但如果程序要长期运行或是以有限的内存运行，为了避免发生OOM，就要显示地去解除一些引用让gc可以回收他们，这时就需要注意不能把正被共享的实例回收了。</p>
+<h2 id="Proxy-模式"><a href="#Proxy-模式" class="headerlink" title="Proxy 模式"></a>Proxy 模式</h2><p>Proxy模式指代理模式，在面对不需要本体进行工作的请求时，将它交给代理去处理；只有当碰到代理职能之外的任务时，才交给本体去处理。<br>代理模式最典型的就是HTTP代理，如果接收到的请求页面在代理服务器中有缓存，就由代理服务器直接处理，如果没有缓存，才交给真正的服务器处理。所以代理模式的本质就是：只有在必要的时候采取劳烦本体。由于在实际环境中，本体象征的一般都是十分昂贵的资源，在中间添加一层代理，可以有效的提升程序运行的效率以及程序本身的健壮性。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/design_mode/20220815095304.png" alt="Proxy 模式类图"></p>
+<p>登场角色：</p>
+<ol>
+<li>Subject：定义了使Proxy和RealSubject角色之间保持一致性的接口，并且可以让用户不必在意使用的究竟是代理还是真实角色。</li>
+<li>Proxy：代理会尽可能处理接收到的请求，只有当自己不能处理时，才会生成RealSubject角色并将工作转交给它。</li>
+<li>RealSubject：实际的主体。<br>将代理人和本人划分出来，可以更加明确的指出哪些由代理人负责完成，哪些由本人负责完成，更好的将二者组件化。并且可以极大程度上避免修改本人的相关代码。</li>
+</ol>
+<blockquote>
+<p>各种Proxy模式</p>
+</blockquote>
+<ol>
+<li>Virtual Proxy：只有当真正需要实例的时候才会生成和初始化实例。</li>
+<li>Remote Proxy：远程调用</li>
+<li>Access Proxy：在调用RealSubject角色的功能时设置访问限制，相当于给代理划分权限级别。</li>
+</ol>
+<p>保持代理与本体一致性的接口</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Printable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">setPrintName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">String</span> <span class="token function">getPrintName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>本体</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Printer</span> <span class="token keyword">implements</span> <span class="token class-name">Printable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">heavyJob</span><span class="token punctuation">(</span><span class="token string">"Printer实例生成中"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token function">heavyJob</span><span class="token punctuation">(</span><span class="token string">"Printer实例生成中["</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">"]"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setPrintName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getPrintName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"============"</span> <span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">"============"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">heavyJob</span><span class="token punctuation">(</span><span class="token class-name">String</span> msg<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment">// TODO Auto-generated catch block</span>
+                e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token char">'.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"生成完毕"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>代理人。这里设置本体名称以及生成本体的操作都需要加上锁，避免在有多个线程访问的情况下出现更新丢失或生成多个实例的情况。<br>此外，这里还是用反射来生成指定的本体，以此解除本体与代理的耦合。</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PrinterProxy</span> <span class="token keyword">implements</span> <span class="token class-name">Printable</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">String</span> name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">Printable</span> real<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token class-name">String</span> className<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">PrinterProxy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">PrinterProxy</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">,</span> <span class="token class-name">String</span> className<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>className <span class="token operator">=</span> className<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">synchronized</span> <span class="token keyword">void</span> <span class="token function">setPrintName</span><span class="token punctuation">(</span><span class="token class-name">String</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>real <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            real<span class="token punctuation">.</span><span class="token function">setPrintName</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">getPrintName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token class-name">String</span> str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">realize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        real<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">synchronized</span> <span class="token keyword">void</span> <span class="token function">realize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>real <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                real <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Printable</span><span class="token punctuation">)</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span>className<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                real<span class="token punctuation">.</span><span class="token function">setPrintName</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InstantiationException</span> <span class="token operator">|</span> <span class="token class-name">IllegalAccessException</span> <span class="token operator">|</span> <span class="token class-name">ClassNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -2603,7 +2782,7 @@
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">87.1k</span>
+                        class="white-color">88.7k</span>
             
             <br>
             <span id="sitetime"></span>
