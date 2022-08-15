@@ -464,32 +464,8 @@
 <td>字符串成员与浮点数分值(score)之间的有序映射，元素的排列由分值决定</td>
 <td>添加，获取，删除单个元素；根据分值范围获取元素。</td>
 </tr>
-<tr>
-<td>在Redis中存储的基本思路：键名称为 xx:id, 冒号前表明这组数据属于的实体类，冒号之后用于分割实体类对应的不同对象(如果需要的话)。值使用的数据结构则要根据实际情况判断，例如hash适用于存储对象中字段和对应的值；set适用于需要去重/并交叉运算的情况；zset可以用于需要排序的情况。</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>一些例子.</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814203913.png"></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814203946.png"></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814204014.png"></td>
-<td></td>
-<td></td>
-</tr>
 </tbody></table>
+<p>在Redis中存储的基本思路：键名称为 xx:id, 冒号前表明这组数据属于的实体类，冒号之后用于分割实体类对应的不同对象(如果需要的话)。值使用的数据结构则要根据实际情况判断，例如hash适用于存储对象中字段和对应的值；set适用于需要去重/并交叉运算的情况；zset可以用于需要排序的情况。<br>一些例子.<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814203913.png"><br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814203946.png"><br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220814204014.png"></p>
 <h2 id="Redis在Web中的应用"><a href="#Redis在Web中的应用" class="headerlink" title="Redis在Web中的应用"></a>Redis在Web中的应用</h2><h3 id="管理用户登录会话"><a href="#管理用户登录会话" class="headerlink" title="管理用户登录会话"></a>管理用户登录会话</h3><p>每一个web服务都会使用cookie来记录访客的身份，并要求浏览器存储这些数据，在下一次登录时携带这些数据。</p>
 <table>
 <thead>
@@ -1157,7 +1133,7 @@ LIMIT <span class="token operator">=</span> <span class="token number">1000000</
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">90.9k</span>
+                        class="white-color">92.4k</span>
             
             <br>
             <span id="sitetime"></span>
