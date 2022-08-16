@@ -6,7 +6,8 @@
     <meta charset="utf-8">
     <meta name="keywords" content="Redis新手入门, 狂奔的蜗牛">
     <meta name="description" content="实用主义的redis学习日志，使用的资料为《Redis实战》
-简介Redis是一个速度非常快的非关系型数据库，可以存储键与5种不同类型的值，可以将存储在内存的键值持久化到硬盘，可以使用复制特性来扩展读性能，还可以使用客户端分片来扩展写性能。">
+
+简介Redis是一个速度非常快的非关系型数据库，可以存储键与5种不同类型的值，可以将存储在内存的键值持久化到硬盘，可以使用复制特性来扩展读性能，还可以使用客户端分片来扩展写性能">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -403,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.2k
+                    4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    15 分
                 </div>
                 
 
@@ -429,6 +430,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>实用主义的redis学习日志，使用的资料为《Redis实战》</p>
+<span id="more"></span>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Redis是一个速度非常快的非关系型数据库，可以存储键与5种不同类型的值，可以将存储在内存的键值持久化到硬盘，可以使用复制特性来扩展读性能，还可以使用客户端分片来扩展写性能。</p>
 <h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>redis有五种数据结构：String, List, Set, Hash, ZSet(有序集合)</p>
 <table>
@@ -485,12 +487,8 @@
 <td>添加信息非常容易。cookie体积非常小，可以有效提升访问速度</td>
 <td>需要在服务器中存储更多数据，用关系型数据库存储会带来较大的开销。</td>
 </tr>
-<tr>
-<td>下面假设一个场景：假如我们希望记录用户最近浏览的内容，由于这类数据一般都有微量，不定期的特质，如果使用关系型数据库会导致大量细碎的IO，严重拖慢运行速率。但是使用redis的话就可以有效解决在效率上的问题，但是内存的大小也同样不是无限的，因此我们需要定期对数据进行修剪。</td>
-<td></td>
-<td></td>
-</tr>
 </tbody></table>
+<p>下面假设一个场景：假如我们希望记录用户最近浏览的内容，由于这类数据一般都有微量，不定期的特质，如果使用关系型数据库会导致大量细碎的IO，严重拖慢运行速率。但是使用redis的话就可以有效解决在效率上的问题，但是内存的大小也同样不是无限的，因此我们需要定期对数据进行修剪。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">update_token</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> token<span class="token punctuation">,</span> user<span class="token punctuation">,</span> item<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
 	timestamp <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
 	conn<span class="token punctuation">.</span>hset<span class="token punctuation">(</span><span class="token string">'login:'</span><span class="token punctuation">,</span> token<span class="token punctuation">,</span> user<span class="token punctuation">)</span> <span class="token comment"># 维护用户和令牌的映射关系</span>
@@ -587,6 +585,277 @@ LIMIT <span class="token operator">=</span> <span class="token number">1000000</
 		<span class="token keyword">return</span> <span class="token boolean">False</span>
 	rank <span class="token operator">=</span> conn<span class="token punctuation">.</span>zrank<span class="token punctuation">(</span><span class="token string">'viewed:'</span><span class="token punctuation">,</span> item_id<span class="token punctuation">)</span>
 	<span class="token keyword">return</span> rank <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span> <span class="token keyword">and</span> rank <span class="token operator">&lt;</span> <span class="token number">10000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Redis命令"><a href="#Redis命令" class="headerlink" title="Redis命令"></a>Redis命令</h2><h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>redis字符串可以存储以下三种数据</p>
+<ul>
+<li>字节串</li>
+<li>整数（长整型）</li>
+<li>浮点数（double）</li>
+</ul>
+<p>当用户向redis中存储字符串时，如果它可以被解释成整数或是浮点数，redis会察觉到这一点并提供增减值的方法，如果对字节串进行增减操作则会收到一个错误反馈。如果对不存在与redis中的键执行增减方法，redis会先将键对应的值初始化为0，然后再执行指定的操作。</p>
+<p>Redis中的自增和自减命令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用例和描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>INCR</td>
+<td>INCR key-name 将键存储的值加1</td>
+</tr>
+<tr>
+<td>DECR</td>
+<td>DECR key-name 将键存储的值减1</td>
+</tr>
+<tr>
+<td>INCRBY</td>
+<td>INCRBY key-name amount 将键存储的值加amout</td>
+</tr>
+<tr>
+<td>DECRBY</td>
+<td>DECRBY key-name amount 将键存储的值减amout</td>
+</tr>
+<tr>
+<td>INCRBYFLOAT</td>
+<td>INCRBYFLOAT key-name amount 将键存储的值加浮点数amout</td>
+</tr>
+</tbody></table>
+<p>Redis处理子串和二进制位的命令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用例和描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>APPEND</td>
+<td>APPEND key-name value 将value追加到给定key当前存储的串的末尾</td>
+</tr>
+<tr>
+<td>GETRANGE</td>
+<td>GETRANGE key-name start end 获取由偏移量start到end范围内所有字符组成的子串</td>
+</tr>
+<tr>
+<td>SETRANGE</td>
+<td>SETRANGE key-name offset value 将从偏移量offset开始的字符串设置为给定值</td>
+</tr>
+<tr>
+<td>GETBIT</td>
+<td>GETBIT key-name offset 将字节串看作是二进制位，并返回串中偏移量为offset的二进制位的值</td>
+</tr>
+<tr>
+<td>SETBIT</td>
+<td>SETBIT key-name offset value 将字节串二进制位中偏移量为offset的位设为value</td>
+</tr>
+</tbody></table>
+<p>其中处理子串的方法，对于超出原有长度的部分都会当作空串处理，例如setrange在处理超出原本字符串长度的偏移量时，其作用就相当于将新的值添加在字符串末尾。</p>
+<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><p>列表是一个由多个字符串组成的有序序列结构，可以用于存储任务信息，最近浏览过的文章或常用联系人信息。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用例和描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RPUSH</td>
+<td>RPUSH key-name value [value …] 将若干个值推入列表的右侧</td>
+</tr>
+<tr>
+<td>LPUSH</td>
+<td>LPUSH key-name value [value …] 将若干个值推入列表的左侧</td>
+</tr>
+<tr>
+<td>RPOP</td>
+<td>RPOP key-name 移除并返回列表右侧的元素</td>
+</tr>
+<tr>
+<td>LPOP</td>
+<td>LPOP key-name 移除并返回列表左侧的元素</td>
+</tr>
+<tr>
+<td>LINDEX</td>
+<td>LINDEX key-name offset 返回本列表中偏移量为offset的元素</td>
+</tr>
+<tr>
+<td>LRANGE</td>
+<td>LRANGE key-name start end 返回列表中第start到第end个元素</td>
+</tr>
+<tr>
+<td>LTRIM</td>
+<td>LTRIM key-name start end 对列表进行修剪，只保留从start到end的元素</td>
+</tr>
+</tbody></table>
+<p>其中LTRIM和LRANGE的组合使用可以做到功能上类似LPOP和RPOP，但能够一次返回多个元素。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> rpush list a b c d
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> <span class="token number">4</span>
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> ltrim list <span class="token number">1</span> <span class="token number">2</span>
+OK
+<span class="token number">127.0</span>.0.1:637<span class="token operator"><span class="token file-descriptor important">9</span>&gt;</span> lrange list <span class="token number">0</span> -1
+<span class="token number">1</span><span class="token punctuation">)</span> <span class="token string">"b"</span>
+<span class="token number">2</span><span class="token punctuation">)</span> <span class="token string">"c"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>以上的所有方法在列表中没有可以使用的元素时都会返回nil，但redis还提供了使用阻塞队列的列表方法，在列表中没有可用元素时不会立即返回而是阻塞一段时间等待可用元素。<br>阻塞式的列表弹出命令以及在列表间移动元素的命令</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BLPOP</td>
+<td>BLPOP key-name [key-name …] timeout  从遇到的首个非空队列中弹出最左边的元素，或者阻塞timeout秒并等待可以弹出的元素。</td>
+</tr>
+<tr>
+<td>BRPOP</td>
+<td>BRPOP key-name [key-name …] timeout  从遇到的首个非空队列中弹出最右边的元素，或者阻塞timeout秒并等待可以弹出的元素。</td>
+</tr>
+<tr>
+<td>RPOPLPUSH</td>
+<td>RPOPLPUSH source-key dest-key 从source-key最右边弹出一个元素，假如dest-key的最左端，并将这个元素返回给用户</td>
+</tr>
+<tr>
+<td>BRPOPLPUSH</td>
+<td>BRPOPLPUSH source-key dest-key timeout 和上面一个命令效果一样，区别在于如果source-key中没有元素，就阻塞timeout秒并等待可弹出的元素</td>
+</tr>
+</tbody></table>
+<h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><p>Redis的集合以无序的方式来存储多个各不相同的元素，可以快速执行添加元素操作，移除元素操作以及检查一个元素是否存在于集合里。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SADD</td>
+<td>SADD key-name item [item …] 将一个或多个元素添加到集合里，并返回被添加进去的元素数量</td>
+</tr>
+<tr>
+<td>SREM</td>
+<td>SREM key-name item [item …] 从集合中移除一个或多个元素，并返回被移除的元素的数量</td>
+</tr>
+<tr>
+<td>SISMEMBER</td>
+<td>SISMEMBER key-name item 检查元素item是否存在于集合key-name里</td>
+</tr>
+<tr>
+<td>SCARD</td>
+<td>SCARD key-name 返回集合包含的元素数量</td>
+</tr>
+<tr>
+<td>SMEMBERS</td>
+<td>SMEMBERS key-name 返回集合包含的元素数量</td>
+</tr>
+<tr>
+<td>SRANDMEMBER</td>
+<td>SRANDMEMBER key-name [count] 从集合里随机返回一个或多个元素。当count为正数时，返回的随机元素不会重复。当count为负数时，返回的元素可能会重复。</td>
+</tr>
+<tr>
+<td>SPOP</td>
+<td>随机移除集合中的一个元素，并返回被移除的元素</td>
+</tr>
+<tr>
+<td>SMOV</td>
+<td>SMOV source-key dest-key item 如果集合source-key包含元素item，那从中移除item并添加到dest-key中。如果item被成功移除就返回1否则返回0。</td>
+</tr>
+</tbody></table>
+<p>以上就是redis集合的基本操作，接下来介绍集合间的组合与关联，这也是集合最有用的方法。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SDIFF</td>
+<td>SDIFF key-name [key-name …] 返回存在于第一个集合但不存在与其他集合中的元素</td>
+</tr>
+<tr>
+<td>SDIFFSTORE</td>
+<td>SDIFFSTORE dest-key key-name [key-name …] 将差集运算的结果存储到dest-key里</td>
+</tr>
+<tr>
+<td>SINTER</td>
+<td>SINTER key-name [key-name …] 返回交集运算的结果</td>
+</tr>
+<tr>
+<td>SINTERSTORE</td>
+<td>SINTERSTORE dest-key key-name [key-name …] 将交集运算的结果存储到dest-key中</td>
+</tr>
+<tr>
+<td>SUNION</td>
+<td>SUNION key-name [key-name …] 返回并集运算的结果</td>
+</tr>
+<tr>
+<td>SUNIONSTORE</td>
+<td>SUNIONSTORE dest-key key-name [key-name …] 将并集运算的结果存储到dest-key中</td>
+</tr>
+</tbody></table>
+<h3 id="散列"><a href="#散列" class="headerlink" title="散列"></a>散列</h3><p>Redis的散列可以将多个键值对存储在一个Redis键里面。因此散列非常适合将一些相关的数据存储在一起。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HMGET</td>
+<td>HMGET key-name key [key …] 从散列里面获取一个或多个键的值</td>
+</tr>
+<tr>
+<td>HMSET</td>
+<td>HMSET key-name key value [key value …] 为散列里面的一个或多个键设置值</td>
+</tr>
+<tr>
+<td>HDEL</td>
+<td>HDEL key-name key [key …] 删除散列里面的一个或多个键值对，返回成功找到并删除的键值对数量</td>
+</tr>
+<tr>
+<td>HLEN</td>
+<td>HLEN key-name 返回散列包含的键值对数量</td>
+</tr>
+</tbody></table>
+<p>像是这一类批量处理的命令，既可以给用户带来便利，同时也可以通过减少命令的调用次数以及客户端与redis之间通信往返的次数来提升redis性能。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HEXISTS</td>
+<td>HEXISTS key-name key 检查给定键是否存在于散列中</td>
+</tr>
+<tr>
+<td>HKEYS</td>
+<td>HKEYS key-name 获取散列包含的所有键</td>
+</tr>
+<tr>
+<td>HVALS</td>
+<td>HVALS key-name 获取散列包含的所有值</td>
+</tr>
+<tr>
+<td>HGETALL</td>
+<td>HGETALL key-name 获取散列包含的所有键值对</td>
+</tr>
+<tr>
+<td>HINCRBY</td>
+<td>HINCRBY key-name key increment 将键key存储的值加上increment</td>
+</tr>
+<tr>
+<td>HINCRBYFLOAT</td>
+<td>HINCRBYFLOAT key-name key increment 将键key存储的值加上浮点数increment</td>
+</tr>
+</tbody></table>
+<p>虽然HGETALL可以获取所有的键值对，但并不代表HKEYS和HVALS就没有用处。如果散列的值非常大，那么可以先使用HKEYS获取散列包含的所有键，然后再一个一个取出值，避免因一次获取多个大体积的值而导致服务器阻塞。</p>
 
                 
             </div>
@@ -834,70 +1103,11 @@ LIMIT <span class="token operator">=</span> <span class="token number">1000000</
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
-            <div class="card">
-                <a href="/2022/08/15/redis/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Redis新手入门">
-                        
-                        <span class="card-title">Redis新手入门</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-15
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/redis/">
-                        <span class="chip bg-color">redis</span>
-                    </a>
-                    
-                    <a href="/tags/python/">
-                        <span class="chip bg-color">python</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%BC%93%E5%AD%98/">
-                        <span class="chip bg-color">缓存</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
         <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/08/11/design-mode/">
+                <a href="/2022/08/16/design-mode/">
                     <div class="card-image">
                         
                         
@@ -913,9 +1123,9 @@ LIMIT <span class="token operator">=</span> <span class="token number">1000000</
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-11
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-16
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -937,6 +1147,59 @@ LIMIT <span class="token operator">=</span> <span class="token number">1000000</
                     
                     <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
                         <span class="chip bg-color">设计模式</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/08/11/take-away/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="外卖商城项目">
+                        
+                        <span class="card-title">外卖商城项目</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            仿《瑞吉外卖》项目，练手用
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-11
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E7%8E%B0/" class="post-category">
+                                    项目实现
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
+                    </a>
+                    
+                    <a href="/tags/Spring-Boot/">
+                        <span class="chip bg-color">Spring Boot</span>
                     </a>
                     
                 </div>
@@ -1133,7 +1396,7 @@ LIMIT <span class="token operator">=</span> <span class="token number">1000000</
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">92.4k</span>
+                        class="white-color">94.7k</span>
             
             <br>
             <span id="sitetime"></span>
