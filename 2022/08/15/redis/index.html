@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9.6k
+                    12.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    36 分
+                    46 分
                 </div>
                 
 
@@ -1273,6 +1273,193 @@ dir ./   决定快照文件和AOF文件的保存路径<span aria-hidden="true" c
 	<span class="token keyword">return</span> <span class="token boolean">False</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>Redis不像关系型数据库一样，在要访问的数据上加锁，因为持有锁的客户端处理越慢，等待的时间就越长。Redis只会在监视的数据被更改时，通知客户端，避免了等待，当客户端接到失败通知时，只需要尝试重新执行即可。</p>
+<h2 id="构建支持程序"><a href="#构建支持程序" class="headerlink" title="构建支持程序"></a>构建支持程序</h2><h3 id="日志记录"><a href="#日志记录" class="headerlink" title="日志记录"></a>日志记录</h3><p>常用的日志记录方式有两种，第一种是将日志记录到文件里面。然后随着程序的运行不断将新的日志行记录到日志文件中。并在一段时间之后创建新的日志文件。这种日志记录方式很难聚合所有的日志并进行处理。<br>另一种方式就是本章使用的syslog。该服务运行在Linux服务器的514号TCP端口和UDP端口上，syslog接收其他程序发来的日志并将这些信息路由到存储在硬盘上的各个日志文件中</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 将所有的日志级别映射为字符串</span>
+SEVERITY <span class="token operator">=</span> <span class="token punctuation">{</span>
+	logging<span class="token punctuation">.</span>DEBUG<span class="token punctuation">:</span> <span class="token string">'debug'</span><span class="token punctuation">,</span>
+	logging<span class="token punctuation">.</span>INFO<span class="token punctuation">:</span> <span class="token string">'info'</span><span class="token punctuation">,</span>
+	logging<span class="token punctuation">.</span>WARNING<span class="token punctuation">:</span> <span class="token string">'warning'</span><span class="token punctuation">,</span>
+	logging<span class="token punctuation">.</span>ERROR<span class="token punctuation">:</span> <span class="token string">'error'</span><span class="token punctuation">,</span>
+	logging<span class="token punctuation">.</span>CRITICAL<span class="token punctuation">:</span> <span class="token string">'critical'</span>
+<span class="token punctuation">}</span>
+SEVERITY<span class="token punctuation">.</span>update<span class="token punctuation">(</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> name<span class="token punctuation">)</span> <span class="token keyword">for</span> name <span class="token keyword">in</span> SEVERITY<span class="token punctuation">.</span>values<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">log_recent</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> name<span class="token punctuation">,</span> message<span class="token punctuation">,</span> severity<span class="token operator">=</span>logging<span class="token punctuation">.</span>INFO<span class="token punctuation">,</span> pipe<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	severity <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>SEVERITY<span class="token punctuation">.</span>get<span class="token punctuation">(</span>severity<span class="token punctuation">,</span> severity<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	destination <span class="token operator">=</span> <span class="token string">'recent:%s:%s'</span><span class="token operator">%</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> severity<span class="token punctuation">)</span>
+	message <span class="token operator">=</span> time<span class="token punctuation">.</span>asctime<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">' '</span> <span class="token operator">+</span> message
+	pipe <span class="token operator">=</span> pipe <span class="token keyword">or</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment"># 使用流水线降低通信次数</span>
+	pipe<span class="token punctuation">.</span>lpush<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> message<span class="token punctuation">)</span> <span class="token comment"># 将日志加入列表</span>
+	pipe<span class="token punctuation">.</span>ltrim<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">99</span><span class="token punctuation">)</span> <span class="token comment"># 让日志只包含最新的100条</span>
+	pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上面的实例可以很方便的记录最新的日志，但是对于日志的重要程度以及出现频率无法进行统计，因此我们再添加一个用于记录常见日志的方法。<br>程序会将消息作为成员存储到有序集合里面，并将消息出现的频率设置为成员的分值。为了确保我们看见的常见消息都是最新的，程序会以每小时一次的频率对消息进行轮换，并在轮换日志的时候保留上一个小时记录的常见消息，从而防止没有任何消息存在的情况出现。<br>程序还需要谨慎处理上一个小时收集到的日志，因为涉及改名操作，因此需要将其放在一个事务里面。此外，程序会将流水线传递给log_recent()来减少记录常见日志和记录最新日志时的通信次数。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">log_common</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> name<span class="token punctuation">,</span> message<span class="token punctuation">,</span> severity<span class="token operator">=</span>logging<span class="token punctuation">.</span>INFO<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	severity <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>SEVERITY<span class="token punctuation">.</span>get<span class="token punctuation">(</span>severity<span class="token punctuation">,</span> severity<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	destination <span class="token operator">=</span> <span class="token string">'common:%s:%s'</span><span class="token operator">%</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> severity<span class="token punctuation">)</span>
+	start_key <span class="token operator">=</span> destination <span class="token operator">+</span> <span class="token string">':start'</span> <span class="token comment"># 程序每小时轮换一次日志，使用一个键来存储当前所处的时间</span>
+	pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	end <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> timeout
+	<span class="token keyword">while</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> end<span class="token punctuation">:</span>
+		<span class="token keyword">try</span><span class="token punctuation">:</span>
+			<span class="token comment"># 对记录当前小时数的键进行监视，确保轮换操作正确执行</span>
+			pipe<span class="token punctuation">.</span>watch<span class="token punctuation">(</span>start_key<span class="token punctuation">)</span>
+			now <span class="token operator">=</span> datetime<span class="token punctuation">.</span>utcnow<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token comment"># 获取当前小时数</span>
+			hour_start <span class="token operator">=</span> datetime<span class="token punctuation">(</span><span class="token operator">*</span>now<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>isoformat<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			existing <span class="token operator">=</span> pipe<span class="token punctuation">.</span>get<span class="token punctuation">(</span>start_key<span class="token punctuation">)</span>
+			<span class="token comment"># 开启事务</span>
+			pipe<span class="token punctuation">.</span>multi<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token comment"># 如果记录的是上一个小时的日志，就将他归档</span>
+			<span class="token keyword">if</span> existing <span class="token keyword">and</span> existing <span class="token operator">&lt;</span> hour_start<span class="token punctuation">:</span>
+				pipe<span class="token punctuation">.</span>rename<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> destination <span class="token operator">+</span> <span class="token string">':last'</span><span class="token punctuation">)</span>
+				pipe<span class="token punctuation">.</span>rename<span class="token punctuation">(</span>start_key<span class="token punctuation">,</span> destination <span class="token operator">+</span> <span class="token string">':pstart'</span><span class="token punctuation">)</span>
+				pipe<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span>start_key<span class="token punctuation">,</span> hour_start<span class="token punctuation">)</span>
+			<span class="token keyword">elif</span> <span class="token keyword">not</span> existing<span class="token punctuation">:</span>
+				pipe<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span>start_key<span class="token punctuation">,</span> hour_start<span class="token punctuation">)</span>
+			<span class="token comment"># 更新日志出现次数</span>
+			pipe<span class="token punctuation">.</span>zincrby<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> message<span class="token punctuation">)</span>
+			<span class="token comment"># 记录日志</span>
+			log_recent<span class="token punctuation">(</span>pipe<span class="token punctuation">,</span> name<span class="token punctuation">,</span> message<span class="token punctuation">,</span> severity<span class="token punctuation">,</span> pipe<span class="token punctuation">)</span>
+			<span class="token keyword">return</span>
+		<span class="token keyword">except</span> redis<span class="token punctuation">.</span>exception<span class="token punctuation">.</span>WatchError<span class="token punctuation">:</span>
+			<span class="token keyword">continue</span>
+	<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="在Redis中存储计数器"><a href="#在Redis中存储计数器" class="headerlink" title="在Redis中存储计数器"></a>在Redis中存储计数器</h3><p>在监控应用程序的同时，持续地收集信息是一件非常重要的事情。那些影响网站响应速度以及网站所能服务的页面数量的代码改动、新的广告营销活动或者是刚刚接触系统的新用户，都有可能会彻底地改变网站载入页面的数量，并因此而影响网站的各项性能指标。但如果我们平时不记录任何指标数据的话，我们就不可能知道指标发生了变化，也就不可能知道网站的性能是在提高还是在下降。<br>在收集指标数据方面，我们可以使用Redis构建一个工具。创建的每一个计数器都有自己的名字，并且会以不同的精度存储最新的数据样本。<br>在存储计数器方面，使用hash存储每个计数器在各个时间段的计数，用计数器的名字和频率构成命名空间。除此之外，利用有序集合存储计数器，并将他们的分值全部设为0，这样Redis在排序的时候就会根据成员值排序。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220823154309.png"><br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220823154332.png"></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 计数器精度</span>
+PRECISION <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">,</span> <span class="token number">300</span><span class="token punctuation">,</span> <span class="token number">3600</span><span class="token punctuation">]</span>
+<span class="token keyword">def</span> <span class="token function">update_counter</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> name<span class="token punctuation">,</span> count<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> now<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	now <span class="token operator">=</span> now <span class="token keyword">or</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token comment"># 用流水线减少消息通信次数</span>
+	pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token comment"># 更新各个频率的相关计数器</span>
+	<span class="token keyword">for</span> prec <span class="token keyword">in</span> PRECISION<span class="token punctuation">:</span>
+		pnow <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>now <span class="token operator">/</span> prec<span class="token punctuation">)</span> <span class="token operator">*</span> prec
+		<span class="token builtin">hash</span> <span class="token operator">=</span> <span class="token string">'%s:%s'</span><span class="token operator">%</span><span class="token punctuation">(</span>prec<span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+		pipe<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'known:'</span><span class="token punctuation">,</span> <span class="token builtin">hash</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span>
+		pipe<span class="token punctuation">.</span>hincrby<span class="token punctuation">(</span><span class="token string">'count:'</span> <span class="token operator">+</span> <span class="token builtin">hash</span><span class="token punctuation">,</span> pnow<span class="token punctuation">,</span> count<span class="token punctuation">)</span>
+	pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_counter</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> name<span class="token punctuation">,</span> precision<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token builtin">hash</span> <span class="token operator">=</span> <span class="token string">'%s:%s'</span><span class="token operator">%</span><span class="token punctuation">(</span>precision<span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+	data <span class="token operator">=</span> conn<span class="token punctuation">.</span>hgetall<span class="token punctuation">(</span><span class="token string">'count:'</span> <span class="token operator">+</span> <span class="token builtin">hash</span><span class="token punctuation">)</span>
+	to_return <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+	<span class="token keyword">for</span> key<span class="token punctuation">,</span> value <span class="token keyword">in</span> data<span class="token punctuation">.</span>iteritems<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		to_return<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	to_return<span class="token punctuation">.</span>sort<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">return</span> to_return<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来就是清理计数器了，如果我们只是一味存储数据而不清理旧数据，必然会导致OOM。不过由于我们之前已经将计数器记录在了Redis的有序集合中，因此只需要遍历它并删除指定的数据即可。<br>在执行清理的过程中要注意以下几点：</p>
+<ul>
+<li>任何时候都可能会有新的计数器被添加进来</li>
+<li>同一时候可能会有多个不同的清理操作</li>
+<li>对于一个每天只更新一次的计数器来说，频繁扫描它的状态会浪费大量资源</li>
+<li>不应尝试清理一个不包含数据的计数器</li>
+</ul>
+<p>接下来简单说一下清理的逻辑：开启一个守护进程，每隔60s扫描一次计数器，对于更新频率高于扫描频率的，每次扫描后都进行清理；而对那些更新频率低于扫描频率的则可以适当减少清理次数，比如一个5min更新一次的计数器，可以每扫描5次清理一次。获取要清理的计数器后，就按照可保存的最大样本数计算记录的截止时间，将截止时间之前的记录全部清理掉。清理完毕之后检查计数器中剩余的数据，如果没有数据了，就尝试删除，不过要监视该计数器，如果有别的客户端添加数据就放弃。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">clean_counters</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+	passed <span class="token operator">=</span> <span class="token number">0</span> <span class="token comment"># 记录清理程序的运行次数，用于同步不同频率的计数器的清理</span>
+	<span class="token keyword">while</span> <span class="token keyword">not</span> QUIT<span class="token punctuation">:</span>
+		start <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+		index <span class="token operator">=</span> <span class="token number">0</span>
+		<span class="token keyword">while</span> index <span class="token operator">&lt;</span> conn<span class="token punctuation">.</span>zcard<span class="token punctuation">(</span><span class="token string">'known:'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			<span class="token builtin">hash</span> <span class="token operator">=</span> conn<span class="token punctuation">.</span>zrange<span class="token punctuation">(</span><span class="token string">'known:'</span><span class="token punctuation">,</span> index<span class="token punctuation">,</span> index<span class="token punctuation">)</span>
+			index <span class="token operator">+=</span> <span class="token number">1</span>
+			<span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token builtin">hash</span><span class="token punctuation">:</span>
+				<span class="token keyword">break</span>
+			<span class="token comment"># 获取计数器名称以及频率</span>
+			<span class="token builtin">hash</span> <span class="token operator">=</span> <span class="token builtin">hash</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+			prec <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">hash</span><span class="token punctuation">.</span>partition<span class="token punctuation">(</span><span class="token string">':'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+			<span class="token comment"># 计算计数器的清理频率</span>
+			hprec <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>prec <span class="token operator">//</span> <span class="token number">60</span><span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token number">1</span>
+			<span class="token keyword">if</span> passes <span class="token operator">%</span> hprec<span class="token punctuation">:</span>
+				<span class="token keyword">continue</span>
+			hkey <span class="token operator">=</span> <span class="token string">'count:'</span> <span class="token operator">+</span> <span class="token builtin">hash</span>
+			<span class="token comment"># 计算允许存在的记录的截止时间</span>
+			cutoff <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> SAMPLE_COUNT <span class="token operator">*</span> prec
+			<span class="token comment"># 获取计数器的时间戳</span>
+			samples <span class="token operator">=</span> <span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">,</span> conn<span class="token punctuation">.</span>hkeys<span class="token punctuation">(</span>hkey<span class="token punctuation">)</span><span class="token punctuation">)</span>
+			samples<span class="token punctuation">.</span>sort<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token comment"># 计算清理的数量</span>
+			remove <span class="token operator">=</span> bbisect<span class="token punctuation">.</span>bisect_right<span class="token punctuation">(</span>samples<span class="token punctuation">,</span> cutoff<span class="token punctuation">)</span>
+
+			<span class="token keyword">if</span> remove<span class="token punctuation">:</span>
+				conn<span class="token punctuation">.</span>hdel<span class="token punctuation">(</span>hkey<span class="token punctuation">,</span> <span class="token operator">*</span>samples<span class="token punctuation">[</span><span class="token punctuation">:</span>remove<span class="token punctuation">]</span><span class="token punctuation">)</span>
+				<span class="token comment"># 如果清理完之后计数器内容为空，尝试删除</span>
+				<span class="token keyword">if</span> remove <span class="token operator">==</span> <span class="token builtin">len</span><span class="token punctuation">(</span>samples<span class="token punctuation">)</span><span class="token punctuation">:</span>
+					<span class="token keyword">try</span><span class="token punctuation">:</span>
+						pipe<span class="token punctuation">.</span>watch<span class="token punctuation">(</span>hkey<span class="token punctuation">)</span>
+						<span class="token keyword">if</span> <span class="token keyword">not</span> pipe<span class="token punctuation">.</span>hlen<span class="token punctuation">(</span>hkey<span class="token punctuation">)</span><span class="token punctuation">:</span>
+							pipe<span class="token punctuation">.</span>multi<span class="token punctuation">(</span><span class="token punctuation">)</span>
+							pipe<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span><span class="token string">'known:'</span><span class="token punctuation">,</span> <span class="token builtin">hash</span><span class="token punctuation">)</span>
+							pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+							index <span class="token operator">-=</span> <span class="token number">1</span>
+						<span class="token keyword">else</span><span class="token punctuation">:</span>
+							pipe<span class="token punctuation">.</span>unwatch<span class="token punctuation">(</span><span class="token punctuation">)</span>
+					<span class="token keyword">except</span> redis<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>WatchError<span class="token punctuation">:</span>
+						<span class="token keyword">pass</span>
+	<span class="token comment"># 修改清理器的轮数</span>
+	passes <span class="token operator">+=</span> <span class="token number">1</span>
+	<span class="token comment"># 计算清理器的耗时</span>
+	duration <span class="token operator">=</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">)</span>
+	<span class="token comment"># 让程序睡眠到下一个1分钟开始，如果之前已经运行了1min，就休眠1s</span>
+	time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token number">60</span> <span class="token operator">-</span> duration<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="存储统计数据"><a href="#存储统计数据" class="headerlink" title="存储统计数据"></a>存储统计数据</h3><p>对于给定的上下文和类型，可以使用Redis的有序集合来存储类型的统计数据。当然这里不是为了利用它有序的特性，而是为了方便之后进行交并集运算。这里我们分析一下存储统计数据的需求：首先需要一种键值对的存储形式，可以将统计数据对应起来，其次需要能够进行交并运算方便不同统计数据间的比对，满足以上两个条件的只有有序集合。<br>接下来简单讲讲存储统计数据的思路：前一部分操作和log_common类似，记录当前小时和前1小时的信息。接着新建两个有序集合，一个作为最小值集合，一个作为最大值集合，然后利用适当的聚合函数计算新的最大最小值。这里专门使用并集运算的原因在于，这类值变动频率很大，自己用watch修改较为麻烦，不如交给redis的命令操作。然后对各成员进行更新即可。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">update_stats</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> context<span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token punctuation">,</span> value<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	destination <span class="token operator">=</span> <span class="token string">'stats:%s:%s'</span><span class="token operator">%</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> <span class="token builtin">type</span><span class="token punctuation">)</span>
+	start_key <span class="token operator">=</span> destination <span class="token operator">+</span> <span class="token string">':start'</span>
+	pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+	end <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> timeout
+	<span class="token keyword">while</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> end<span class="token punctuation">:</span>
+		<span class="token keyword">try</span><span class="token punctuation">:</span>
+			pipe<span class="token punctuation">.</span>watch<span class="token punctuation">(</span>start_key<span class="token punctuation">)</span>
+			now <span class="token operator">=</span> datetime<span class="token punctuation">.</span>utcnow<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>timetuple<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			hour_start <span class="token operator">=</span> datetime<span class="token punctuation">(</span><span class="token operator">*</span>now<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span>isoformat<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			existing <span class="token operator">=</span> pipe<span class="token punctuation">.</span>get<span class="token punctuation">(</span>start_key<span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>multi<span class="token punctuation">(</span><span class="token punctuation">)</span>
+			<span class="token keyword">if</span> existing <span class="token keyword">and</span> existing <span class="token operator">&lt;</span> hour_start<span class="token punctuation">:</span>
+				pipe<span class="token punctuation">.</span>rename<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> destination <span class="token operator">+</span> <span class="token string">':last'</span><span class="token punctuation">)</span>
+				pipe<span class="token punctuation">.</span>rename<span class="token punctuation">(</span>start_key<span class="token punctuation">,</span> destination <span class="token operator">+</span> <span class="token string">':pstart'</span><span class="token punctuation">)</span>
+				pipe<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span>start_key<span class="token punctuation">,</span> hour_start<span class="token punctuation">)</span>
+			<span class="token keyword">elif</span> <span class="token keyword">not</span> existing<span class="token punctuation">:</span>
+				pipe<span class="token punctuation">.</span><span class="token builtin">set</span><span class="token punctuation">(</span>start_key<span class="token punctuation">,</span> hour_start<span class="token punctuation">)</span>
+			tkey1 <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+			tkey2 <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>tkey1<span class="token punctuation">,</span> <span class="token string">'min'</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>tkey2<span class="token punctuation">,</span> <span class="token string">'max'</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>zunionstore<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> 
+				<span class="token punctuation">[</span>destination<span class="token punctuation">,</span> tkey1<span class="token punctuation">]</span><span class="token punctuation">,</span> aggregate<span class="token operator">=</span><span class="token string">'min'</span><span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>zunionstore<span class="token punctuation">(</span>destination<span class="token punctuation">,</span>
+				<span class="token punctuation">[</span>destination<span class="token punctuation">,</span> tkey2<span class="token punctuation">]</span><span class="token punctuation">,</span> aggregate<span class="token operator">=</span><span class="token string">'max'</span><span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>delete<span class="token punctuation">(</span>tkey1<span class="token punctuation">,</span> tkey2<span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>zincrby<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> <span class="token string">'count'</span><span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>zincrby<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> <span class="token string">'sum'</span><span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+			pipe<span class="token punctuation">.</span>zincrby<span class="token punctuation">(</span>destination<span class="token punctuation">,</span> <span class="token string">'sumsq'</span><span class="token punctuation">,</span> value<span class="token operator">*</span>value<span class="token punctuation">)</span>
+			<span class="token keyword">return</span> pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">3</span><span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token comment"># 返回一些后续要用到的统计信息</span>
+		<span class="token keyword">except</span> redis<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>WatchError<span class="token punctuation">:</span>
+			<span class="token keyword">continue</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在存储了统计数据之后，我们就可以开始尝试寻找例如生成速度较慢的网页，以方便后续优化。<br>我们可以给每个页面都添加一个计时器来解决这个问题，但要注意的是，我们真正需要的是统计数据，是访问最慢的几个页面，因此需要实现一个既能计时，又能将计时结果存储起来的东西。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@contextlib<span class="token punctuation">.</span>contextmanager</span>
+<span class="token keyword">def</span> <span class="token function">access_time</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	start <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">yield</span> <span class="token comment"># 执行被上下文管理器包裹的代码</span>
+	delta <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start
+	stats <span class="token operator">=</span> update_stats<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> context<span class="token punctuation">,</span> <span class="token string">'AccessTime'</span><span class="token punctuation">,</span> delta<span class="token punctuation">)</span>
+	average <span class="token operator">=</span> stats<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">/</span> stats<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token comment"># 计算平均访问时长</span>
+	pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+	pipe<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'slowest:AccessTime'</span><span class="token punctuation">,</span> context<span class="token punctuation">,</span> average<span class="token punctuation">)</span>
+	pipe<span class="token punctuation">.</span>zremrangebyrank<span class="token punctuation">(</span><span class="token string">'slowest:AccessTime'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">101</span><span class="token punctuation">)</span> <span class="token comment"># 只保留最慢的100个界面</span>
+	pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 使用方式</span>
+<span class="token keyword">with</span> access_time<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	callback<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>统计数据不知能记录网页的加载速度，同样还可以加载模板的渲染速度，数据库的加载速度等等。除此之外，我们还可以将明显出现异常的统计数据输出到日志当中，方便进行问题的排查与优化。</p>
 
                 
             </div>
@@ -1813,7 +2000,7 @@ dir ./   决定快照文件和AOF文件的保存路径<span aria-hidden="true" c
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">100.3k</span>
+                        class="white-color">103.5k</span>
             
             <br>
             <span id="sitetime"></span>
