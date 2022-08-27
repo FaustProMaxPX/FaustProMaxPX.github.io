@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    12.1k
+                    15.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    46 分
+                    58 分
                 </div>
                 
 
@@ -1460,7 +1460,206 @@ PRECISION <span class="token operator">=</span> <span class="token punctuation">
 	callback<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>统计数据不知能记录网页的加载速度，同样还可以加载模板的渲染速度，数据库的加载速度等等。除此之外，我们还可以将明显出现异常的统计数据输出到日志当中，方便进行问题的排查与优化。</p>
+<h3 id="查找IP属地以及国家"><a href="#查找IP属地以及国家" class="headerlink" title="查找IP属地以及国家"></a>查找IP属地以及国家</h3><p>这一节要实现根据用户的IP定位其所在的地区。难点在于同一属地的IP地址数量很大，普通的筛选策略会消耗大量机器资源。不过同一地区的IP地址有一种特征：相比其他地区的起始IP，必然与所属地区IP的一致位数最多。因此这里可以将城市IP地址转换为分数，用有序队列存储。用户所属的地区IP就是在所有比用户IP分数小的地区IP中最大的那个。<br>在本例中使用散列存储城市详细信息，用有序队列存储ip分数与城市id的映射</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># IP转换为分数的函数</span>
+<span class="token keyword">def</span> <span class="token function">ip_to_score</span><span class="token punctuation">(</span>ip_address<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	score <span class="token operator">=</span> <span class="token number">0</span>
+	<span class="token keyword">for</span> v <span class="token keyword">in</span> ip_address<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		score <span class="token operator">=</span> score <span class="token operator">*</span> <span class="token number">256</span> <span class="token operator">+</span> <span class="token builtin">int</span><span class="token punctuation">(</span>v<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+	<span class="token keyword">return</span> score<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 将城市id以及其IP地址的分数添加到有序集合</span>
+<span class="token keyword">def</span> <span class="token function">import_ips_to_redis</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	csv_file <span class="token operator">=</span> csv<span class="token punctuation">.</span>reader<span class="token punctuation">(</span><span class="token builtin">open</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	<span class="token keyword">for</span> count<span class="token punctuation">,</span> row <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>csv_file<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		start_ip <span class="token operator">=</span> row<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">if</span> row <span class="token keyword">else</span> <span class="token string">''</span>
+		<span class="token keyword">if</span> <span class="token string">'i'</span> <span class="token keyword">in</span> start_ip<span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			<span class="token keyword">continue</span>
+		<span class="token keyword">if</span> <span class="token string">'.'</span> <span class="token keyword">in</span> start_ip<span class="token punctuation">:</span>
+			start_ip <span class="token operator">=</span> ip_to_score<span class="token punctuation">(</span>start_ip<span class="token punctuation">)</span>
+		<span class="token keyword">elif</span> start_ip<span class="token punctuation">.</span>isdigit<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+			start_ip <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>start_ip<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+		<span class="token keyword">else</span><span class="token punctuation">:</span>
+			<span class="token keyword">continue</span>
+		city_id <span class="token operator">=</span> row<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">'_'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>count<span class="token punctuation">)</span>
+		conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'ip2cityid:'</span><span class="token punctuation">,</span> city_id<span class="token punctuation">,</span> start_ip<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">find_city_by_ip</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> ip_address<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>ip_address<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		ip_address <span class="token operator">=</span> ip_to_score<span class="token punctuation">(</span>ip_address<span class="token punctuation">)</span>
+	<span class="token comment"># 查找所属城市的id</span>
+	city_id <span class="token operator">=</span> conn<span class="token punctuation">.</span>zrevrangebyscore<span class="token punctuation">(</span><span class="token string">'ip2cityid:'</span><span class="token punctuation">,</span> ip_address<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> start<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> num<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> <span class="token keyword">not</span> city_id<span class="token punctuation">:</span>
+		<span class="token keyword">return</span> <span class="token boolean">None</span>
+	city_id <span class="token operator">=</span> city_id<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>partition<span class="token punctuation">(</span><span class="token string">'_'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+	<span class="token keyword">return</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>conn<span class="token punctuation">.</span>hget<span class="token punctuation">(</span><span class="token string">'cityid2city:'</span><span class="token punctuation">,</span> city_id<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="构建应用程序组件"><a href="#构建应用程序组件" class="headerlink" title="构建应用程序组件"></a>构建应用程序组件</h2><h3 id="自动补全"><a href="#自动补全" class="headerlink" title="自动补全"></a>自动补全</h3><p>假设我们现在需要完成一个最近联系人的自动补全功能。这需要我们能够快速向列表中添加或是删除联系人，除此之外，这个功能不能占用太多的内存。综合以上考量，应当选择列表作为存储结构，因为列表是Redis中内存占用最小的数据结构。<br>在构建最近联系人阶段，主要分为以下三个步骤：</p>
+<ol>
+<li>如果该联系人已经存在，就删除它</li>
+<li>将新的最近联系人插入</li>
+<li>如果最近联系人个数超出阈值就进行修剪</li>
+</ol>
+<p>当需要自动补全时，从Redis中获取最近联系人列表并进行匹配，返回匹配的联系人列表。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">fetch_autocomplete_list</span><span class="token punctuation">(</span>user<span class="token punctuation">,</span> conn<span class="token punctuation">:</span> redis<span class="token punctuation">.</span>Redis<span class="token punctuation">[</span><span class="token builtin">str</span><span class="token punctuation">]</span><span class="token punctuation">,</span> prefix<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    candidates <span class="token operator">=</span> conn<span class="token punctuation">.</span>lrange<span class="token punctuation">(</span><span class="token string">'recent:'</span> <span class="token operator">+</span> user<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+    matches <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> c <span class="token keyword">in</span> candidates<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> c<span class="token punctuation">.</span>lower<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span>prefix<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            matches<span class="token punctuation">.</span>append<span class="token punctuation">(</span>c<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> matches<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>因为在构建最近联系人列表时，我们已经有意限制了联系人数量的大小，因此这种解决方案可以取得十分优秀的效果。但如果面对的是大量数据的情况，这种方案就不太适用了。可以考虑使用带有时间戳的有序列表实现该功能。</p>
+<p>在上面的例子中，我们的解决思路是直接从Redis现有列表中查找匹配的元素。但当元素数量很多时，扫描整个列表只为寻找几个匹配的记录就显得不是那么划算了。对于与时间有关的自动补全已经给出了方案，但如果只给定范围呢，例如公会成员列表又该怎么做呢？</p>
+<p>接下来要介绍的方案的核心思路是：根据给定参数创建查找范围从而提升查找效率。<br>在介绍解决方案之前还要先介绍以下有序集合的一种变相用法，前文有提到过，当所有成员的分值都相同时，Redis就会根据成员字符串的ASCII码来进行排序(这里假设所有成员名称均为纯英文)。因此，如果用户给定abc开头的前缀，那就是需要查找abbz…与abd之间的所有成员，程序可以通过向Redis中插入abb{和abc{来创建出查找范围(在ASCII码中，`是首个排在a前的字符，{是首个排在z后的字符)</p>
+<p>创建查找范围的思路：利用二分查找找到prefix末尾的前置字符，然后添加’{‘作为查找范围的起点，然后在prefix最后添加{作为终点。实际上是找到首个小于prefix，以及首个大于prefix的字符串。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">valid_charater <span class="token operator">=</span> <span class="token string">'`abcdefghijklmnopqrstuvwxyz{'</span>
+<span class="token keyword">def</span> <span class="token function">find_prefix_range</span><span class="token punctuation">(</span>prefix<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pos <span class="token operator">=</span> bisect<span class="token punctuation">.</span>bisect_left<span class="token punctuation">(</span>valid_charater<span class="token punctuation">,</span> prefix<span class="token punctuation">)</span>
+    suffix <span class="token operator">=</span> valid_charater<span class="token punctuation">[</span><span class="token punctuation">(</span>pos <span class="token keyword">or</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span>
+    <span class="token keyword">return</span> prefix<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> suffix <span class="token operator">+</span> <span class="token string">'{'</span><span class="token punctuation">,</span> prefix <span class="token operator">+</span> <span class="token string">'{'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>具体查询的时候就是先向Redis插入刚刚创建的两个范围界限，在查找完成之后将它们删除。考虑到同一时间可能会有多个客户端尝试查询，在删除时需要开启事务，同时在返回结果时也要注意将带有{的元素清除(查询过程中可能有客户端插入了界限元素)</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">auto_complete_on_prefix</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> guide<span class="token punctuation">,</span> prefix<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    start<span class="token punctuation">,</span> end <span class="token operator">=</span> find_prefix_range<span class="token punctuation">(</span>prefix<span class="token operator">=</span>prefix<span class="token punctuation">)</span>
+    identifier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment"># 为避免多个客户端同时查询导致起始元素和终止元素被重复添加</span>
+    start <span class="token operator">+=</span> identifier
+    end <span class="token operator">+=</span> identifier
+    zset_name <span class="token operator">=</span> <span class="token string">"member:"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>guide<span class="token punctuation">)</span>
+    conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>zset_name<span class="token punctuation">,</span> <span class="token punctuation">{</span>start<span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">,</span> end<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    pipeline <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            pipeline<span class="token punctuation">.</span>watch<span class="token punctuation">(</span>zset_name<span class="token punctuation">)</span>
+            sindex <span class="token operator">=</span> pipeline<span class="token punctuation">.</span>zrank<span class="token punctuation">(</span>zset_name<span class="token punctuation">,</span> start<span class="token punctuation">)</span>
+            eindex <span class="token operator">=</span> pipeline<span class="token punctuation">.</span>zrank<span class="token punctuation">(</span>zset_name<span class="token punctuation">,</span> end<span class="token punctuation">)</span>
+            erange <span class="token operator">=</span> <span class="token builtin">min</span><span class="token punctuation">(</span>sindex <span class="token operator">+</span> <span class="token number">9</span><span class="token punctuation">,</span> eindex <span class="token operator">-</span> <span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># type: ignore</span>
+            pipeline<span class="token punctuation">.</span>multi<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>zset_name<span class="token punctuation">,</span> start<span class="token punctuation">,</span> end<span class="token punctuation">)</span>
+            pipeline<span class="token punctuation">.</span>zrange<span class="token punctuation">(</span>zset_name<span class="token punctuation">,</span> sindex<span class="token punctuation">,</span> erange<span class="token punctuation">)</span>  <span class="token comment"># type: ignore</span>
+            items <span class="token operator">=</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+            <span class="token keyword">break</span>
+        <span class="token keyword">except</span> redis<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>WatchError<span class="token punctuation">:</span>
+            <span class="token keyword">continue</span>
+    <span class="token keyword">return</span> <span class="token punctuation">[</span>item <span class="token keyword">for</span> item <span class="token keyword">in</span> items <span class="token keyword">if</span> <span class="token string">'{'</span> <span class="token keyword">not</span> <span class="token keyword">in</span> item<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>在上面的例子中，我们使用WATCH命令来保证数据的一致性。但在高负载的情况下，WATCH会导致大量的重试操作，大大拉低系统的性能。<br>以下列举一些并发情况下锁在不正确运行的症状：</p>
+<ul>
+<li>持有锁的进程因为操作时间过长而导致锁被自动释放，但进程本身并不知晓这一点，甚至还可能会错误地释放掉了其他进程持有的锁。</li>
+<li>一个持有锁并打算执行长时间操作的进程已经崩溃，但其他想要获取锁的进程不知道哪个进程持有着锁，也无法检测出持有锁的进程已经崩溃，只能白白地浪费时间等待锁被释放。</li>
+<li>在一个进程持有的锁过期之后，其他多个进程同时尝试去获取锁，并且都获得了锁。</li>
+<li>上面提到的第一种情况和第三种情况同时出现，导致有多个进程获得了锁，而每个进程都以为自己是唯一一个获得锁的进程。</li>
+</ul>
+<p>下面我们来尝试以下手动实现一个简易的锁，具体思路如下：用锁名称构成命名空间，将值设置为一个uuid生成的字符串，所有涉及共享数据操作的程序都要尝试去获取指定的锁。程序会使用Redis命令<code>setnx</code>尝试获取锁(setnx只会在当前键没有值时将值插入进去)，插入成功就代表成功获取到锁，否则就不断重试去获取锁。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_lock</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> lockname<span class="token punctuation">,</span> acquire_timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identifier <span class="token operator">=</span> uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    end <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> acquire_timeout
+    <span class="token keyword">while</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> end<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> conn<span class="token punctuation">.</span>setnx<span class="token punctuation">(</span><span class="token string">'lock'</span> <span class="token operator">+</span> lockname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> identifier
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">.001</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">False</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在购买操作时，就只需要将完整的购买操作包裹在持有锁的阶段就行。其中购买操作放在try代码段内是为了保证即使程序中途异常也能保证锁最后被释放。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">purchase_item_with_lock</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> buyerid<span class="token punctuation">,</span> itemid<span class="token punctuation">,</span> sellerid<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    buyer <span class="token operator">=</span> <span class="token string">"users:%s"</span><span class="token operator">%</span>buyerid
+    seller <span class="token operator">=</span> <span class="token string">"users:%s"</span><span class="token operator">%</span>sellerid
+    item <span class="token operator">=</span> <span class="token string">"%s.%s"</span><span class="token operator">%</span><span class="token punctuation">(</span>itemid<span class="token punctuation">,</span> sellerid<span class="token punctuation">)</span>
+    inventory <span class="token operator">=</span> <span class="token string">"inventory:%s"</span><span class="token operator">%</span>buyerid
+    locked <span class="token operator">=</span> acquire_lock<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> market<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> locked<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+    pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+        pipe<span class="token punctuation">.</span>zscore<span class="token punctuation">(</span><span class="token string">"market:"</span><span class="token punctuation">,</span> item<span class="token punctuation">)</span>
+        pipe<span class="token punctuation">.</span>hget<span class="token punctuation">(</span>buyer<span class="token punctuation">,</span> <span class="token string">'funds'</span><span class="token punctuation">)</span>
+        price<span class="token punctuation">,</span> funds <span class="token operator">=</span> pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> price <span class="token keyword">is</span> <span class="token boolean">None</span> <span class="token keyword">or</span> price <span class="token operator">&gt;</span> funds<span class="token punctuation">:</span>
+            <span class="token keyword">return</span> <span class="token boolean">None</span>
+        pipe<span class="token punctuation">.</span>hincrby<span class="token punctuation">(</span>seller<span class="token punctuation">,</span> <span class="token string">'funds'</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>price<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        pipe<span class="token punctuation">.</span>hincrby<span class="token punctuation">(</span>buyer<span class="token punctuation">,</span> <span class="token string">'funds'</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token operator">-</span>price<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        pipe<span class="token punctuation">.</span>sadd<span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> itemid<span class="token punctuation">)</span>
+        pipe<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span><span class="token string">'market:'</span><span class="token punctuation">,</span> item<span class="token punctuation">)</span>
+        pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">finally</span><span class="token punctuation">:</span>
+        release_lock<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> market<span class="token punctuation">,</span> locked<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而在释放锁的时候要注意：要监视锁对应键的情况，避免某一把锁被多次释放</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">release_lock</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> lockname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    lockname <span class="token operator">=</span> <span class="token string">'lock:'</span> <span class="token operator">+</span> lockname
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            pipe<span class="token punctuation">.</span>watch<span class="token punctuation">(</span>lockname<span class="token punctuation">)</span>
+            <span class="token keyword">if</span> pipe<span class="token punctuation">.</span>get<span class="token punctuation">(</span>lockname<span class="token punctuation">)</span> <span class="token operator">==</span> identifier<span class="token punctuation">:</span>
+                pipe<span class="token punctuation">.</span>multi<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                pipe<span class="token punctuation">.</span>delete<span class="token punctuation">(</span>lockname<span class="token punctuation">)</span>
+                pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token keyword">return</span> <span class="token boolean">True</span>
+            pipe<span class="token punctuation">.</span>unwatch<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">break</span>
+        <span class="token keyword">except</span> redis<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>WatchError<span class="token punctuation">:</span>
+            <span class="token keyword">pass</span>
+    <span class="token keyword">return</span> <span class="token boolean">False</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以上的实例代码只实现了和watch同一粒度的锁，但在市场交易这种情况下，明显细粒度锁更加适合。因此只需要将传入<code>acquire_lock</code>中的lockname进行对应的修改就能实现粒度的更改。</p>
+<p>dogpile效应：执行事务所需的时间越长，就会有越多待处理的事务互相重叠，这种重叠增加了执行单个事务所需的时间，并使得那些带有时间限制的事务失败的几率大幅上升，最终导致所有事务执行失败的几率和进行重试的几率都大幅地上升。典型例子就是用户等得不耐烦，重复发起请求，服务器压力飙升。</p>
+<p>在完成了锁的创建与失效之后，就要考虑锁的超时处理了。为了保证客户端即使崩溃，也能正确释放锁，需要在其他客户端尝试请求锁且失败时，检查这一把锁的过期时间，如果没有过期就为其设置超时时间。这样，即使客户端在获取锁后，设置过期时间前崩溃了，也不会导致某一把锁从此无法获取。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_lock_with_timeout</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> lockname<span class="token punctuation">,</span> acquire_timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> lock_timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identifier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    lockname <span class="token operator">=</span> <span class="token string">'lock:'</span> <span class="token operator">+</span> lockname
+    lock_timeout <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>math<span class="token punctuation">.</span>ceil<span class="token punctuation">(</span>lock_timeout<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    end <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> acquire_timeout
+    <span class="token keyword">while</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> end<span class="token punctuation">:</span>
+        <span class="token keyword">if</span> conn<span class="token punctuation">.</span>setnx<span class="token punctuation">(</span>lockname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            conn<span class="token punctuation">.</span>expire<span class="token punctuation">(</span>lockname<span class="token punctuation">,</span> lock_timeout<span class="token punctuation">)</span>
+            <span class="token keyword">return</span> identifier
+        <span class="token keyword">elif</span> <span class="token keyword">not</span> conn<span class="token punctuation">.</span>ttl<span class="token punctuation">(</span>lockname<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            conn<span class="token punctuation">.</span>expire<span class="token punctuation">(</span>lockname<span class="token punctuation">,</span> lock_timeout<span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">.001</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">False</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>利用这个新的锁，我们就可以重新实现上面的自动补全功能，每有用户需要自动补全时就直接锁定整个联系人列表，避免多个用户查询导致不断的冲突重试。</p>
+<h3 id="计数信号量"><a href="#计数信号量" class="headerlink" title="计数信号量"></a>计数信号量</h3><p>计数信号量用于限制一个资源最多能被多少进程同时访问，用于限定能被同时使用的资源数量。客户端获取信号量与锁的方式相同，区别在于获取不到锁会等待，而获取不到信号量则会直接返回结果。<br>这里使用有序队列搭配时间戳实现信号量的获取限制，程序为每一个进程生成一个唯一表示作为有序集合的成员，时间戳则为分数。若成员在指定排名之内则能够获取到信号量，否则删除自身在有序集合中的记录并返回空。同时程序在向集合中添加前会先清除过期记录。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identidier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    now <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pipeline <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zremrangebyscore<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> <span class="token string">'-inf'</span><span class="token punctuation">,</span> now <span class="token operator">-</span> timeout<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identidier<span class="token punctuation">,</span> now<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrank<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identidier<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&lt;</span> limit<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> identidier
+    conn<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identidier<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">None</span>
+
+<span class="token keyword">def</span> <span class="token function">release_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> conn<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面是一个非常简单的信号量实现，它的缺陷在于会默认所有发起请求的客户端的系统时间都是一样的。如果系统A比系统B快10ms，只要B在A获取信号量的10ms以内尝试获取信号量，就能窃取到A的信号量。因类似情况导致锁获取结果不同的锁或信号量，我们称他们为不公平的锁/信号量。</p>
+<p>为了让信号量尽量公平，我们可以在程序中再添加一个计数器，每当有一个进程尝试来获取信号量就将计数器值自增并赋给对应进程。在分配信号量时，根据进程获得的计数器值来确定。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_fair_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identifier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    czset <span class="token operator">=</span> semname <span class="token operator">+</span> <span class="token string">':owner'</span>
+    ctr <span class="token operator">=</span> semname <span class="token operator">+</span> <span class="token string">':counter'</span>
+    now <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pipeline <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zremrangebyscore<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> <span class="token string">'-inf'</span><span class="token punctuation">,</span> now <span class="token operator">-</span> timeout<span class="token punctuation">)</span> <span class="token comment"># 将已经超时的信号量删除</span>
+    pipeline<span class="token punctuation">.</span>zinterstore<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> <span class="token punctuation">{</span>czset<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> semname<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment"># czset中只会保留还在semaphore中的记录</span>
+    pipeline<span class="token punctuation">.</span>incr<span class="token punctuation">(</span>ctr<span class="token punctuation">)</span>
+    counter <span class="token operator">=</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> now<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> counter<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrank<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&lt;</span> limit<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> identifier
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">None</span>
+
+<span class="token keyword">def</span> <span class="token function">release_fair_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pipeline <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname <span class="token operator">+</span> <span class="token string">':owner'</span><span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -2000,7 +2199,7 @@ PRECISION <span class="token operator">=</span> <span class="token punctuation">
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">103.5k</span>
+                        class="white-color">106.5k</span>
             
             <br>
             <span id="sitetime"></span>
