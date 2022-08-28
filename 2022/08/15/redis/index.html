@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    15.1k
+                    16.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    58 分
+                    63 分
                 </div>
                 
 
@@ -1660,6 +1660,90 @@ PRECISION <span class="token operator">=</span> <span class="token punctuation">
     pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
     pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname <span class="token operator">+</span> <span class="token string">':owner'</span><span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
     <span class="token keyword">return</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_fair_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identifier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    czset <span class="token operator">=</span> semname <span class="token operator">+</span> <span class="token string">':owner'</span>
+    ctr <span class="token operator">=</span> semname <span class="token operator">+</span> <span class="token string">':counter'</span>
+    now <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pipeline <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zremrangebyscore<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> <span class="token string">'-inf'</span><span class="token punctuation">,</span> now <span class="token operator">-</span> timeout<span class="token punctuation">)</span> <span class="token comment"># 将已经超时的信号量删除</span>
+    pipeline<span class="token punctuation">.</span>zinterstore<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> <span class="token punctuation">{</span>czset<span class="token punctuation">:</span> <span class="token number">1</span><span class="token punctuation">,</span> semname<span class="token punctuation">:</span> <span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token comment"># czset中只会保留还在semaphore中的记录</span>
+    pipeline<span class="token punctuation">.</span>incr<span class="token punctuation">(</span>ctr<span class="token punctuation">)</span>
+    counter <span class="token operator">=</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> now<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> counter<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrank<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&lt;</span> limit<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> identifier
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>czset<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token boolean">None</span>
+
+<span class="token keyword">def</span> <span class="token function">release_fair_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pipeline <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    pipeline<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span>semname <span class="token operator">+</span> <span class="token string">':owner'</span><span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> pipeline<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>由于这里我们只给信号量设置了10秒的超时时间，如果交易过程超过了10s，那就需要及时对信号量进行刷新。同时还需要注意如果信号量已经因为过期被删除，就需要拒绝调用这的请求。<br>在长时间使用信号量的时候，必须以合适的频率对信号量进行刷新，避免超时导致信号量被删除。<br>因为我们在上面区分开了超时序列和计数序列，计数序列的内容根据超时序列进行同步，因此刷新时只需要更新超时序列，确保计数序列中的对应记录不被删除即可。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">refresh_fair_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span>semname<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        release_fair_semaphore<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+    <span class="token keyword">return</span> <span class="token boolean">True</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在完成以上功能之后，就要开始考虑消除竞争条件了。下面想象一下这样的场景：线程A首先完成了计数器的自增操作，但在线程A将自己的标识符加入有序集合之前，B完成了自增操作和添加操作，抢先一步拿到信号量。这样，虽然线程A的计数排名靠前，但因为还没有加入集合，所以信号量归B。之后信号量A将自己加入集合，检查排名发现自己满足条件，于是便能直接窃取B已经获取的信号量。而B不会收到任何提示，只会在尝试删除信号量或刷新信号量时发现。</p>
+<p>想要解决上述问题，首先要明确问题的根源：获取信号量的过程不是原子性的，是可再分的，因此在并发环境下它就是线程不安全的。而想让一个线程不安全的操作变得线程安全，最简单的方法就是加锁，加锁是一个原子性操作，获取锁之后的操作都将是线程安全的。因此只需要在获取信号量之前，先尝试获取对应信号量的锁。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_semaphore_with_lock</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">.01</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identifier <span class="token operator">=</span> market<span class="token punctuation">.</span>acquire_lock_with_timeout<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> timeout<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> identifier<span class="token punctuation">:</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> acquire_fair_semaphore<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> timeout<span class="token punctuation">)</span>
+        <span class="token keyword">finally</span><span class="token punctuation">:</span>
+            market<span class="token punctuation">.</span>release_lock<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a>任务队列</h3><p>在处理请求时，对于那些执行时间较长的操作，可以放入队列，之后再对队列进行处理。这样用户可以及时得到反馈，服务器也不会因某个任务而阻塞。<br>任务队列的应用非常广泛，最典型的就是给用户发送邮件、验证码。</p>
+<h4 id="先进先出队列"><a href="#先进先出队列" class="headerlink" title="先进先出队列"></a>先进先出队列</h4><p>这里先介绍先进先出队列，用发送邮件当作例子。由于发送邮件都有较高的延迟，且容易出现失败的情况，因此将它交给队列处理会是个好选择。将要发送的邮件信息先存储在队列当中，当要发送时，构建一个工作进程以并行的方式一次发送多封邮件。<br>这里使用列表来存储邮件信息，用<code>RPUSH</code>添加邮件，<code>BLPOP</code>提取出要发送的邮件。由于邮件不一定每时每刻都有，因此使用阻塞队列可以避免程序过多次重试。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">process_sold_email_queue</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">while</span> <span class="token keyword">not</span> QUIT<span class="token punctuation">:</span>
+        packed <span class="token operator">=</span> conn<span class="token punctuation">.</span>blpop<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'queue'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">30</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> packed<span class="token punctuation">:</span>
+            <span class="token keyword">continue</span>
+        to_send <span class="token operator">=</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>packed<span class="token punctuation">)</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            fetch_data_and_send_sold_email<span class="token punctuation">(</span>to_send<span class="token punctuation">)</span>
+        <span class="token keyword">except</span> EmailSenderError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+            log_error<span class="token punctuation">(</span><span class="token string">"Failed to send"</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            log_success<span class="token punctuation">(</span><span class="token string">"Send sold email"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这是队列的最简单的一种实现方式，接下来尝试给他添加优先级。<br>最简单的一种方式就是用不同的队列表示不同的优先级，并按顺序将他们放入列表传递给函数。Redis的<code>BLPOP</code>命令会在接收到的队列列表中按顺序从最先给他提供数据的列表中抽取对象。</p>
+<h4 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h4><p>通常应用程序还会希望能让某个任务被延迟执行，例如B站发送视频设置准点发送就可以交给延迟队列来处理。这里最容易想到的一种方法就是使用有序集合存储任务的执行时间戳，定期扫描集合中有没有到期的任务要执行。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">execute_later</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> queue<span class="token punctuation">,</span> name<span class="token punctuation">,</span> args<span class="token punctuation">,</span> delay<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identifier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    item <span class="token operator">=</span> json<span class="token punctuation">.</span>dump<span class="token punctuation">(</span><span class="token punctuation">[</span>identifier<span class="token punctuation">,</span> queue<span class="token punctuation">,</span> name<span class="token punctuation">,</span> args<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> delay <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+        conn<span class="token punctuation">.</span>zadd<span class="token punctuation">(</span><span class="token string">'delayed:'</span><span class="token punctuation">,</span> item<span class="token punctuation">,</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> delay<span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        conn<span class="token punctuation">.</span>rpush<span class="token punctuation">(</span><span class="token string">'queue:'</span> <span class="token operator">+</span> queue<span class="token punctuation">,</span> item<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> identifier
+
+<span class="token keyword">def</span> <span class="token function">poll_queue</span><span class="token punctuation">(</span>conn<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">while</span> <span class="token keyword">not</span> QUIT<span class="token punctuation">:</span>
+        item <span class="token operator">=</span> conn<span class="token punctuation">.</span>zrange<span class="token punctuation">(</span><span class="token string">'delayed:'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> withscores<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> item <span class="token keyword">or</span> item<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&gt;</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">.01</span><span class="token punctuation">)</span>
+            <span class="token keyword">continue</span>
+        item <span class="token operator">=</span> item<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        identifier<span class="token punctuation">,</span> queue<span class="token punctuation">,</span> function<span class="token punctuation">,</span> args <span class="token operator">=</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+        locked <span class="token operator">=</span> lock<span class="token punctuation">.</span>acquire_lock_with_timeout<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> locked<span class="token punctuation">:</span>
+            <span class="token keyword">continue</span>
+        <span class="token keyword">if</span> conn<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span><span class="token string">'delayed:'</span><span class="token punctuation">,</span> item<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            conn<span class="token punctuation">.</span>rpush<span class="token punctuation">(</span><span class="token string">'queue:'</span> <span class="token operator">+</span> queue<span class="token punctuation">,</span> item<span class="token punctuation">)</span>
+        lock<span class="token punctuation">.</span>release_lock<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> identifier<span class="token punctuation">,</span> locked<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>实现时要注意的一点是，在转移任务时要给对应的任务加锁，避免某个任务被多次执行。</p>
+
                 
             </div>
             <hr/>
@@ -2199,7 +2283,7 @@ PRECISION <span class="token operator">=</span> <span class="token punctuation">
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">106.5k</span>
+                        class="white-color">107.8k</span>
             
             <br>
             <span id="sitetime"></span>
