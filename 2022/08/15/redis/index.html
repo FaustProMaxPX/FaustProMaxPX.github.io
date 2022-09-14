@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    23.5k
+                    25.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    93 分
+                    99 分
                 </div>
                 
 
@@ -2299,7 +2299,75 @@ POST_PER_PASS <span class="token operator">=</span> <span class="token number">1
                 <span class="token keyword">break</span>
     pubsub<span class="token punctuation">.</span>reset<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>之后具体的过滤器创建就不多赘述了，可以根据自己的业务要求创建需要的过滤器。</p>
+<h2 id="降低内存占用"><a href="#降低内存占用" class="headerlink" title="降低内存占用"></a>降低内存占用</h2><h3 id="短结构"><a href="#短结构" class="headerlink" title="短结构"></a>短结构</h3><p>对于长度比较短的结构，Redis提供了一系列配置选项，可以让它以更节约空间的方式存储长度较短的结构。<br>在列表、散列和有序集合的长度较短或者体积较小的时候，Redis可以选择使用一种名为_压缩列表_（ziplist）的紧凑存储方式来存储这些结构。压缩列表是列表、散列和有序集合这3种不同类型的对象的一种非结构化（unstructured）表示。<br>压缩列表会以序列化的方式存储数据，每次读取都要对数据进行解码，每次写入也要进行局部的重新编码，并且可能需要对内存里的数据进行移动。</p>
+<h4 id="压缩列表表示"><a href="#压缩列表表示" class="headerlink" title="压缩列表表示"></a>压缩列表表示</h4><p>在讲压缩列表之前，我们先看一下Redis列表的存储方式。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220914144938.png" alt="Redis长列表存储格式"></p>
+<p>Redis在存储长列表时，会存储一个指向前面节点和后面节点的指针。在包含字符串的指针中，又会存储当前节点的字符串长度以及剩余可用的字节数量。也就是说每个节点都需要额外存储3个指针，两个整数，以及字符串内的一个额外字节，算下来每个节点都至少需要21个字节的额外开销。</p>
+<p>而压缩列表则是用节点组成的序列，每个节点都用两个长度值和一个字符串组成。第一个长度值记录的是前一个节点的长度，这个长度值会被用来进行从后向前的遍历，第二个长度值记录了当前节点的长度，最后则是真正的字符串。压缩列表就是这样通过避免存储额外的元数据和指针来减少存储空间的占用。</p>
+<p>Redis配置文件的设置</p>
+<pre class="line-numbers language-none"><code class="language-none">list-max-ziplist-entries 512
+list-max-ziplist-value 64
 
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>entries表示列表散列和有序集合在被编码为压缩列表的情况下允许包含的最大元素<br>value表示压缩列表每个节点的最大体积是多少个字节</p>
+<h4 id="集合的整数集合编码"><a href="#集合的整数集合编码" class="headerlink" title="集合的整数集合编码"></a>集合的整数集合编码</h4><p>对于体积较小，并且成员都可以被解释为十进制整数的集合，Redis就会以有序数组的方式存储集合，这种存储方式又称为整数集合。</p>
+<p>配置文件设置</p>
+<pre class="line-numbers language-none"><code class="language-none">set-max-intset-entries 512<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="短结构存在的性能问题"><a href="#短结构存在的性能问题" class="headerlink" title="短结构存在的性能问题"></a>短结构存在的性能问题</h4><p>前面提到，Redis存储短结构时，是将他们序列化后存储在内存中，这就代表他在读写时多了编解码操作，因此当短结构的体积很大时，它反而会带来巨大的性能问题。<br>而对于整数集合来说，虽然它本身不需要序列化存储，但每一次插入都需要进行数据的移动，当数据量非常大时，这个操作就会很消耗时间。</p>
+<h3 id="分片结构"><a href="#分片结构" class="headerlink" title="分片结构"></a>分片结构</h3><p>分片：本质上是基于某些简单的规则将数据划分为更小的部分，然后根据数据所属的部分来决定将数据发送到哪个位置上面。<br>ps：分片对有序集合来说提升并不明显，因为有序集合需要等待所有的分片完成操作之后才能获得结果。</p>
+<h4 id="分片式散列"><a href="#分片式散列" class="headerlink" title="分片式散列"></a>分片式散列</h4><p>对散列进行分片首先需要选择一个方法来对数据进行划分。因为散列本身就存储着一些键，所以程序在对键进行划分的时候，可以把散列存储的键用作其中一个信息源，并使用散列函数为键计算出一个数字散列值。然后程序会根据需要存储的键的总数量以及每个分片需要存储的键数量，计算出所需的分片数量，并使用这个分片数量和键的散列值来决定应该把键存储到哪个分片里面。</p>
+<p>分片函数：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">shard_key</span><span class="token punctuation">(</span>base<span class="token punctuation">,</span> key<span class="token punctuation">,</span> total_elements<span class="token punctuation">,</span> shard_size<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">or</span> key<span class="token punctuation">.</span>isdigit<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        shard_id <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">//</span> shard_size
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        shards <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">*</span> total_elements <span class="token operator">//</span> shard_size
+        shard_id <span class="token operator">=</span> binascii<span class="token punctuation">.</span>crc32<span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token operator">%</span> shards
+    <span class="token keyword">return</span> <span class="token string">"%s:%s"</span><span class="token operator">%</span><span class="token punctuation">(</span>base<span class="token punctuation">,</span> shard_id<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面例子中的分片函数需要用户传入基础散列的名字，将要被存储到分片散列里的键，预计的元素总数量以及请求的分片数量<br>在对非数字键进行分片时，需要<code>total_elements</code>和<code>shard_size</code>用于计算实际所需的分片总数量。因此这两个参数都应尽量不发生变化，即使真的需要修改，也要使用<code>resharding</code>(重新分片)来讲数据从旧分片迁移到新分片。</p>
+<p>分片的使用</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">shard_hset</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> base<span class="token punctuation">,</span> key<span class="token punctuation">,</span> value<span class="token punctuation">,</span> total_elements<span class="token punctuation">,</span> shard_size<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    shard <span class="token operator">=</span> shard_key<span class="token punctuation">(</span>base<span class="token punctuation">,</span> key<span class="token punctuation">,</span> total_elements<span class="token punctuation">,</span> shard_size<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> conn<span class="token punctuation">.</span>hset<span class="token punctuation">(</span>shard<span class="token punctuation">,</span> key<span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">shard_hget</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> base<span class="token punctuation">,</span> key<span class="token punctuation">,</span> total_elements<span class="token punctuation">,</span> shard_size<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    shard <span class="token operator">=</span> shard_key<span class="token punctuation">(</span>base<span class="token punctuation">,</span> key<span class="token punctuation">,</span> total_elements<span class="token punctuation">,</span> shard_size<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> conn<span class="token punctuation">.</span>hget<span class="token punctuation">(</span>shard<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="分片集合"><a href="#分片集合" class="headerlink" title="分片集合"></a>分片集合</h4><p>之前我们提到过计算网站唯一访客的数量，这里提一下另一种做法：使用集合存储到访用户的id，但如果单纯使用集合存储，那往往会导致最终集合的体积异常庞大，这时就可以使用到分片技术了。<br>只要使用上一节讲的分片方法，我们就能很轻易的实现分片集合，但由于我们存储的是UUID，它的过长的长度会导致我们无法享受到整数集合带来的好处。因此，我们可以将UUID的前15个十六进制数字用作分片的键。<br>使用UUID的前15个十六进制数字可以大幅减少内存的占用，同时让Redis能够以整数集合的方式存储。</p>
+<p>具体实现<br>思路：根据用户的会话id生成传入Redis的id，并获取预期的访客数量，交给分片集合函数进行处理。如果成功添加，就将当天的访客数+1</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">shard_sadd</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> base<span class="token punctuation">,</span> member<span class="token punctuation">,</span> total_elements<span class="token punctuation">,</span> shard_size<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    shard <span class="token operator">=</span> shard_key<span class="token punctuation">(</span>base<span class="token punctuation">,</span> <span class="token string">'x'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>member<span class="token punctuation">)</span><span class="token punctuation">,</span> total_elements<span class="token punctuation">,</span> shard_size<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> conn<span class="token punctuation">.</span>sadd<span class="token punctuation">(</span>shard<span class="token punctuation">,</span> member<span class="token punctuation">)</span>
+
+SHARD_SIZE <span class="token operator">=</span> <span class="token number">512</span>
+<span class="token keyword">def</span> <span class="token function">count_visit</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> session_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    today <span class="token operator">=</span> date<span class="token punctuation">.</span>today<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    key <span class="token operator">=</span> <span class="token string">'unique:%s'</span><span class="token operator">%</span>today<span class="token punctuation">.</span>isoformat<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    expected <span class="token operator">=</span> get_expected<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> today<span class="token punctuation">)</span>
+    <span class="token builtin">id</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>session_id<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'-'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> shard_sadd<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token builtin">id</span><span class="token punctuation">,</span> expected<span class="token punctuation">,</span> SHARD_SIZE<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        conn<span class="token punctuation">.</span>incr<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+
+DAILY_EXPECTED <span class="token operator">=</span> <span class="token number">1000000</span>
+EXPECTED <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token keyword">def</span> <span class="token function">get_expected</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> today<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> key <span class="token keyword">in</span> DAILY_EXPECTED<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span>
+    exkey <span class="token operator">=</span> key <span class="token operator">+</span> <span class="token string">':expected'</span>
+    expected <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span>exkey<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> expected<span class="token punctuation">:</span>
+        yesterday <span class="token operator">=</span> <span class="token punctuation">(</span>today <span class="token operator">-</span> timedelta<span class="token punctuation">(</span>days<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>isoformat<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        expected <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'unique:%s'</span><span class="token operator">%</span>yesterday<span class="token punctuation">)</span>
+        expected <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>expected <span class="token keyword">or</span> DAILY_EXPECTED<span class="token punctuation">)</span>
+        expected <span class="token operator">=</span> <span class="token number">2</span><span class="token operator">**</span><span class="token builtin">int</span><span class="token punctuation">(</span>math<span class="token punctuation">.</span>ceil<span class="token punctuation">(</span>math<span class="token punctuation">.</span>log<span class="token punctuation">(</span>expected<span class="token operator">*</span><span class="token number">1.5</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> conn<span class="token punctuation">.</span>setnx<span class="token punctuation">(</span>exkey<span class="token punctuation">,</span> expected<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            expected <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span>exkey<span class="token punctuation">)</span>
+    EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>expected<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -2839,7 +2907,7 @@ POST_PER_PASS <span class="token operator">=</span> <span class="token number">1
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">114.8k</span>
+                        class="white-color">116.5k</span>
             
             <br>
             <span id="sitetime"></span>
