@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    25.1k
+                    27k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    99 分
+                    106 分
                 </div>
                 
 
@@ -936,11 +936,8 @@ OK
 <td>ZUNION</td>
 <td>ZUNION dest-key key-count key [key …] [WEIGHTS weight …] [AGGREGATE SUM|MIN|MAX] 对给定有序集合执行并集运算</td>
 </tr>
-<tr>
-<td>这里稍微解释一下redis中的集合运算，当若干个有序集合进行集合运算后，其成员部分的结果和我们熟知的数学意义上的集合运算结果一致。而分数部分则由用户传入的WEIGHT和AGGREGATE决定，WEIGHT可以决定各个集合中分数的权重，默认为1。AGGREGATE则决定集合之间找到匹配项后对分数的处理行为，是直接相加还是取最大或最小值。</td>
-<td></td>
-</tr>
 </tbody></table>
+<p>这里稍微解释一下redis中的集合运算，当若干个有序集合进行集合运算后，其成员部分的结果和我们熟知的数学意义上的集合运算结果一致。而分数部分则由用户传入的WEIGHT和AGGREGATE决定，WEIGHT可以决定各个集合中分数的权重，默认为1。AGGREGATE则决定集合之间找到匹配项后对分数的处理行为，是直接相加还是取最大或最小值。</p>
 <h3 id="发布与订阅"><a href="#发布与订阅" class="headerlink" title="发布与订阅"></a>发布与订阅</h3><p>订阅者可以订阅指定的频道，发布者可以向指定的频道传输信息，这些信息一旦被传输到给定频道，所有订阅该频道的订阅者都会收到信息。<br>Redis也提供了一系列用于发布与订阅的命令</p>
 <table>
 <thead>
@@ -2368,6 +2365,102 @@ EXPECTED <span class="token operator">=</span> <span class="token punctuation">{
             expected <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span>exkey<span class="token punctuation">)</span>
     EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>expected<span class="token punctuation">)</span>
     <span class="token keyword">return</span> EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="扩展Redis"><a href="#扩展Redis" class="headerlink" title="扩展Redis"></a>扩展Redis</h2><h3 id="扩展读性能"><a href="#扩展读性能" class="headerlink" title="扩展读性能"></a>扩展读性能</h3><p>在开始扩展性能之前，先回顾一下可以提高性能的几个途径：</p>
+<ol>
+<li>使用上一章提到的短结构时，确保压缩列表的最大长度不会太大以至于影响性能。</li>
+<li>根据程序需要执行的查询类型，选择能为这种查询提供最好性能的结构。</li>
+<li>在将大体积的对象缓存到Redis里之前，考虑先对它进行压缩以减少读取和写入对象时所需的网络带宽。</li>
+<li>使用流水线和连接池。</li>
+</ol>
+<p>接下来就可以开始考虑提升Redis读取能力的方法了，最容易想到的就是添加只读从服务器。<br>在使用只读从服务器时，必须牢记只可以对Redis主服务器进行写入。</p>
+<p>在使用多个Redis从服务器处理查询时可能会遇到的最棘手的问题就是主服务器临时下线或者永久下线。所以每当有从服务器尝试与主服务器建立连接时，主服务器都会为从服务器创建一个快照，如果有多个从服务器建立连接，他们最后都会收到同一个快照。这大幅减少了创建快照的工作负担。<br>不过大量的发送快照副本也会大量消耗主服务器的带宽，导致主服务器延迟变高，甚至主服务器已经建立的连接断开。</p>
+<p>因此，想要解决服务器重同步问题的办法之一，就是减少主服务器传送给从服务器的数据量。而最简单的实现方法，就是添加一个中间层，让中间层的服务器负责转发数据副本。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/20220923104227.png"></p>
+<p>中间层可以有效分担主服务器传输数据副本的压力，不过这也导致了复杂的网络拓扑结构，增加了处理故障的难度。</p>
+<p>除了添加服务器群组之外，解决重同步的另一个方向就是对网络连接进行压缩，从而减少需要传送的数据量。</p>
+<blockquote>
+<p>[!note]+ 加密和压缩开销</p>
+</blockquote>
+<p>使用带压缩的SSH隧道可以有效减少网络负载。<br>SSH隧道：在SSH客户端与SSH服务端之间建立一个隧道，将网络数据通过该隧道转发至指定端口，从而进行网络通信。SSH隧道自动提供了相应的加密及解密服务，保证了数据传输的安全性。<br>SSH的加密算法并不会占用很多的处理器资源，一般来说会将SSH压缩的等级控制在5级以下。因为5级压缩可以在1级压缩的基础上，将数据的总体积减少10%～20%，并且只需要相当于1级压缩2～3倍的处理时间。</p>
+<blockquote>
+<p>[!note]+ 使用OPENVPN进行压缩</p>
+</blockquote>
+<p>初看上去，使用AES加密和lzo压缩的OpenVPN似乎是一个绝妙的现成解决方案，跟SSH需要使用第三方脚本才能进行自动重连接相比，OpenVPN不仅提供加密和压缩功能，而且还具有对用户透明的重连接功能。遗憾的是，我能够找到的大部分信息都显示OpenVPN在开启lzo压缩之后，对于10兆网络连接的性能提升只有25%～30%，而对于速度更快的连接，lzo压缩不会给性能带来任何提升。</p>
+<blockquote>
+<p>[!def]+ Sentinal</p>
+</blockquote>
+<p>Redis的哨兵可以配合Redis的复制功能使用，并对下线的主服务器进行故障转移。哨兵会监视系一列主服务器以及这些主服务器的从服务器。<br>通过向主服务器发送PUBLISH和SUBSCRIBE命令(确认主服务器能够正确收发消息)，并向主从服务器发送PING命令，各个哨兵进程可以自主识别可用的从服务器和其他的哨兵。当主服务器失效时，监视该主服务器的所有哨兵会基于彼此共有的信息选出一个哨兵，并选出一个新的主服务器。选出的哨兵会负责让剩余的从服务器去复制这个新的主服务器。</p>
+<h3 id="扩展写性能"><a href="#扩展写性能" class="headerlink" title="扩展写性能"></a>扩展写性能</h3><p>在扩展写性能之前，我们同样需要检查是否已经尽一切可能降低了内存占用，并且是否尽可能介绍了需要写入的数据量。</p>
+<ul>
+<li>尽可能减少程序需要读取的数据量</li>
+<li>将无关的功能迁移至其他服务器</li>
+<li>在对Redis进行写入之前，尝试在本地内存中对将要写入的数据进行聚合运算</li>
+<li>使用锁去替换可能会给速度带来限制的<code>WATCH/MULTI/EXEC</code>事务</li>
+<li>降低命令长度</li>
+</ul>
+<p>如果以上的操作都基本已经做到极限了，就代表达到了单台服务器的性能瓶颈。这时就可以将数据分片到多台机器上了。</p>
+<blockquote>
+<p>[!tip]+ 预先分片</p>
+</blockquote>
+<p>在为了应对未来可能出现的流量增长而对系统进行预先分片的时候，我们可能会陷入这样一种处境：目前拥有的数据实在太少，按照预先分片方法计算出的机器数量去存储这些数据只会得不偿失。为了能够如常地对数据进行分割，我们可以在单台机器上面运行多个Redis服务器，并将每个服务器用作一个分片；或者使用单个Redis服务器上的多个Redis数据库。然后以此为起点，复制和配置管理方法，将数据迁移到多台机器上面。</p>
+<h4 id="分片配置信息处理"><a href="#分片配置信息处理" class="headerlink" title="分片配置信息处理"></a>分片配置信息处理</h4><p>由于各个分片分布在不同的机器上，因此需要一个函数来根据分片动态获取对应的Redis连接。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_redis_connection</span><span class="token punctuation">(</span>component<span class="token punctuation">,</span> wait<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    key <span class="token operator">=</span> <span class="token string">'config:redis:'</span> <span class="token operator">+</span> component
+    <span class="token comment"># 获取旧配置</span>
+    old_config <span class="token operator">=</span> CONFIGS<span class="token punctuation">.</span>get<span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token builtin">object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment"># 获取新配置</span>
+    config <span class="token operator">=</span> get_config<span class="token punctuation">(</span>
+        config_connection<span class="token punctuation">,</span> <span class="token string">'redis'</span><span class="token punctuation">,</span> component<span class="token punctuation">,</span> wait<span class="token punctuation">)</span>
+    <span class="token comment"># 如果新旧配置不同，就创建一个新的连接</span>
+    <span class="token keyword">if</span> config <span class="token operator">!=</span> old_config<span class="token punctuation">:</span>
+        REDIS_CONNECTIONS<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> redis<span class="token punctuation">.</span>Redis<span class="token punctuation">(</span><span class="token operator">**</span>config<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> REDIS_CONNECTIONS<span class="token punctuation">.</span>get<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">get_sharded_connection</span><span class="token punctuation">(</span>component<span class="token punctuation">,</span> key<span class="token punctuation">,</span> shard_count<span class="token punctuation">,</span> wait<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    shard <span class="token operator">=</span> shard_key<span class="token punctuation">(</span>component<span class="token punctuation">,</span> <span class="token string">'x'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">,</span> shard_count<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> get_redis_connection<span class="token punctuation">(</span>shard<span class="token punctuation">,</span> wait<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="创建分片服务器连接装饰器"><a href="#创建分片服务器连接装饰器" class="headerlink" title="创建分片服务器连接装饰器"></a>创建分片服务器连接装饰器</h4><p>接下来我们就需要使用<code>get_sharded_connection</code>写出一个能够自动创建分片连接，并将分片连接传递给底层函数的装饰器。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">sharded_connection</span><span class="token punctuation">(</span>component<span class="token punctuation">,</span> shard_count<span class="token punctuation">,</span> wait<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">wrapper</span><span class="token punctuation">(</span>function<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token decorator annotation punctuation">@functools<span class="token punctuation">.</span>wraps</span><span class="token punctuation">(</span>function<span class="token punctuation">)</span>
+        <span class="token keyword">def</span> <span class="token function">call</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            conn <span class="token operator">=</span> get_sharded_connection<span class="token punctuation">(</span>
+                component<span class="token punctuation">,</span> key<span class="token punctuation">,</span> shard_count<span class="token punctuation">,</span> wait
+            <span class="token punctuation">)</span>
+            <span class="token keyword">return</span> function<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> call
+    <span class="token keyword">return</span> wrapper
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个包装器可以实现在不修改<code>count_visit()</code>的情况下直接对它进行封装。但要注意的是，由于count_visit需要维持聚合计数信息，而获取这些信息需要通过get_expected，这个函数没有必要分片并且会在不同的时期被不同的用户使用，所以需要对它进行非分片连接。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@sharded_connection</span><span class="token punctuation">(</span><span class="token string">'unique'</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">count_visit</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> session_id<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    today <span class="token operator">=</span> date<span class="token punctuation">.</span>today<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    key <span class="token operator">=</span> <span class="token string">'unique:%s'</span><span class="token operator">%</span>today<span class="token punctuation">.</span>isoformat<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    conn2<span class="token punctuation">,</span> expected <span class="token operator">=</span> get_expected<span class="token punctuation">(</span>key<span class="token punctuation">,</span> today<span class="token punctuation">)</span>
+    <span class="token builtin">id</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>session_id<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'-'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> shard<span class="token punctuation">.</span>shard_sadd<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token builtin">id</span><span class="token punctuation">,</span> expected<span class="token punctuation">,</span> shard<span class="token punctuation">.</span>SHARD_SIZE<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        conn2<span class="token punctuation">.</span>incr<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+
+<span class="token comment"># 获取非分片连接</span>
+<span class="token decorator annotation punctuation">@redis_connection</span><span class="token punctuation">(</span><span class="token string">'unique'</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">get_expected</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> today<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> key <span class="token keyword">in</span> DAILY_EXPECTED<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span>
+    exkey <span class="token operator">=</span> key <span class="token operator">+</span> <span class="token string">':expected'</span>
+    expected <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span>exkey<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> expected<span class="token punctuation">:</span>
+        yesterday <span class="token operator">=</span> <span class="token punctuation">(</span>today <span class="token operator">-</span> timedelta<span class="token punctuation">(</span>days<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>isoformat<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        expected <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'unique:%s'</span><span class="token operator">%</span>yesterday<span class="token punctuation">)</span>
+        expected <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>expected <span class="token keyword">or</span> DAILY_EXPECTED<span class="token punctuation">)</span>
+        expected <span class="token operator">=</span> <span class="token number">2</span><span class="token operator">**</span><span class="token builtin">int</span><span class="token punctuation">(</span>math<span class="token punctuation">.</span>ceil<span class="token punctuation">(</span>math<span class="token punctuation">.</span>log<span class="token punctuation">(</span>expected<span class="token operator">*</span><span class="token number">1.5</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> conn<span class="token punctuation">.</span>setnx<span class="token punctuation">(</span>exkey<span class="token punctuation">,</span> expected<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            expected <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span>exkey<span class="token punctuation">)</span>
+    EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>expected<span class="token punctuation">)</span>
+    <span class="token comment"># 返回非分片连接，使得count_visit()在有需要时可以对唯一计数器操作</span>
+    <span class="token keyword">return</span> conn<span class="token punctuation">,</span> EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
                 
             </div>
             <hr/>
@@ -2907,7 +3000,7 @@ EXPECTED <span class="token operator">=</span> <span class="token punctuation">{
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">116.5k</span>
+                        class="white-color">119.8k</span>
             
             <br>
             <span id="sitetime"></span>
