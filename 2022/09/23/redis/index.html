@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    27k
+                    27.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    106 分
+                    109 分
                 </div>
                 
 
@@ -2461,6 +2461,61 @@ EXPECTED <span class="token operator">=</span> <span class="token punctuation">{
     <span class="token comment"># 返回非分片连接，使得count_visit()在有需要时可以对唯一计数器操作</span>
     <span class="token keyword">return</span> conn<span class="token punctuation">,</span> EXPECTED<span class="token punctuation">[</span>key<span class="token punctuation">]</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="Redis的Lua脚本编程"><a href="#Redis的Lua脚本编程" class="headerlink" title="Redis的Lua脚本编程"></a>Redis的Lua脚本编程</h2><h3 id="将Lua脚本载入Redis"><a href="#将Lua脚本载入Redis" class="headerlink" title="将Lua脚本载入Redis"></a>将Lua脚本载入Redis</h3><p>SCRIPT LOAD: 载入Lua脚本，返回一个SHA1校验和<br>EVALSHA: 调用SHA校验和对应的脚本</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">script_load</span><span class="token punctuation">(</span>script<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sha <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token boolean">None</span><span class="token punctuation">]</span>
+    <span class="token keyword">def</span> <span class="token function">call</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> keys<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args<span class="token operator">=</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> force_eval<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> force_eval<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> sha<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+                sha<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> conn<span class="token punctuation">.</span>execute_command<span class="token punctuation">(</span>
+                    <span class="token string">"SCRIPT"</span><span class="token punctuation">,</span> <span class="token string">"LOAD"</span><span class="token punctuation">,</span> script<span class="token punctuation">,</span> parse<span class="token operator">=</span><span class="token string">"LOAD"</span>
+                <span class="token punctuation">)</span>
+        <span class="token keyword">try</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> conn<span class="token punctuation">.</span>execute_command<span class="token punctuation">(</span>
+                <span class="token string">"EVALSHA"</span><span class="token punctuation">,</span> sha<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>keys<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">(</span>keys<span class="token operator">+</span>args<span class="token punctuation">)</span>
+            <span class="token punctuation">)</span>
+        <span class="token keyword">except</span> redis<span class="token punctuation">.</span>exceptions<span class="token punctuation">.</span>ResponseError <span class="token keyword">as</span> msg<span class="token punctuation">:</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> msg<span class="token punctuation">.</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>starswith<span class="token punctuation">(</span><span class="token string">"NOSCRIPT"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">raise</span>
+        <span class="token keyword">return</span> conn<span class="token punctuation">.</span>execute_command<span class="token punctuation">(</span>
+            <span class="token string">"EVAL"</span><span class="token punctuation">,</span> script<span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>keys<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">*</span><span class="token punctuation">(</span>keys<span class="token operator">+</span>args<span class="token punctuation">)</span>
+        <span class="token punctuation">)</span>
+	<span class="token keyword">return</span> call<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面是一个加载Lua脚本的函数，这个脚本允许我们使用任何指定的连接而无需显示创建新的脚本对象。在调用该函数第一次执行命令时，会调用<code>SCRIPT LOAD</code>，之后会调用<code>EVALSHA</code>。<br>由于脚本在返回各种不同类型的数据时可能会产生含糊不清的结果，所以应该尽量显示的返回字符串，然后手动进行分析操作。</p>
+<h3 id="创建新的状态信息"><a href="#创建新的状态信息" class="headerlink" title="创建新的状态信息"></a>创建新的状态信息</h3><p><strong>Lua脚本跟单个Redis命令一样，都是单个原子操作</strong>。因为Redis一次只会执行一个命令，所以EVAL，EVALSHA这两个命令也会被当作单个命令来处理。<br>这有效的帮助我们消除了竞态条件，不过这就导致<em>已经对结构进行了修改的Lua脚本无法被中断</em>。<br>对于不执行写命令的脚本来说，在脚本允许事件超过lua-time-limit指定的时间之后，就可以执行SCRIPT KILL命令杀死正在运行的脚本。<br>但如果脚本已经对存储的数据进行了写入，杀死脚本就会带来数据不一致的问题，这时就只能直接用SHUTDOWN NOSAVE杀死服务器。</p>
+<p>Lua脚本一个最显著的优势就是它减少了与服务器的通讯次数，这不仅减少了多次通信的时间开销，还避免了 WATCH/MULTI/EXEC 事务冲突。</p>
+<p>在开始Lua脚本演示之前，先介绍一下Redis使用Lua脚本的基本格式<br><code>EVAL script numkeys key [key ...] arg [arg ...]</code><br>在宿主语言的Lua脚本代码中key和arg分别用KEYS和ARGV表示，需要注意的是，Lua中数组的下标从1开始。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">create_status</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> message<span class="token punctuation">,</span> <span class="token operator">**</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    args <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token string">'message'</span><span class="token punctuation">,</span> message<span class="token punctuation">,</span>
+        <span class="token string">'posted'</span><span class="token punctuation">,</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">'uid'</span><span class="token punctuation">,</span> uid<span class="token punctuation">,</span>
+    <span class="token punctuation">]</span>
+    <span class="token keyword">for</span> key<span class="token punctuation">,</span> value <span class="token keyword">in</span> data<span class="token punctuation">.</span>iteritems<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        args<span class="token punctuation">.</span>append<span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+        args<span class="token punctuation">.</span>append<span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+    
+    <span class="token keyword">return</span> create_status_lua<span class="token punctuation">(</span>
+        conn<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'user:%s'</span><span class="token operator">%</span>uid<span class="token punctuation">,</span> <span class="token string">'status:id:'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> args
+    <span class="token punctuation">)</span>
+
+create_status_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+local login = redis.call('hget', KEYS[1], 'login')
+if not login then
+    return false
+end
+local id = redis.call('incr', KEYS[2])
+local key = string.format('status:%s', id)
+redis.call('hmset', key,
+    'login', login,
+    'id', id,
+    unpack(ARGV))
+redis.call('hincrby', KEYS[1], 'posts', 1)
+return id
+)
+'''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以上就是用Lua脚本执行创建状态信息命令的表示，我们主要将它拆分成两部分，第一部分负责组装Lua脚本需要的参数，第二部分是Lua脚本本身。</p>
+
                 
             </div>
             <hr/>
@@ -3006,7 +3061,7 @@ EXPECTED <span class="token operator">=</span> <span class="token punctuation">{
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">119.8k</span>
+                        class="white-color">120.4k</span>
             
             <br>
             <span id="sitetime"></span>
