@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    27.7k
+                    28.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    109 分
+                    112 分
                 </div>
                 
 
@@ -2515,6 +2515,73 @@ return id
 )
 '''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>以上就是用Lua脚本执行创建状态信息命令的表示，我们主要将它拆分成两部分，第一部分负责组装Lua脚本需要的参数，第二部分是Lua脚本本身。</p>
+<h3 id="重写锁实现"><a href="#重写锁实现" class="headerlink" title="重写锁实现"></a>重写锁实现</h3><h4 id="Lua实现脚本的原因"><a href="#Lua实现脚本的原因" class="headerlink" title="Lua实现脚本的原因"></a>Lua实现脚本的原因</h4><ol>
+<li>在EVAL命令或EVALSHA命令执行Lua脚本时，跟在脚本或SHA1校验和之后的第一组参数就是Lua脚本需要读取或者写入的键。这样做的主要目的是让集群可以拒绝那些尝试在指定分片上，对不可用的键进行读取或写入的脚本。如果事先不知道哪些键会被读取和写入，就应该使用WATCH/MULTI/EXEC</li>
+<li>在处理Redis存储的数据时，程序可能会需要一些数据，而这些数据无法在最开始的调用中获取。如果在在读取时不进行一定的限制，可能会导致服务器对数据库进行许多多余的访问，造成性能下降，甚至新数据被旧数据覆盖。</li>
+</ol>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_lock_with_timeout</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> lockname<span class="token punctuation">,</span> acquire_timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">,</span> lock_timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    identifier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    lockname <span class="token operator">=</span> <span class="token string">'lock:'</span> <span class="token operator">+</span> lockname
+    lock_timeout <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>math<span class="token punctuation">.</span>ceil<span class="token punctuation">(</span>lock_timeout<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    acquired <span class="token operator">=</span> <span class="token boolean">False</span>
+    end <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> acquire_timeout
+    <span class="token keyword">while</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> end <span class="token keyword">and</span> <span class="token keyword">not</span> acquired<span class="token punctuation">:</span>
+        <span class="token comment"># 执行实际的锁获取操作，确保Lua调用已经执行成功</span>
+        acquired <span class="token operator">=</span> acquire_lock_with_timeout_lua<span class="token punctuation">(</span>
+            conn<span class="token punctuation">,</span> <span class="token punctuation">[</span>lockname<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>lock_timeout<span class="token punctuation">,</span> identifier<span class="token punctuation">]</span>
+        <span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">'OK'</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">.001</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">not</span> acquired<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> acquired <span class="token keyword">and</span> identifier
+
+<span class="token comment"># 检测锁是否存在，然后用给定的ttl和标识符设置键</span>
+acquire_lock_with_timeout_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+    if redis.call('exists', KEYS[1] == 0) then
+        return redis.call('setex', KEYS[1], unpack(ARGV))
+    end
+'''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Lua实现计数信号量"><a href="#Lua实现计数信号量" class="headerlink" title="Lua实现计数信号量"></a>Lua实现计数信号量</h3><p>由于Lua版本的信号量获取操作都是在Redis内部完成，也就是说消除了系统时间不同的不公平，因为请求到来的时间统一按照Redis的内部时间计算，因此不再需要计数器以及信号量拥有者的集合。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">acquire_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    now <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> acquire_semaphore_lua<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> <span class="token punctuation">[</span>semname<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>now <span class="token operator">-</span> timeout<span class="token punctuation">,</span> limit<span class="token punctuation">,</span> now<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+acquire_semaphore_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+    redis.call('zremrangebyscore', KEYS[1], '-inf', ARGV[1])
+    if redis.call('zcard', KEYS[1]) &lt; tonumber(ARGV[2]) then
+        redis.call('zadd', KEYS[1], ARGV[3], ARGV[4])
+        return ARGV[4]
+    end
+'''</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">refresh_semaphore</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> semname<span class="token punctuation">,</span> identifier<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> refresh_semaphore_lua<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> <span class="token punctuation">[</span>semname<span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token punctuation">[</span>identifier<span class="token punctuation">,</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token boolean">None</span>
+
+refresh_semaphore_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+    if redis.call('zscore', KEYS[1], ARGV[1]) then
+        return redis.call('zadd', KEYS[1], ARGV[2], ARGV[1]) or true
+    end
+'''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="移除WATCH-x2F-MULTI-x2F-EXEC"><a href="#移除WATCH-x2F-MULTI-x2F-EXEC" class="headerlink" title="移除WATCH/MULTI/EXEC"></a>移除WATCH/MULTI/EXEC</h3><p>由于WATCH等命令使用的是乐观锁机制，因此在并发量很高的情况下，会导致错误出现的次数越来越频繁，产生大量重试。并且对这些异常的处理也会导致代码变得非常臃肿，下面将使用Lua脚本优化掉这些命令。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">autocomplete_on_prefix</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> guild<span class="token punctuation">,</span> prefix<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    start<span class="token punctuation">,</span> end <span class="token operator">=</span> auto_complete<span class="token punctuation">.</span>find_prefix_range<span class="token punctuation">(</span>prefix<span class="token punctuation">)</span>
+    identifier <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    items <span class="token operator">=</span> autocomplete_on_prefix_lua<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> 
+        <span class="token punctuation">[</span><span class="token string">'members:'</span> <span class="token operator">+</span> guild<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>start<span class="token operator">+</span>identifier<span class="token punctuation">,</span> end<span class="token operator">+</span>identifier<span class="token punctuation">]</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token punctuation">[</span>item <span class="token keyword">for</span> item <span class="token keyword">in</span> items <span class="token keyword">if</span> <span class="token string">'{'</span> <span class="token keyword">not</span> <span class="token keyword">in</span> item<span class="token punctuation">]</span>
+
+autocomplete_on_prefix_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+redis.call('zadd', KEYS[1], 0, ARGV[1], 0, ARGV[2])
+local sindex = redis.call('zrank', KEYS[1], ARGV[1])
+local eindex = redis.call('zrank', KEYS[1], ARGV[2])
+eindex = math.min(sindex + 9, eindex - 2)
+redis.call('zrem', KEYS[1], unpack(ARGV))
+return redis.call('zrange', KEYS[1], sindex, eindex)
+'''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用Lua脚本的程序减少了通信往返带来的额外开销，并且消除了事务竞争带来的WATCH错误。</p>
 
                 
             </div>
@@ -3061,7 +3128,7 @@ return id
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">120.4k</span>
+                        class="white-color">122.1k</span>
             
             <br>
             <span id="sitetime"></span>
