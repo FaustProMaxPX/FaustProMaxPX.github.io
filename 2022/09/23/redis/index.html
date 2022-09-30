@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    28.4k
+                    30k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    112 分
+                    118 分
                 </div>
                 
 
@@ -2582,7 +2582,109 @@ redis.call('zrem', KEYS[1], unpack(ARGV))
 return redis.call('zrange', KEYS[1], sindex, eindex)
 '''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>使用Lua脚本的程序减少了通信往返带来的额外开销，并且消除了事务竞争带来的WATCH错误。</p>
+<h3 id="使用Lua对列表进行分片"><a href="#使用Lua对列表进行分片" class="headerlink" title="使用Lua对列表进行分片"></a>使用Lua对列表进行分片</h3><p>本节将创建一种分片列表表示，并使用它去降低长度较大的列表的内存占用。这个分片列表支持对列表两端进行推入操作，以及阻塞和非阻塞的弹出操作。<br>为了能够对分片列表的两端执行推入和弹出操作，程序在构建分片列表时除了需要存储组成列表的各个分片之外，还需要记录列表第一个分片的ID以及最后一个分片的ID。这里按照<code>&lt;listname&gt;:first</code>和<code>&lt;listname&gt;:last</code>的格式将内容存储到Redis字符串里。<br>除此之外，组成分片的每一个分片都会被命名为<code>&lt;listname&gt;:&lt;shardid&gt;</code>并按顺序进行分配。</p>
+<h4 id="将元素推入分片列表"><a href="#将元素推入分片列表" class="headerlink" title="将元素推入分片列表"></a>将元素推入分片列表</h4><p>在将元素推入分片列表之前，程序需要将数据拆分成块以便进行发送。因为在程序向分片列表发送数据的时候，虽然可以直到列表的总容量，但并不清楚是否有客户端正在对列表进行阻塞弹出操作，因此用户在推入大量元素的时候，程序可能需要进行多次数据发送操作。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">shard_push_helper</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token operator">*</span>items<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    items <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>items<span class="token punctuation">)</span>
+    total <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">while</span> items<span class="token punctuation">:</span>
+        pushed <span class="token operator">=</span> sharded_push_lua<span class="token punctuation">(</span>conn<span class="token punctuation">,</span>
+            <span class="token punctuation">[</span>key <span class="token operator">+</span> <span class="token string">':'</span><span class="token punctuation">,</span> key <span class="token operator">+</span> <span class="token string">':first'</span><span class="token punctuation">,</span> key <span class="token operator">+</span> <span class="token string">':last'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token punctuation">[</span>kwargs<span class="token punctuation">[</span><span class="token string">'cmd'</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">+</span> items<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">64</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+        total <span class="token operator">+=</span> pushed
+        <span class="token keyword">del</span> items<span class="token punctuation">[</span><span class="token punctuation">:</span>pushed<span class="token punctuation">]</span>
+    <span class="token keyword">return</span> total
 
+<span class="token keyword">def</span> <span class="token function">sharded_lpush</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token operator">*</span>items<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> shard_push_helper<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token operator">*</span>items<span class="token punctuation">,</span> cmd<span class="token operator">=</span><span class="token string">'lpush'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">sharded_rpush</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token operator">*</span>items<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> shard_push_helper<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> <span class="token operator">*</span>items<span class="token punctuation">,</span> cmd<span class="token operator">=</span><span class="token string">'rpush'</span><span class="token punctuation">)</span>
+
+sharded_push_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+local max = tonumber(redis.call('config', 'get', 'list-max-ziplist-entries')[2])
+if #ARGV &lt; 2 or max &lt; 2 then return 0 end
+local skey = ARGV[1] == 'lpush' and KEYS[2] or KEYS[3]
+local shard = redis.call('get', skey) or '0'
+while 1 do
+    local current = tonumber(redis.call('llen', KEYS[1]..shard))
+    local topush = math.min(#ARGV - 1, max - current - 1)
+    if topush &gt; 0 then
+        redis.call(ARGV[1], KEYS[1]..shard, unpack(ARGV, 2, topush - 1))
+        return topush
+    end
+    shard = redis.call(ARGV[1] == 'lpush' and 'decr' or 'incr', skey)
+end
+'''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以上就是将元素推入列表的实现，下面简单讲解一下Lua脚本所做的操作：</p>
+<ol>
+<li>首先检查每个列表分片的最大长度，如果没有元素需要推入，或压缩列表的最大长度太小，拒绝推入。</li>
+<li>接下来根据要执行的命令获取分片列表的一端</li>
+<li>在循环中先获取当前分片剩余的大小，在允许的情况下尽可能多的推入元素。此外在列表里保留一个节点的空间用来应对可能的阻塞弹出操作。</li>
+<li>如果分片已经装满，修改该分片的首个/末尾分片的编号，将数据推入新的分片中。</li>
+</ol>
+<p>限制：由于这个分片列表的实现无法预知元素会被推入哪一个分片里，因此无法被应用到多台服务器。</p>
+<h4 id="从分片中弹出元素"><a href="#从分片中弹出元素" class="headerlink" title="从分片中弹出元素"></a>从分片中弹出元素</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">sharded_lpop</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> sharded_list_pop_lua<span class="token punctuation">(</span>
+        conn<span class="token punctuation">,</span> <span class="token punctuation">[</span>key<span class="token operator">+</span><span class="token string">':'</span><span class="token punctuation">,</span> key<span class="token operator">+</span><span class="token string">':first'</span><span class="token punctuation">,</span> key<span class="token operator">+</span><span class="token string">':last'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'lpop'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">sharded_rpop</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> sharded_list_pop_lua<span class="token punctuation">(</span>
+        conn<span class="token punctuation">,</span> <span class="token punctuation">[</span>key<span class="token operator">+</span><span class="token string">':'</span><span class="token punctuation">,</span> key<span class="token operator">+</span><span class="token string">':first'</span><span class="token punctuation">,</span> key<span class="token operator">+</span><span class="token string">':last'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'rpop'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">)</span>
+
+sharded_list_pop_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+local skey = ARGV[1] == 'lpop' and KEYS[2] or KEYS[3]
+local okey = ARGV[1] ~= 'lpop' and KEYS[2] or KEYS[3]
+local shard = redis.call('get', skey) or '0'
+
+local ret = redis.call(ARGV[1], KEYS[1]..shard)
+if not ret or redis.call('llen', KEYS[1]..shard) == '0' then
+    local oshard = redis.call('get', okey) or '0'
+    if shard == oshard then
+        return ret
+    end
+    local cmd = ARGV[1] == 'lpop' and 'incr' or 'decr'
+    shard = redis.call(cmd, skey)
+    if not ret then
+        ret = redis.call(ARGV[1], KEYS[1]..shard)
+    end
+end
+return ret
+'''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从分片中弹出元素的操作非常简单。程序需要找到位于列表一端的分片，然后在分片非空的情况下，从分片中弹出一个元素。如果列表在执行弹出操作之后不再包含任何元素，就对记录这列表端分片信息的字符串键进行修改。完成修改之后，如果当前列表中还有元素，就尝试从新的分片中弹出元素。</p>
+<h4 id="对分片列表执行阻塞弹出操作"><a href="#对分片列表执行阻塞弹出操作" class="headerlink" title="对分片列表执行阻塞弹出操作"></a>对分片列表执行阻塞弹出操作</h4><p>因为Lua脚本和<code>WATCH/MULTI/EXEC</code>事务目前提供的语义和命令在某些情况下还是可能会产生不正确的数据，所以在不需要实际地阻塞客户端并且等待请求的情况下，程序应该尽可能地使用分片列表的非阻塞操作。<br>要想实现阻塞弹出需要使用到一些特殊操作。首先，程序会在一个给定的时限里面，尝试通过执行非阻塞弹出操作来获得元素。如果没有成功获得，那将在循环中执行几个指定的步骤直到获取到元素或超时。<br>在这一系列操作中，首先要执行的就是非阻塞弹出命令。如果未能弹出元素，就会获取第一个和最后一个分片ID，然后对指定端点尝试弹出。<br>由于通信往返的延迟，在程序获取分片列表端点之后，直到开始尝试弹出这段时间里，列表的端点可能已经发生了变化。为了解决这个问题，程序在执行阻塞弹出操作之前，会先发送一个被流水线包裹的<em>EVAL</em>脚本调用。这个脚本会检查程序是否在尝试从正确的列表里弹出元素，如果是的话不做任何操作，之后的阻塞弹出也会正常进行。但如果弹出操作针对的是错误的列表，就需要向那个列表推入一个额外的伪元素，这个元素会在之后被弹出操作弹出，告诉客户端分片端点发生变化。<br>尽管如此，仍存在一个潜在的竞态条件：如果一个客户端在Lua脚本执行之后，弹出操作之前向服务器执行了推入或弹出操作，就会导致程序得到不正确的数据。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">DUMMY <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">sharded_bpop_helper</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> timeout<span class="token punctuation">,</span> pop<span class="token punctuation">,</span> bpop<span class="token punctuation">,</span> endp<span class="token punctuation">,</span> push<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    pipe <span class="token operator">=</span> conn<span class="token punctuation">.</span>pipeline<span class="token punctuation">(</span><span class="token boolean">False</span><span class="token punctuation">)</span>
+    timeout <span class="token operator">=</span> <span class="token builtin">max</span><span class="token punctuation">(</span>timeout<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token number">2</span><span class="token operator">**</span><span class="token number">64</span>
+    end <span class="token operator">=</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> timeout
+
+    <span class="token keyword">while</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> end<span class="token punctuation">:</span>
+        result <span class="token operator">=</span> pop<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> result <span class="token keyword">not</span> <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">,</span> DUMMY<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> result
+        
+        shard <span class="token operator">=</span> conn<span class="token punctuation">.</span>get<span class="token punctuation">(</span>key <span class="token operator">+</span> endp<span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token string">'0'</span>
+        sharded_bpop_helper_lua<span class="token punctuation">(</span>pipe<span class="token punctuation">,</span> <span class="token punctuation">[</span>key <span class="token operator">+</span> <span class="token string">':'</span><span class="token punctuation">,</span> key <span class="token operator">+</span> endp<span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token punctuation">[</span>shard<span class="token punctuation">,</span> push<span class="token punctuation">,</span> DUMMY<span class="token punctuation">]</span><span class="token punctuation">,</span> force_eval<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+        <span class="token builtin">getattr</span><span class="token punctuation">(</span>pipe<span class="token punctuation">,</span> bpop<span class="token punctuation">)</span><span class="token punctuation">(</span>key <span class="token operator">+</span> <span class="token string">':'</span> <span class="token operator">+</span> shard<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        result <span class="token operator">=</span> <span class="token punctuation">(</span>pipe<span class="token punctuation">.</span>execute<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token keyword">or</span> <span class="token punctuation">[</span><span class="token boolean">None</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+        <span class="token keyword">if</span> result <span class="token keyword">not</span> <span class="token keyword">in</span> <span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">,</span> DUMMY<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> result
+
+<span class="token keyword">def</span> <span class="token function">sharded_blpop</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> sharded_bpop_helper<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> timeout<span class="token punctuation">,</span> sharded_lpop<span class="token punctuation">,</span> <span class="token string">'blpop'</span><span class="token punctuation">,</span> <span class="token string">':first'</span><span class="token punctuation">,</span> <span class="token string">'lpush'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">sharded_brpop</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> sharded_bpop_helper<span class="token punctuation">(</span>conn<span class="token punctuation">,</span> key<span class="token punctuation">,</span> timeout<span class="token punctuation">,</span> sharded_rpop<span class="token punctuation">,</span> <span class="token string">'brpop'</span><span class="token punctuation">,</span> <span class="token string">':last'</span><span class="token punctuation">,</span> <span class="token string">'rpush'</span><span class="token punctuation">)</span>
+
+sharded_bpop_helper_lua <span class="token operator">=</span> script_load<span class="token punctuation">(</span><span class="token triple-quoted-string string">'''
+local shard = redis.call('get', KEYS[2]) or '0'
+if shard ~= ARGV[1] then
+    redis.call(ARGV[2], KEYS[1]..ARGV[1], ARGV[3])
+end
+'''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -3128,7 +3230,7 @@ return redis.call('zrange', KEYS[1], sindex, eindex)
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">122.1k</span>
+                        class="white-color">123.7k</span>
             
             <br>
             <span id="sitetime"></span>
