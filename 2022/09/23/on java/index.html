@@ -403,14 +403,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.8k
+                    5.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    18 分
+                    22 分
                 </div>
                 
 
@@ -857,6 +857,120 @@
 <li>先行发生的另一个特性就是，在线程对某一个volatile变量执行写操作时，所有在该写操作之前被线程修改的其他变量——包括非volatile变量也会被刷新到主存当中。</li>
 </ol>
 <h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>原子操作：不会被线程调度器中断的操作，一旦操作开始，直到完成之前，中途都不可能发生上下文切换。<br>我们常常会错误的认为原子操作不需要同步。然而在多核系统中，可见性是比原子性重要的多的问题，一个任务做出的修改，即使是原子操作，也可能对其他操作是不可见的(修改可能被临时保存在本地处理器缓存中)。</p>
+<h3 id="Lock对象"><a href="#Lock对象" class="headerlink" title="Lock对象"></a>Lock对象</h3><p>Java的并发库提供了显式的互斥机制，Lock对象必须显式的创建、加锁以及解锁。在使用lock时，必须在调用lock()之后放置一个try-finally语句，并在finally语句中unlock()。同时return必须包含在try子句中，避免数据被过早暴露给下一个任务。<br>虽然Lock显式调用的特点比使用synchronized需要的代码多，但相对的，我们也获得了对异常处理的权限，可以有机会执行清理操作，让系统维持在正常的状态。<br>一般来说，如果我们希望获取锁后就立刻主动放弃或等待一段时间后放弃，就需要使用lock<br>使用实例</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AttemptLocking</span> <span class="token punctuation">{</span>  
+    <span class="token keyword">private</span> <span class="token class-name">ReentrantLock</span> lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+  
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">untimed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">boolean</span> captured <span class="token operator">=</span> lock<span class="token punctuation">.</span><span class="token function">tryLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>  
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"tryLock(): "</span> <span class="token operator">+</span> captured<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>  
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>captured<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+                lock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token punctuation">}</span>  
+        <span class="token punctuation">}</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">timed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">boolean</span> captured <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>  
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>  
+            captured <span class="token operator">=</span> lock<span class="token punctuation">.</span><span class="token function">tryLock</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"tryLock(2, TimeUnit.SECONDS): "</span> <span class="token operator">+</span> captured<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>  
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>captured<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+                lock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token punctuation">}</span>  
+        <span class="token punctuation">}</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">final</span> <span class="token class-name">AttemptLocking</span> al <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AttemptLocking</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        al<span class="token punctuation">.</span><span class="token function">untimed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        al<span class="token punctuation">.</span><span class="token function">timed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token class-name">CompletableFuture</span><span class="token punctuation">.</span><span class="token function">runAsync</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-&gt;</span> <span class="token punctuation">{</span>  
+            al<span class="token punctuation">.</span>lock<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"acquired"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        al<span class="token punctuation">.</span><span class="token function">untimed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        al<span class="token punctuation">.</span><span class="token function">timed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h3><p>这是一种实现了Delayed接口的对象组成的无边界<code>BlockingQueue</code>。一个对象只有在延迟时间到期后才能从队列中取出。队列是有序的，所以头部的延迟时间最短，如果没有到达延迟时间，那么头部元素就相当于不存在。</p>
+<p>下面是使用示例。在延迟队列中，所有的任务会按照延迟时间的大小进行排序</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">DelayedTask</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span><span class="token punctuation">,</span> <span class="token class-name">Delayed</span> <span class="token punctuation">{</span>  
+  
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> counter <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> id <span class="token operator">=</span> counter<span class="token operator">++</span><span class="token punctuation">;</span>  
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">int</span> delta<span class="token punctuation">;</span>  
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">long</span> trigger<span class="token punctuation">;</span>  
+    <span class="token keyword">protected</span> <span class="token keyword">static</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">DelayedTask</span><span class="token punctuation">&gt;</span></span> sequence <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+  
+    <span class="token class-name">DelayedTask</span><span class="token punctuation">(</span><span class="token keyword">int</span> deltaInMilliseconds<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        delta <span class="token operator">=</span> deltaInMilliseconds<span class="token punctuation">;</span>  
+        trigger <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>NANOSECONDS<span class="token punctuation">.</span><span class="token function">convert</span><span class="token punctuation">(</span>delta<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        sequence<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token annotation punctuation">@Override</span>  
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compareTo</span><span class="token punctuation">(</span><span class="token class-name">Delayed</span> o<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token class-name">DelayedTask</span> task <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">DelayedTask</span><span class="token punctuation">)</span> o<span class="token punctuation">;</span>  
+        <span class="token keyword">return</span> <span class="token class-name">Long</span><span class="token punctuation">.</span><span class="token function">compare</span><span class="token punctuation">(</span>trigger<span class="token punctuation">,</span> task<span class="token punctuation">.</span>trigger<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token annotation punctuation">@Override</span>  
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">+</span> <span class="token string">" "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token annotation punctuation">@Override</span>  
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">return</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"[%d] Task %d"</span><span class="token punctuation">,</span> delta<span class="token punctuation">,</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token annotation punctuation">@Override</span>  
+    <span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">getDelay</span><span class="token punctuation">(</span><span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">return</span> unit<span class="token punctuation">.</span><span class="token function">convert</span><span class="token punctuation">(</span>trigger <span class="token operator">-</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>NANOSECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">summary</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token keyword">return</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"(%d:%d)"</span><span class="token punctuation">,</span> id<span class="token punctuation">,</span> delta<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+  
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">EndTask</span> <span class="token keyword">extends</span> <span class="token class-name">DelayedTask</span> <span class="token punctuation">{</span>  
+  
+        <span class="token class-name">EndTask</span><span class="token punctuation">(</span><span class="token keyword">int</span> deltaInMilliseconds<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+            <span class="token keyword">super</span><span class="token punctuation">(</span>deltaInMilliseconds<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span>  
+  
+        <span class="token annotation punctuation">@Override</span>  
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+            sequence<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>delayedTask <span class="token operator">-&gt;</span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>delayedTask<span class="token punctuation">.</span><span class="token function">summary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span>  
+    <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span>  
+  
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DelayQueueDemo</span> <span class="token punctuation">{</span>  
+  
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>  
+        <span class="token class-name">DelayQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">DelayedTask</span><span class="token punctuation">&gt;</span></span> tasks <span class="token operator">=</span> <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>  
+                <span class="token keyword">new</span> <span class="token class-name">Random</span><span class="token punctuation">(</span><span class="token number">47</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ints</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4000</span><span class="token punctuation">)</span>  
+                        <span class="token punctuation">.</span><span class="token function">mapToObj</span><span class="token punctuation">(</span><span class="token class-name">DelayedTask</span><span class="token operator">::</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  
+                <span class="token class-name">Stream</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">DelayedTask<span class="token punctuation">.</span>EndTask</span><span class="token punctuation">(</span><span class="token number">4000</span><span class="token punctuation">)</span><span class="token punctuation">)</span>  
+                <span class="token punctuation">)</span>  
+                <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token class-name">Collectors</span><span class="token punctuation">.</span><span class="token function">toCollection</span><span class="token punctuation">(</span><span class="token class-name">DelayQueue</span><span class="token operator">::</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>tasks<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+            tasks<span class="token punctuation">.</span><span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span>  
+    <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="无锁集合"><a href="#无锁集合" class="headerlink" title="无锁集合"></a>无锁集合</h3><p>无锁集合具备一项特性：集合可以在读取的同时进行修改，只要读取方只能看见已完成的修改结果。接下来介绍几个相关的策略</p>
+<h4 id="复制策略"><a href="#复制策略" class="headerlink" title="复制策略"></a>复制策略</h4><p>利用复制策略，修改是在部分数据结构的一个单独副本上进行的，该副本在修改过程中不可见，只有在完成修改后，修改后的结构才会安全的与主数据结构交换，然后读取方才能看到修改。<br>在<code>CopyOnWriteArrayList</code>中，写操作会复制整个底层数组。原始数组被留在原地，修改完成后，会通过原子操作将数组交换进去。</p>
+<h4 id="CAS操作"><a href="#CAS操作" class="headerlink" title="CAS操作"></a>CAS操作</h4><p>比较交换(Compare-And-Swap)操作中，从内存中取出一个值之后，在计算新值的同时继续使用原始值(会保存取出的值)。然后通过CAS指令，将保存的原始值和内存中的值进行比较，如果两者相等，就将旧的值替换为新的计算结果。如果比较失败，就代表有其他的线程对内存中的值进行了修改，在这种情况下就必须进行重试。<br>从上面的描述上我们可以清晰地看出，CAS本质上是采用的乐观锁，因此他在内存竞争不激烈的情况下速度非常快，但在竞争激烈时，冲突次数就会急剧上升，效率大幅下降。</p>
 
                 
             </div>
@@ -1397,7 +1511,7 @@
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">123.7k</span>
+                        class="white-color">124.8k</span>
             
             <br>
             <span id="sitetime"></span>

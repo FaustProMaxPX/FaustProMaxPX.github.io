@@ -397,14 +397,14 @@ Docker容器技术的诞生随着现代软件项目越来越庞大，需要的�
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.5k
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    6 分
                 </div>
                 
 
@@ -427,7 +427,7 @@ Docker容器技术的诞生随着现代软件项目越来越庞大，需要的�
 
 <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><h2 id="容器技术的诞生"><a href="#容器技术的诞生" class="headerlink" title="容器技术的诞生"></a>容器技术的诞生</h2><p>随着现代软件项目越来越庞大，需要的依赖也变得越来越多，因此不同依赖之间的库/依赖的冲突就变得越来越频繁，调试环境成为了一大难题。而容器诞生便是为了解决环境配置问题，他将不同的依赖库隔离，提供专属于它的适配环境，以此来避免不同依赖运行在同一环境上带来的冲突。<br>和虚拟机相比，容器更多的面向任务，而不掌管操作系统，虚拟机则会真正的控制一个操作系统。</p>
 <h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><ol>
-<li>docker run  {name} {cmd}运行指定的容器并执行<em>cmd</em>对应的任务，如果本地没有对应镜像，就前往仓库下载<br>参数：<br>-d：在后台运行<br>-i：以交互模式运行<br>-t：为容器分配一个伪输入终端。<br>-p：指定映射的端口  -p 80:5000将容器的5000端口映射到本机的80端口<br>-v：将docker内的数据映射到外部机器的指定位置，通常用于运行数据库的容器。 -v /opt/dir:/var/lib/mysql<br>-e：设置环境变量<br>–name：给容器命名</li>
+<li>docker run  {name} {cmd}运行指定的容器并执行<em>cmd</em>对应的任务，如果本地没有对应镜像，就前往仓库下载<br>参数：<br>-d：在后台运行<br>-i：以交互模式运行<br>-t：为容器分配一个伪输入终端。<br>-p：指定映射的端口  -p 80:5000将容器的5000端口映射到本机的80端口<br>-v：将docker内的数据映射到外部机器的指定位置，通常用于运行数据库的容器。 -v /opt/dir:/var/lib/mysql<br>-e：设置环境变量<br>–name：给容器命名<br>–restart:设置容器的重启规则 always:总是重启容器 on-failure:在退出代码为非0值时才会自动重启</li>
 <li>docker ps 查看当前正在运行的容器，参数-a可以显示所有容器</li>
 <li>docker stop {name} 停止某容器</li>
 <li>docker rm {name} 删除某容器</li>
@@ -436,7 +436,9 @@ Docker容器技术的诞生随着现代软件项目越来越庞大，需要的�
 <li>docker pull {name} 拉取指定镜像</li>
 <li>docker exec {name} {cmd} 在容器<em>name</em>执行<em>cmd</em></li>
 <li>docker inspect {name} 获取容器<em>name</em>的详细信息</li>
-<li>docker logs {name} 获取容器<em>name</em>的日志</li>
+<li>docker logs {name} 获取容器<em>name</em>的日志，可以添加参数-f来监控日志</li>
+<li>docker top {name} 获取容器<em>name</em>的所有进程信息</li>
+<li>docker stats {name}… 显式一个或多个容器的统计信息</li>
 </ol>
 <h2 id="Docker-compose"><a href="#Docker-compose" class="headerlink" title="Docker compose"></a>Docker compose</h2><p>在需要多个服务相互交互的情况下，我们就需要将不同的容器连接起来<br>docker run –link {target-containter} {container} 运行<em>container</em>并与<em>target-container</em>连接，实现交互。<br>但在有大量服务的情况下，这样做明显费时费力，因此，我们可以使用docker-compose实现服务依赖的管理。<br>docker compose分为3个部分：</p>
 <ul>
@@ -471,6 +473,14 @@ COPY . /opt/source-code
 # 在指定位置执行命令
 ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>上面的五个步骤都会被Docker缓存，方便再次build</p>
+<p>docker执行Dockerfile中指令的流程：</p>
+<ol>
+<li>Docker从基础镜像运行一个容器</li>
+<li>执行一条指令，对容器做出修改</li>
+<li>提交一个新的镜像层</li>
+<li>Docker基于刚提交的镜像运行一个新容器</li>
+<li>执行Dockerfile中的下一条指令</li>
+</ol>
 <h3 id="CMD-vs-EntryPoint"><a href="#CMD-vs-EntryPoint" class="headerlink" title="CMD vs. EntryPoint"></a>CMD vs. EntryPoint</h3><p>DockerFile中的CMD会指定容器要执行的任务，在对应的任务完成前，容器不会退出。在docker run 后附加的命令会覆盖镜像原本规定的任务。<br>CMD格式 : <code>CMD ['command', 'param1', 'param2']</code><br>EntryPoint作用和CMD相近，唯一的区别是，EntryPoint的可执行指令在镜像文件中已经规定好，docker run只能修改指令的参数。<br>如果既要规定使用的指令，又希望参数有默认值，则可以将二者结合起来使用</p>
 <pre class="line-numbers language-docker" data-language="docker"><code class="language-docker"><span class="token comment"># 默认休眠5秒</span>
 <span class="token instruction"><span class="token keyword">ENTRYPOINT</span> [<span class="token string">"sleep"</span>]</span>
@@ -1032,7 +1042,7 @@ ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run<span aria-hidden="true" c
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">123.7k</span>
+                        class="white-color">124.8k</span>
             
             <br>
             <span id="sitetime"></span>
