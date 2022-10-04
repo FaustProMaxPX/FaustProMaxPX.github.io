@@ -397,14 +397,14 @@ Docker容器技术的诞生随着现代软件项目越来越庞大，需要的�
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.7k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    8 分
                 </div>
                 
 
@@ -481,11 +481,33 @@ ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run<span aria-hidden="true" c
 <li>Docker基于刚提交的镜像运行一个新容器</li>
 <li>执行Dockerfile中的下一条指令</li>
 </ol>
-<h3 id="CMD-vs-EntryPoint"><a href="#CMD-vs-EntryPoint" class="headerlink" title="CMD vs. EntryPoint"></a>CMD vs. EntryPoint</h3><p>DockerFile中的CMD会指定容器要执行的任务，在对应的任务完成前，容器不会退出。在docker run 后附加的命令会覆盖镜像原本规定的任务。<br>CMD格式 : <code>CMD ['command', 'param1', 'param2']</code><br>EntryPoint作用和CMD相近，唯一的区别是，EntryPoint的可执行指令在镜像文件中已经规定好，docker run只能修改指令的参数。<br>如果既要规定使用的指令，又希望参数有默认值，则可以将二者结合起来使用</p>
+<h4 id="构建缓存"><a href="#构建缓存" class="headerlink" title="构建缓存"></a>构建缓存</h4><p>Docker会将之前的镜像层看作缓存，当再次开启构建时，会将缓存的镜像作为新的开始点。<br>构建缓存带来的一个好处就是，我们可以实现简单的Dockerfile模板，例如在文件顶部使用相同的指令集模板</p>
+<pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile">FROM ubuntu:14.04
+MAINTAINER faustc "xx@qq.com"
+ENV REFRESHED_AT 2022-10-04
+RUN apt-get -qq update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在上面这个例子中，如果我们希望刷新apt的缓存，只需要修改环境变量中的日期即可。Docker会发现新的构建请求无法命中缓存，于是开始重新构建镜像。而在大多数时候，Docker都可以命中现有的缓存，大幅提升了效率。<br>不过有的时候要确保构建过程不会使用缓存，此时可以使用–no-cache标志。</p>
+<h4 id="基本命令-1"><a href="#基本命令-1" class="headerlink" title="基本命令"></a>基本命令</h4><ol>
+<li><p>CMD<br>CMD指令用于指定一个容器<em>启动时</em>要运行的命令。有点类似于RUN指令。但RUN指令是指定镜像被构建时要运行的命令，而CMD是指定容器被启动时要运行的命令。<br>推荐使用数组语法来设置要执行的命令 <code>CMD ['command', 'param1', 'param2']</code>，否则Dokcer会在指定的命令之前自动加上/bin/sh -c 这有可能导致意外的错误。<br>ps:在Dockerfile中只能指定一条CMD指令，如果指定了多条CMD指令也只有最后一条会被执行。</p>
+</li>
+<li><p>EntryPoint<br>EntryPoint作用和CMD相近，唯一的区别是，EntryPoint的可执行指令在镜像文件中已经规定好，docker run只能修改指令的参数。<br>同时，在启动容器时附加的参数也会被传递给EntryPoint，交给他来执行。如果我们希望容器启动时可以有一个默认参数，那么就可以将EntryPoint和CMD联合起来使用</p>
 <pre class="line-numbers language-docker" data-language="docker"><code class="language-docker"><span class="token comment"># 默认休眠5秒</span>
 <span class="token instruction"><span class="token keyword">ENTRYPOINT</span> [<span class="token string">"sleep"</span>]</span>
-<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"5"</span>]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
+<span class="token instruction"><span class="token keyword">CMD</span> [<span class="token string">"5"</span>]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+<li><p>WORKDIR<br>从镜像创建一个新容器时，在容器内部设置一个工作目录，ENTRYPOINT，CMD指定的程序都会在这个目录下执行。</p>
+<pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile">WORKDIR /opt/webapp/db
+RUN bundle install
+WORKDIR /opt/webapp
+ENTRYPOINT ["rackup"]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面的实例中，先将工作目录切换为/opt/webapp/db之后运行bundle install，然后将目录切换到/opt/webapp运行ENTRYPOINT的指令。</p>
+</li>
+<li><p>ENV<br>在镜像构建过程中设置环境变量。</p>
+<pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile">ENV MYSQL_ROOT_PASSWORD 123456
+ENV TARGET_DIR /home
+WORKDIR $TARGET_DIR<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>上面的实例中将MYSQL的root密码传递到容器中，同时如果要在其他命令中使用定义的环境变量，只需要用${环境变量名} 即可</p>
+</li>
+</ol>
 <h2 id="Docker-Engine"><a href="#Docker-Engine" class="headerlink" title="Docker Engine"></a>Docker Engine</h2><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img20220729201817.png" alt="Docker Engine结构图"></p>
 <h3 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h3><p>系统会为每一个进程分配一个唯一的pid，也就是说即使运行了一个容器，上面也不可能有相同pid的进程。这时候命名空间就发挥作用了，它可以将容器内部的进程编号隔离开来，不受外部主机影响，发放与外部相同的进程id，但这个id只属于该容器内部，在容器外看到的pid依旧不会与外部进程编号重复。</p>
 <h2 id="Docker-Storage"><a href="#Docker-Storage" class="headerlink" title="Docker Storage"></a>Docker Storage</h2><p>docker在安装之后，会将它所有的数据存储在 /var/lib/docker文件夹下。</p>
@@ -1042,7 +1064,7 @@ ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run<span aria-hidden="true" c
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">124.8k</span>
+                        class="white-color">126.9k</span>
             
             <br>
             <span id="sitetime"></span>
