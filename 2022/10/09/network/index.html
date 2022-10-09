@@ -388,7 +388,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-10-05
+                    2022-10-09
                 </div>
                 
 
@@ -397,14 +397,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.2k
+                    8.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    14 分
+                    29 分
                 </div>
                 
 
@@ -478,6 +478,24 @@
 </tbody></table>
 <h4 id="TCP报文结构"><a href="#TCP报文结构" class="headerlink" title="TCP报文结构"></a>TCP报文结构</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909160541.png"></p>
 <p>Source/Destination port:源端口，目的端口，用于标注报文来自/去往主机的哪一个应用程序<br>Sequence:当前报文携带的数据的首个字节，在整个数据中的位置<br>Acknowledgment Sequence:已经确定收到了#字节前的部分，期待从#开始之后的数据内容<br>HLEN:报文头部大小<br>Checksum:检验和，检验报文是否在传输过程中损坏<br>PSH:告诉连接的另一端，立即发送数据而不要等待接收到指定数量的数据一起发送。</p>
+<h4 id="TCP连接知识点"><a href="#TCP连接知识点" class="headerlink" title="TCP连接知识点"></a>TCP连接知识点</h4><h5 id="TCP三次握手的原因"><a href="#TCP三次握手的原因" class="headerlink" title="TCP三次握手的原因"></a>TCP三次握手的原因</h5><ul>
+<li><p>阻止重复历史连接的初始化<br>三次握手的首要原因是为了防止旧的重复连接初始化造成混乱。现在假设客户端向服务器发起连接，附带的序列号为seq1，但是在服务器接收到请求之前，客户端宕机了，恢复之后，客户端重新发起了一次建立连接请求。服务端首先接收到的大概率是seq1的连接请求，之后服务端响应客户端，此时服务端根据响应回来的ack判断该连接是否是一个历史连接，如果是就向服务器发送RST中止连接。<br>现在考虑一下如果只有两次握手会导致什么，服务端在接收到请求之后直接响应客户端并建立连接，发送数据，但对客户端来说，这是一个历史连接，并不生效。这就导致网络资源被白白浪费。而三次握手给了发起方一个判断请求是否有效的机会，可以有效防止资源的浪费。</p>
+</li>
+<li><p>同步双方初始序列号<br>序列号是可靠传输的一个关键因素：<br>(1) 接收方可以去除掉重复数据<br>(2) 接收方可以根据数据包的序列号按序接收<br>(3) 可以标识发送出去的数据包中，哪些是对方成功接收到的<br>第二三次握手的作用就是确保双方已经知道对方的序列号，自己接下来发送的数据要按照什么序列号来传输。</p>
+</li>
+<li><p>避免资源浪费<br>第三次握手还有一个作用就是让服务器知道客户端已经收到了自己发出去的数据，完成了连接的建立。如果只有两次握手，那么服务端就不清楚客户端究竟有没有收到自己的数据，因此对于每一个SYN都只能主动建立一个连接。如果客户端发送的SYN被阻塞，重复多次发送SYN，就会导致服务端建立多个连接，浪费资源。</p>
+</li>
+</ul>
+<h5 id="TCP每次建立连接的初始化序列号不同的原因"><a href="#TCP每次建立连接的初始化序列号不同的原因" class="headerlink" title="TCP每次建立连接的初始化序列号不同的原因"></a>TCP每次建立连接的初始化序列号不同的原因</h5><pre class="line-numbers language-ad-abstract" data-language="ad-abstract"><code class="language-ad-abstract">title: 主要原因
+1. 防止历史报文被下一个相同四元组的连接接收
+2. 防止黑客伪造的相同序列号的TCP报文被对方接收<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>具体场景：<br>客户端和服务端建立一个TCP连接，客户端向服务端发送了一个数据包。如果客户端与服务端中有一方宕机，在重启后重新建立TCP连接。现在假设每次初始序列号不变，若在上一次连接期间发送的数据包此刻姗姗来迟，可能会由于它恰好在接收窗口内而被接收方接收过去引发混乱。<br>这也同样是TCP断开连接时在最后等待一段时间的原因：让本次连接的所有数据包都消失在网络当中。</p>
+<h5 id="TCP分片的意义"><a href="#TCP分片的意义" class="headerlink" title="TCP分片的意义"></a>TCP分片的意义</h5><pre class="line-numbers language-ad-tip" data-language="ad-tip"><code class="language-ad-tip">title: 基本术语
+MTU：一个网络包的最大长度，一般为1500字节。包含IP头部，TCP头部以及数据
+MSS：除去IP和TCP头部之后，一个网络包容纳的TCP数据的最大长度
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>IP分片操作：当IP层发现有一个大小超过MTU的数据要发送，他就会将数据进行分片发送。目标主机的IP层接收之后重新组装再交付给上层。<br>这样做看似非常完美，但IP协议是个尽力而为协议，他不会进行超时重传。也就是如果有一个IP分片丢失，对于上层的TCP来说就是有一个TCP报文段没有收到，它会重传整个TCP报文段，这显然是非常低效的。<br>因此如果我们将分片的任务交给TCP，它确保每一个报文段中搭载的数据不会超过MSS(这相当于保证了IP层不会分片)。那么即使发生丢包，也是以MSS为单位重传。</p>
 <h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h3><p>UDP只会获取需要传输的数据，然后交给网络层<br>UDP不像TCP那样保证可靠传输，一般由不需要可靠传输，或是拥有私有传输机制的应用使用。</p>
 <h4 id="UDP报文结构"><a href="#UDP报文结构" class="headerlink" title="UDP报文结构"></a>UDP报文结构</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909162916.png"></p>
 <p>Length:UDP数据报中数据的长度<br>Checksum:UDP中的检验和会用到IP层的一部分信息，虽然这会破坏分层原则，但也可以帮助UDP发现数据报是否传输到错误的目的地。</p>
@@ -560,7 +578,8 @@
 <h3 id="GET和POST"><a href="#GET和POST" class="headerlink" title="GET和POST"></a>GET和POST</h3><p>GET的语义：从服务器获取指定的资源，GET 请求的参数位置一般是写在 URL 中，URL 规定只能支持 ASCII，所以 GET 请求的参数只允许 ASCII 字符<br>POST的语义：根据请求负荷对指定的资源做出处理</p>
 <h4 id="安全与幂等"><a href="#安全与幂等" class="headerlink" title="安全与幂等"></a>安全与幂等</h4><p>安全：请求方法不会破坏服务器上的资源<br>幂等：多次执行相同的操作，结果都是相同的</p>
 <p>由于GET方法是只读操作，因此它是安全且幂等的，无论发起多少次请求，服务器上的资源都不会受到影响。所以GET请求的数据可以被缓存<br>POST则是新增或提交数据的操作，会修改服务器上的资源，因此它是不安全的。同时多次请求也会创建多个资源，因此它也不是幂等的。基于此，POST请求一般是不会被缓存的。<br>不过以上都是基于语义得出的结论，在实际操作中仍旧要看对应方法请求的目的。</p>
-<h3 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h3><h4 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h4><p>只要浏览器判断缓存没有过期，就直接使用本地缓存，决定权在浏览器这边。<br>强制缓存利用如下两个响应头来实现</p>
+<h3 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h3><p>^3b171b</p>
+<h4 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h4><p>只要浏览器判断缓存没有过期，就直接使用本地缓存，决定权在浏览器这边。<br>强制缓存利用如下两个响应头来实现</p>
 <ul>
 <li>Cache-Control：一个相对时间，表示资源有效期 <strong>优先级高</strong></li>
 <li>Expires：一个绝对时间，表示资源的过期时间</li>
@@ -603,6 +622,106 @@
 <li><strong>私钥加密，公钥解密</strong>。目的是为了<strong>保证消息不会被冒充</strong>，只有收取到被私钥加密的信息，公钥才能正确解密。而私钥又被服务端持有，因此相当于是表明这条信息来自服务端。<br>这里我们使用私钥加密，公钥解密的方式来确保哈希值不会被中间人替换，保证消息来自服务端且没有被篡改。</li>
 </ul>
 <h4 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h4><p>到目前为止，我们利用混合算法保证内容传输过程的安全性，用摘要算法和数字签名保证了消息传输的完整性以及消息来源的正确性。但还缺少身份验证环节，数字签名保证了消息来自服务端，但没有保证这个消息一定来自我们期望的那个服务端。<br>也就是说，如果我们伪造一个公钥给客户端，然后用自己的私钥加密信息发送给客户端，由于客户端手中的公钥和我们的私钥匹配，他就能因此解析出信息。从而让客户端误认为我们是货真价实的服务端。<br>在HTTPS中，每个网站都会把他们的公钥注册到CA，CA会用私钥给这些公钥做一个数字签名，然后将网站的信息，公钥和数字签名打包成一个数字证书发送给网站。这样，每当客户端要发起请求时，都会先拿着这个数字证书到CA去验证证书是否合法，如果CA能用自己的公钥解析成功，就代表这个证书确实是被注册过的，然后将这个网站的公钥交给客户端，客户端就可以利用这个公钥解析出信息的内容</p>
+<h4 id="HTTPS建立连接的流程"><a href="#HTTPS建立连接的流程" class="headerlink" title="HTTPS建立连接的流程"></a>HTTPS建立连接的流程</h4><p>SSL/TLS协议基本流程：</p>
+<ol>
+<li>客户端向服务器索要并验证服务器的公钥</li>
+<li>双方协商生成会话密钥</li>
+<li>双方采用会话密钥进行加密通信</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110019.png" alt="基于RSA的四次握手"></p>
+<p>详细流程：</p>
+<ol>
+<li><p>ClientHello<br>客户端向服务器发送加密通信请求<br>在这一步，客户端主要发送以下信息：<br>(1) 客户端支持的SSL/TLS协议版本<br>(2) 客户端生成的随机数，后续会用于生成会话密钥<br>(3) 客户端支持的密码套件列表</p>
+</li>
+<li><p>ServerHello<br>服务端收到请求后做出响应，响应包括如下信息：<br>(1) 确认SSL/TLS协议版本，如果浏览器不支持，就关闭加密通信<br>(2) 服务器生成的随机数，用于后续生成会话密钥<br>(3) 确认密码套件列表<br>(4) 服务器的数字证书</p>
+</li>
+<li><p>客户端回应<br>客户端收到回应之后，先通过浏览器或OS中的CA公钥，校验服务器的数字证书的真实性。如果证书没有问题，客户端就会取出证书中的服务器公钥，用它来加密报文信息。报文中包含：<br>(1) 一个随机数(pre-master key)<br>(2) 加密通信算法改变通知，告诉服务器后续的报文信息都会用会话密钥加密<br>(3) 客户端握手结束通知，表示客户端的握手阶段已经结束。同时把之前发送的所有内容做一个摘要用来供服务端校验。</p>
+</li>
+</ol>
+<p><strong>到此为止，客户端和服务端都有了三个随机数，接着就用双方协商的加密算法，计算出本次通信的会话密钥</strong></p>
+<ol start="4">
+<li>服务端回应<br>服务端收到三个随机数之后，通过协商的加密算法计算出会话密钥。然后向客户端发送信息：<br>(1) 加密通信算法改变通知，表示随后的信息都会使用会话密钥加密通信<br>(2) 服务端握手结束通知，同时把之前发送的内容做一个摘要交给客户端进行校验。</li>
+</ol>
+<blockquote>
+<p>客户端校验数字证书的流程</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110407.png" alt="数字证书签发和验证流程"></p>
+<p>签发证书：</p>
+<ol>
+<li>CA将持有者的公钥，用途，颁发者，有效时间等信息打包，然后进行哈希计算得到一个Hash值。</li>
+<li>接着将Hash值用CA私钥加密，生成证书签名</li>
+<li>最后将签名添加在证书上生成数字证书</li>
+</ol>
+<p>校验证书：</p>
+<ol>
+<li>用相同的哈希算法计算数字证书内容的哈希值</li>
+<li>用CA公钥解密数字签名，获取到哈希值。</li>
+<li>比较两个哈希值是否相同，如果相同，代表数字证书有效</li>
+</ol>
+<h4 id="保证应用数据完整性"><a href="#保证应用数据完整性" class="headerlink" title="保证应用数据完整性"></a>保证应用数据完整性</h4><p>TLS在实现上分为<em>握手协议</em>和<em>记录协议</em>：</p>
+<ul>
+<li>TLS握手协议负责协商加密算法和生成对称密钥来保护应用程序数据</li>
+<li>TLS记录协议负责保护应用数据并验证其完整性和来源，因此对HTTP数据加密是使用的记录协议。</li>
+</ul>
+<p>具体过程：</p>
+<ol>
+<li>将消息分割成多个较短的片段，然后分别对每个片段进行压缩</li>
+<li>然后压缩的片段会被加上MAC值，这个MAC值用来识别数据的完整性，同时防止篡改。此外为了防止重放攻击，还加上了片段的编码。</li>
+<li>接下来，压缩的片段和MAC值会一起通过对称加密进行加密</li>
+<li>最后加上由数据类型，版本，长度组成的报文头部<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006111656.png"></li>
+</ol>
+<h3 id="HTTP-x2F-1-1-HTTP-x2F-2-HTTP-x2F-3"><a href="#HTTP-x2F-1-1-HTTP-x2F-2-HTTP-x2F-3" class="headerlink" title="HTTP/1.1 HTTP/2 HTTP/3"></a>HTTP/1.1 HTTP/2 HTTP/3</h3><h4 id="HTTP-x2F-1-1"><a href="#HTTP-x2F-1-1" class="headerlink" title="HTTP/1.1"></a>HTTP/1.1</h4><p>HTTP/1.1相比HTTP/1.0的改进：</p>
+<ul>
+<li>使用长连接的方式改善了频繁建立连接的开销</li>
+<li>支持管道传输，发起请求之后不必等待响应，可以直接发送下一个请求，减少整体响应时间</li>
+</ul>
+<p>HTTP/1.1的性能瓶颈</p>
+<ul>
+<li>请求/响应头未经压缩就发送，首部信息越多延迟越大。只能压缩body部分</li>
+<li>首部冗长导致每次互相发送相同的首部造成巨大的浪费</li>
+<li>服务器按顺序处理请求，如果先到达的请求处理很慢，会导致客户剩余的请求无法处理（队头阻塞）</li>
+<li>没有请求优先级控制</li>
+<li>请求只能从客户端开始，服务端只能被动响应</li>
+</ul>
+<h4 id="HTTP-x2F-2"><a href="#HTTP-x2F-2" class="headerlink" title="HTTP/2"></a>HTTP/2</h4><p>HTTP/2协议基于HTTPS，因此它的安全性是可以保证的<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007110905.png"></p>
+<p>相比于HTTP/1.1，HTTP/2在以下方面做出了改进：</p>
+<ol>
+<li><p>头部压缩<br>如果同时发送多个请求，且这些请求的头部基本相同，HTTP2就会压缩头，消除掉重复的部分。<br>它的具体实现就是<code>HPACK</code>算法：客户端和服务端同时维护一张头部表，所有字段都会存入该表，下次要发送同样的字段时就可以直接发送索引号。</p>
+</li>
+<li><p>二进制格式<br>HTTP/2全面采用二进制格式传输数据，头信息和数据体都是二进制并且统称为帧。虽然这大幅降低了报文的可读性，但却加快了计算机的处理速度，计算机可以直接解析二进制报文。</p>
+</li>
+<li><p>并发传输<br>由于HTTP/1.1的实现是基于请求-响应模型的。在同一个连接中，HTTP完成一个事务才能开始处理下一个事务，这就有可能导致队头阻塞。<br>而在HTTP2中引入了Stream的概念，多个Stream可以复用一条TCP连接。1个TCP连接可以包含多个Stream，Stream里可以包含一个或多个Message(Message对应请求/响应报文)。而在一个Message中，又有多个帧(存放报文各部分的信息)。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007112708.png"><br>针对不同的HTTP请求用独一无二的StreamID来区分，接收端可以通过StreamID来组装HTTP消息。这就使得Stream的帧可以乱序发送，也就代表HTTP2可以并行的发送请求/接收响应。</p>
+</li>
+<li><p>服务器推送<br>HTTP/2还在一定程度上改善了传统的<em>请求-应答</em>模式。服务器可以主动地向客户端发送消息。<br>客户端的服务器双方都可以建立Stream，规定客户端建立的StreamID必须是奇数，服务端建立的StreamID必须是偶数。<br>乍一听可能感觉这个功能没有什么价值，但现在想象一下，如果我们希望请求一个页面，在HTTP/1.1中我们首先要请求html文件，但只请求一个html文件显然是不够的，再加上css和js文件才能构成我们平日使用的网页。这就需要客户端发送多个请求，消息往返次数很多。但在HTTP2中，服务端发现客户端请求了一个网页，在返回html文件的同时，主动将对应的css和js文件返回过去，这就大大提高了通信效率。</p>
+</li>
+</ol>
+<h4 id="HTTP-x2F-3"><a href="#HTTP-x2F-3" class="headerlink" title="HTTP/3"></a>HTTP/3</h4><p>HTTP/2看上去已经非常完美了，但实际上，他仍然存在队头阻塞的问题，只不过问题的根源在于TCP层。HTTP/2用流的方式让服务端不至于因为处理某个特定请求速度过慢而导致无法接收到其他请求。但如果某个请求在传输过程中发生了丢包，就会导致TCP触发超时重传，此时丢失的包之后发送的所有数据包都会被存储在TCP的缓冲区，应用层无法接收到数据。也就是说，如果发生了丢包，那么之后传输的数据，哪怕不属于同一个流也会被TCP关在缓冲区里。<br>HTTP/3为了解决这个问题，直接将运输层的协议改成了基于UDP的QUIC协议。由于UDP的发送是无序且不可靠的，因此不会因为丢包而发生阻塞。而基于UDP的QUIC协议又实现了类似TCP的可靠传输功能。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007114451.png"><br>QUIC具备如下特点：</p>
+<ol>
+<li><p>无队头阻塞<br>QUIC也有类似HTTP/2多路复用的概念，同时QUIC也有自己的一套机制来保证传输的可靠性。<strong>当某个流发生丢包时，只会阻塞这个流，其他流不会收到影响</strong>。因此QUIC连接上的流是相互独立的，即使发生丢包也不会影响其他流。</p>
+</li>
+<li><p>更快的连接建立<br>对于HTTP/1 和 HTTP/2，TCP和TLS是分层的，他们分别属于内核实现的传输层、openssl库实现的表示层。所以他们非常难以合并在一起。<br>HTTP/3在传输数据前虽然需要QUIC协议握手，但这个握手过程只需要1RTT，目的是为了确认双方的连接ID。同时QUIC内部包含了TLS，因此他会在自己的帧里携带TLS记录。因此只要1个RTT就可以建立连接同时完成密钥协商。</p>
+</li>
+<li><p>连接迁移<br>由于基于TCP的HTTP协议是通过(源地址，源端口，目的地址，目的端口)这个四元组确定一条TCP连接的，当网络发生变化时，就必须断开连接然后重新建立连接。期间发生的TCP三次握手，SSL四次握手的时延以及TCP慢启动的减速都会降低用户体验。<br>但对于QUIC来说，由于他确定连接的方式是通过连接ID，所以即使网络环境发生变化，只要连接上下文(连接ID，TLS密钥等)不变，就可以快速复用原连接，消除重连的成本。</p>
+</li>
+</ol>
+<h3 id="HTTP-x2F-1-1优化"><a href="#HTTP-x2F-1-1优化" class="headerlink" title="HTTP/1.1优化"></a>HTTP/1.1优化</h3><p>优化思路：</p>
+<ol>
+<li>尽量避免发送HTTP请求</li>
+<li>在需要发送HTTP请求时，尽量减少请求次数</li>
+<li>减少HTTP响应的数据大小</li>
+</ol>
+<p>第一种思路可以通过缓存实现，具体的介绍在HTTP缓存一节[[#^3b171b]]</p>
+<h4 id="减少HTTP请求次数"><a href="#减少HTTP请求次数" class="headerlink" title="减少HTTP请求次数"></a>减少HTTP请求次数</h4><p>切入点：</p>
+<ul>
+<li>减少重定向请求次数<br>由于服务器上的资源可能由于迁移或维护等等原因，将资源转移到另一个URL后，客户端不知情，仍旧请求原先的URL。这时服务端就需要通过302状态码和Location头部告诉客户端资源已经迁移，客户端转而向新的URL发起请求。<br>因此，如果重定向请求过多，就会导致客户端为请求一个资源发起多次请求，大大拉低网络性能。此外，客户端的请求一般需要先经过代理服务器然后到达源服务器，这就导致重定向请求在网络中的传递次数翻了一倍。<br>为了减少重定向的请求次数，我们可以让代理服务器帮助客户端去请求重定向之后的URL，而不是将302的响应交给客户端让它重发一次响应。并且，在代理服务器知晓了重定向规则之后，就可以将客户端给的旧URL地址映射到新的URL地址上，这样就可以直接略过重定向这一步骤。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162150.png" alt="代理服务器发送重定向请求"></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162221.png" alt="代理服务器了解重定向规则后"></p>
+<ul>
+<li><p>合并请求<br>由于HTTP/1.1是请求响应模型，如果一个请求未收到响应就会导致阻塞。因此为了防止单个请求的阻塞，浏览器一般会<em>同时发起多个请求，每个请求都是不同的TCP连接</em>。因此如果我们能够合并请求，就可以减少TCP连接的数量，省去TCP握手和慢启动过程的耗时。<br>具体的做法包括：<br>(1) 部分网页会包含大量的小图片，图标。对于这种资源，单开一个TCP连接显然是非常浪费的。对于这种情况，我们可以将这些小图片合成一张大图片，浏览器用一次请求获取这张大图然后根据CSS数据切割大图片<br>(2) 将js、css等资源打包成大文件<br>(3) 将图片的二进制数据使用base64编码后，以URL的形式直接嵌入HTML文件，跟随HTML一起发送。</p>
+</li>
+<li><p>延迟发送请求<br>请求网页的时候，没必要把全部资源都获取到，而是只获取当前用户所看到的页面资源，当用户向下滑动页面的时候，再向服务器获取接下来的资源，这样就达到了延迟发送请求的效果。</p>
+</li>
+</ul>
 
                 
             </div>
@@ -629,7 +748,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FaustProMaxPX.github.io/2022/10/05/network/">http://FaustProMaxPX.github.io/2022/10/05/network/</a>
+                    <a href="http://FaustProMaxPX.github.io/2022/10/09/network/">http://FaustProMaxPX.github.io/2022/10/09/network/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -847,7 +966,7 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2022/10/05/network/">
+                <a href="/2022/10/09/network/">
                     <div class="card-image">
                         
                         
@@ -864,7 +983,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-09
                             </span>
                         <span class="publish-author">
                             
@@ -1137,7 +1256,7 @@
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">133.9k</span>
+                        class="white-color">143.4k</span>
             
             <br>
             <span id="sitetime"></span>

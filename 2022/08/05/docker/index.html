@@ -397,14 +397,14 @@ Docker容器技术的诞生随着现代软件项目越来越庞大，需要的�
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.7k
+                    4.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    15 分
                 </div>
                 
 
@@ -427,7 +427,7 @@ Docker容器技术的诞生随着现代软件项目越来越庞大，需要的�
 
 <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><h2 id="容器技术的诞生"><a href="#容器技术的诞生" class="headerlink" title="容器技术的诞生"></a>容器技术的诞生</h2><p>随着现代软件项目越来越庞大，需要的依赖也变得越来越多，因此不同依赖之间的库/依赖的冲突就变得越来越频繁，调试环境成为了一大难题。而容器诞生便是为了解决环境配置问题，他将不同的依赖库隔离，提供专属于它的适配环境，以此来避免不同依赖运行在同一环境上带来的冲突。<br>和虚拟机相比，容器更多的面向任务，而不掌管操作系统，虚拟机则会真正的控制一个操作系统。</p>
 <h2 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h2><ol>
-<li>docker run  {name} {cmd}运行指定的容器并执行<em>cmd</em>对应的任务，如果本地没有对应镜像，就前往仓库下载<br>参数：<br>-d：在后台运行<br>-i：以交互模式运行<br>-t：为容器分配一个伪输入终端。<br>-p：指定映射的端口  -p 80:5000将容器的5000端口映射到本机的80端口<br>-v：将docker内的数据映射到外部机器的指定位置，通常用于运行数据库的容器。 -v /opt/dir:/var/lib/mysql<br>-e：设置环境变量<br>–name：给容器命名<br>–restart:设置容器的重启规则 always:总是重启容器 on-failure:在退出代码为非0值时才会自动重启</li>
+<li>docker run  {name} {cmd}运行指定的容器并执行<em>cmd</em>对应的任务，如果本地没有对应镜像，就前往仓库下载<br>参数：<br>-d：在后台运行<br>-i：以交互模式运行<br>-t：为容器分配一个伪输入终端。<br>-p：指定映射的端口  -p 80:5000将容器的5000端口映射到本机的80端口 -p 80 表示将容器内的80端口映射到本机上的随机路径<br>-v：将docker内的数据映射到外部机器的指定位置，通常用于运行数据库的容器。 -v /opt/dir:/var/lib/mysql<br>-e：设置环境变量<br>–name：给容器命名<br>–restart:设置容器的重启规则 always:总是重启容器 on-failure:在退出代码为非0值时才会自动重启</li>
 <li>docker ps 查看当前正在运行的容器，参数-a可以显示所有容器</li>
 <li>docker stop {name} 停止某容器</li>
 <li>docker rm {name} 删除某容器</li>
@@ -463,7 +463,10 @@ Docker容器技术的诞生随着现代软件项目越来越庞大，需要的�
 			<span class="token comment"># 指定数据卷</span>
 		<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
-<h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><h3 id="DockerFile"><a href="#DockerFile" class="headerlink" title="DockerFile"></a>DockerFile</h3><pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile"># 指定image基于哪一个OS镜像或是基于OS镜像的某个镜像
+<h2 id="Docker-image"><a href="#Docker-image" class="headerlink" title="Docker image"></a>Docker image</h2><p>Docker镜像由文件系统叠加而成。最底端是一个引导文件系统，即bootfs。当一个容器启动之后，它将会被移到内存中，引导文件系统则会被卸载，留出更多的内存供initrd磁盘镜像使用。<br>Docker镜像的第二层是root文件系统即rootfs，它位于引导文件系统之上，rootfs可以是一种或多种OS。<br>在传统Linux引导过程中，root文件系统会最先以只读的方式加载，当引导结束并完成完整性检查之后，他才会切换成读写模式。但是在Docker里，root文件系统永远只能是只读状态，此外，Docker利用联合加载技术又会在root文件系统层上加载更多的只读文件系统。</p>
+<p>联合加载：一次同时加载多个文件系统，它会将各层文件系统叠加到一起，这样最终的文件系统会包含所有底层的文件和目录。</p>
+<p>Docker在创建一个新容器时，会构建出一个镜像栈，并在栈的最顶端添加一个读写层。这个读写层再加上下面的镜像层以及一些配置数据就构成了一个容器。如果我们希望对某个文件进行修改，Docker会利用写时复制(COW)策略将更改应用到读写层当中，而不改变只读层的镜像内容。</p>
+<h3 id="DockerFile"><a href="#DockerFile" class="headerlink" title="DockerFile"></a>DockerFile</h3><pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile"># 指定image基于哪一个OS镜像或是基于OS镜像的某个镜像
 FROM Ubuntu
 # 在容器中安装需要的依赖
 RUN apt-get update &amp;&amp; apt-get -y install python
@@ -531,6 +534,17 @@ WORKDIR $TARGET_DIR<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile">COPY conf.d/ /etc/apache2/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>文件源路径必须是一个与当前构建环境相对的文件或者目录，本地文件都放到与Dockerfile的同一级目录下。由于构建环境会上传到Docker daemon，复制是在daemon中发生的，因此构建环境之外的部分无法被访问。</p>
 </li>
+<li><p>ARG<br>ARG指令用来定义可以在docker build命令运行时传递给构建运行时的变量，只需要在构建时使用 –build-arg 标志即可。用户只能在构建时指定在Dockerfile文件中定义过的参数。</p>
+<pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile">ARG build
+# 默认值为user
+ARG webapp_user=user <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>ps：千万不要使用ARG来传递一些机密信息，因为他们会在构建过程中以及镜像的构建历史中被暴露。</p>
+</li>
+<li><p>ONBUILD<br>这个指令可以为镜像添加触发器。当一个镜像被用作其他镜像的基础镜像时，触发器就会被触发。它最典型的用法就是将用户代码添加到镜像当中。<br>触发器会在构建过程中插入新的指令，一般都是紧跟在FROM之后的</p>
+<pre class="line-numbers language-Dockerfile" data-language="Dockerfile"><code class="language-Dockerfile">ONBUILD ADD . /app/src
+ONBUILD RUN cd /app/src &amp;&amp; make<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>ONBUILD触发器会按照在父镜像中指定的顺序执行，<em>并且只能继承一次，孙子镜像并不会触发触发器</em></p>
+</li>
 </ol>
 <h2 id="Docker-Engine"><a href="#Docker-Engine" class="headerlink" title="Docker Engine"></a>Docker Engine</h2><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img20220729201817.png" alt="Docker Engine结构图"></p>
 <h3 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h3><p>系统会为每一个进程分配一个唯一的pid，也就是说即使运行了一个容器，上面也不可能有相同pid的进程。这时候命名空间就发挥作用了，它可以将容器内部的进程编号隔离开来，不受外部主机影响，发放与外部相同的进程id，但这个id只属于该容器内部，在容器外看到的pid依旧不会与外部进程编号重复。</p>
@@ -558,8 +572,37 @@ WORKDIR $TARGET_DIR<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <td>None</td>
 <td>关闭网络功能</td>
 </tr>
+<tr>
+<td>bridge模式是docker的默认网络模式，他会为每一个容器分配一个独立的network namespace，并将容器连接到docker0虚拟网卡，通过docker0网桥以及Iptables nat表配置与宿主机通信。</td>
+<td></td>
+</tr>
+<tr>
+<td>docker容器间通信不一定需要知道容器的主机地址，也可以直接使用容器名，docker为根据内嵌的DNS，将容器名转换成对应的ip地址，同时使用容器名也可以避免重新启动后ip地址更改带来的麻烦。</td>
+<td></td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/docker/20220805121555.png" alt="bridge模式拓扑"></td>
+<td></td>
+</tr>
 </tbody></table>
-<p>bridge模式是docker的默认网络模式，他会为每一个容器分配一个独立的network namespace，并将容器连接到docker0虚拟网卡，通过docker0网桥以及Iptables nat表配置与宿主机通信。<br>docker容器间通信不一定需要知道容器的主机地址，也可以直接使用容器名，docker为根据内嵌的DNS，将容器名转换成对应的ip地址，同时使用容器名也可以避免重新启动后ip地址更改带来的麻烦。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/docker/20220805121555.png" alt="bridge模式拓扑"></p>
+<h3 id="Docker内部连网"><a href="#Docker内部连网" class="headerlink" title="Docker内部连网"></a>Docker内部连网</h3><p>Docker安装后，会创建一个名为docker0的网络接口，每个Docker容器都会在这个接口上分配一个IP地址。<br>接口docker0是一个虚拟的以太网桥，用于连接容器和本地宿主网络。<br>Docker每创建一个容器就会创建一组互联的网络接口，这组接口就像管道的两端，其中一端为容器里的eth0接口，另一端统一命名为类似veth6a这种名字作为宿主机的一个端口。通过将每一个veth*接口绑定到虚拟网桥，Docker创建了一个虚拟子网。</p>
+<h3 id="Docker-Networking"><a href="#Docker-Networking" class="headerlink" title="Docker Networking"></a>Docker Networking</h3><p>Docker networking允许用户创建自己的网络，容器可以通过它来互相通信。最重要的是，现在容器可以跨越不同的宿主机来通信，网络配置也可以更加灵活。<br>创建Docker网络：<code>docker network create {name}</code> 创建一个名为<em>name</em>的网络<br>启动一个容器，并将它连接到指定网络：<code>docker run --net={net_name} {image_name}</code><br>上面的命令会让容器在指定网络内部启动，Docker会感知到所有连接在这个网络上的容器，然后将这些地址保存在/etc/hosts文件当中。之后，只要是连接在网络内的容器，都可以通过容器名获得其他容器的地址。<br>将已有的容器连接到网络中：<code>docker network connect {net_name} {container_name}</code><br>PS:一个容器可以同时隶属于多个Docker网络</p>
+<h3 id="Docker链接"><a href="#Docker链接" class="headerlink" title="Docker链接"></a>Docker链接</h3><p>链接容器需要的参数：–link {container_name}:{alias}。标志创建了两个容器之间的客户-服务链接。该参数需要两个参数一个是容器名，另一个是链接的别名。别名可以让我们一致的访问容器公开的信息，而无需关注底层容器的名字。<br>虽然链接是早期Docker使用的容器通信方式，但即使在当下，他仍具备一些安全上的优势。比如，在启动被链接容器时不需要指定暴露的端口，通过将容器链接在一起，可以让客户容器直接访问服务容器的公开端口。并且，只有通过link链接的容器才能链接到这个端口。<br>最后，Docker在父容器的以下地方写入了链接信息：</p>
+<ul>
+<li>/etc/hosts 文件中</li>
+<li>包含连接信息的环境变量中<br>第一点就不必再多赘述，我们主要介绍下第二点。<br>Docker会在链接时，自动在客户容器中创建以别名开头的环境变量，这些变量包含如下信息：</li>
+<li>服务容器的名字</li>
+<li>容器里运行的服务所使用的协议、IP和端口号</li>
+<li>容器里运行的不同服务所指定的协议、IP和端口号</li>
+<li>容器里由Docker设置的环境变量</li>
+</ul>
+<h2 id="Docker-swarm"><a href="#Docker-swarm" class="headerlink" title="Docker swarm"></a>Docker swarm</h2><p>docker swarm是用来管理docker集群的平台，它将一群docker主机变成一台虚拟机</p>
+<ul>
+<li><strong>swarm mananger</strong>：负责整个集群的管理工作包括集群配置、服务管理等所有跟集群有关的工作。</li>
+<li><strong>work node</strong>：即图中的 available node，主要负责运行相应的服务来执行任务（task）。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/docker/20220807101122.png" alt="原理图"></li>
+</ul>
+<p>docker swarm init 初始化管理节点<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/docker/20220807101538.png"></p>
+<p>docker service –replicas=n {container} 在集群中部署n台<em>container</em></p>
 
                 
             </div>
@@ -1088,7 +1131,7 @@ WORKDIR $TARGET_DIR<span aria-hidden="true" class="line-numbers-rows"><span></sp
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">133.9k</span>
+                        class="white-color">143.4k</span>
             
             <br>
             <span id="sitetime"></span>
