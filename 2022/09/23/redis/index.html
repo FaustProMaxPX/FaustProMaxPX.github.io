@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    30k
+                    30.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    118 分
+                    121 分
                 </div>
                 
 
@@ -1090,6 +1090,7 @@ dir ./   决定快照文件和AOF文件的保存路径<span aria-hidden="true" c
 <li>当一个Redis服务器连接另一个Redis服务器，并向对方发送<code>SYNC</code>命令来开始一次复制操作的时候，如果主服务器目前没有在执行<code>BGSAVE</code>操作，或者主服务器并非刚刚执行完<code>BGSAVE</code>操作，那么主服务器就会执行<code>BGSAVE</code>命令。</li>
 </ol>
 <p>在使用快照之前，首先必须意识到，如果系统真的崩溃，用户将丢失最近一次生成快照之后更改的所有数据。因此快照只适合于即使丢失一部分数据也不会造成问题的应用。</p>
+<h4 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h4><p>当Redis服务器执行RDB快照时，会fork出一个子进程执行相关操作，具体流程同AOF。不过需要注意的时，RDB期间服务器通过写时复制修改的内容不会在本次RDB中被写入RDB文件，只能等待下一次<code>bgsave</code>或<code>save</code>执行。</p>
 <h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><h5 id="个人开发"><a href="#个人开发" class="headerlink" title="个人开发"></a>个人开发</h5><p>在个人开发服务器上，我们主要考虑的是尽可能降低快照持久化带来的资源消耗。如果打算在服务器中使用快照持久化，并存储大量的数据，那尽量让开发服务器的硬件配置接近生产服务器的配置，方便快速判断快照生成频率是否恰当。</p>
 <h5 id="对日志进行聚合运算"><a href="#对日志进行聚合运算" class="headerlink" title="对日志进行聚合运算"></a>对日志进行聚合运算</h5><p>在对日志文件进行聚合计算或者对页面浏览量进行分析时，唯一要考虑的是，如果redis因崩溃而没能创建快照，我们可以承受丢失多长时间内产生的数据，并在配置文件中用save做好处理。除此之外，还要解决如何恢复因故障而被终端的日志操作。<br>在数据恢复时，首先要做的是弄清楚丢失了哪些数据。因此在处理日志的同时要记录被处理日志的有关信息。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">process_logs</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> path<span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -1151,6 +1152,17 @@ dir ./   决定快照文件和AOF文件的保存路径<span aria-hidden="true" c
 <pre class="line-numbers language-ad-danger" data-language="ad-danger"><code class="language-ad-danger">如果不想让自己的固态尽早报废，不要使用always选项。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="重写-x2F-压缩AOF文件"><a href="#重写-x2F-压缩AOF文件" class="headerlink" title="重写/压缩AOF文件"></a>重写/压缩AOF文件</h4><p>AOF虽然可以很大程度上减少数据丢失的量，并且能在极短时间内完成持久化操作。但其并非十全十美。<br>随着时间推移，AOF的文件体积会不断增长，占用大量的磁盘空间，同时redis每次重启都要执行AOF中的写明了来还原数据集，如果AOF非常大，还原会非常缓慢。<br>为解决AOF体积不断增大的问题，用户可以向redis发送<code>BGREWRITEAOF</code>命令，它会通过移除AOF文件中的冗余命令来重写AOF文件。要注意的是，该命令的执行逻辑与快照<code>BGSAVE</code>基本相同，因此有同样的缺陷。在使用时要谨慎选择时间段，因为如果AOF非常大的话，内存和时间消耗会很大。<br><code>auto-aof-rewrite-percentage</code>:当AOF体积达到最小体积阈值的指定百分比时开始重写<br><code>auto-aof-rewrite-min-size</code>：AOF在磁盘上可接受的最小文件大小</p>
+<p><strong>AOF重写流程</strong></p>
+<p>当AOF重写开始后，会fork出一个子<strong>进程</strong>来执行相关操作。使用进程而非线程的原因是，子线程与父进程共享内存，在执行修改时必须通过加锁来保证数据一致性。而使用进程，我们就可以通过COW避免加锁带来的开销。</p>
+<blockquote>
+<p><strong>COW在AOF中的应用</strong><br>主线程通过<code>fork</code>调用生成子进程时，操作系统会将主进程的页表复制一份给子进程，这个页表记录虚拟地址和物理地址映射关系，而不会复制物理内存。<br>这样一来，子进程就和父进程共享了物理内存数据，同时页表对应的页表项也会标记为只读。<br>当子进程或父进程想要修改共享内存中的数据时，就会触发写时复制，此时OS就会进行物理内存的复制，并重新设置内存映射关系。这个新的页表专属于发起修改的一方，它具有读写权限</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/20230124103337.png" alt="COW示意图"></p>
+<p>既然使用了写时复制，那么父进程在AOF期间进行的修改操作对执行AOF的子进程就是不可见的了，这显然会导致数据不一致。因此，父进程会将新写入的数据写入AOF缓冲区（等待被写入AOF文件的缓冲区）和AOF重写缓存区（处理AOF重写的缓冲区）。当子进程完成AOF时会向父进程发送一个信号，此时父进程会将AOF重写缓冲区的所有内容追加到AOF文件中，并重命名。</p>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/20230124103643.png"></p>
+<h4 id="混合持久化"><a href="#混合持久化" class="headerlink" title="混合持久化"></a>混合持久化</h4><p>通过上面的讨论，我们可以看出AOF和RDB都各有优劣。而为了最大程度上利用二者的优势，Redis推出了混合持久化。</p>
+<p>开启混合持久化后，进行AOF重写时，fork出来的重写子进程会先将与主线程共享的内存数据以RDB的形式写入AOF文件。在此期间主线程处理的写操作会写入到AOF重写缓冲区，最后它会以增量命令的形式被写入AOF文件。写入完成后通知主线程将新的含有RDB格式和AOF格式的文件替换掉旧的AOF文件。</p>
+<p>这样做的好处在于，重启Redis加载数据时，由于数据量很大的部分使用RDB存储，它的加载速度会很快。而之后一些琐碎的修改使用AOF存储，可以很大程度上减少数据的丢失。</p>
 <h3 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h3><p>让其他服务器拥有一个不断更新的数据副本，使得拥有数据副本的服务器可以用于处理用户发送的请求。<br>在需要扩展读请求或是在需要写入临时数据的时候，用户可以通过设置额外的Redis从服务器来保存数据集的副本。客户端每次向主服务器进行写入时，从服务器都会实时地得到更新。</p>
 <h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><p>前文提到当主服务器被连接时，会存储一份快照，因此要确保主服务器的<code>dir</code>,<code>dbfilename</code>被正确配置，并且拥有相应的权限。<br>从服务器可以同过<code>slaveof host port</code>来连接主服务器，也可以通过<code>slaveof no one</code>让服务器停止复制操作。</p>
 <h4 id="启动过程"><a href="#启动过程" class="headerlink" title="启动过程"></a>启动过程</h4><table>
@@ -3224,13 +3236,13 @@ end
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">143.4k</span>
+                        class="white-color">144.2k</span>
             
             <br>
             <span id="sitetime"></span>
             <br>
             <!-- 
-                <span id="year">2019-2022</span>
+                <span id="year">2019-2023</span>
             
             <a href="/about" target="_blank">Faustxc</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
