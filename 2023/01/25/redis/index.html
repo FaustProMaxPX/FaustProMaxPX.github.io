@@ -395,7 +395,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-09-23
+                    2023-01-25
                 </div>
                 
 
@@ -404,14 +404,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    30.7k
+                    31.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    121 分
+                    125 分
                 </div>
                 
 
@@ -1204,6 +1204,11 @@ dir ./   决定快照文件和AOF文件的保存路径<span aria-hidden="true" c
 <li>快照还没发送：所有从服务器收到相同的快照和写命令</li>
 <li>快照正在发送或已经发送：当主服务器与较早进行连接的从服务器执行完复制所需的5个步骤之后，主服务器会与新连接的从服务器执行一次新的步骤1至步骤5</li>
 </ol>
+<p>考虑到主从服务器间的网络不可能永远畅通，我们必须准备一些应对网络问题的措施。当发生主从服务器断开连接后又重新连接的情况时，最简单的处理方式就是让它们再进行一次全量复制，这显然是非常耗时的。</p>
+<p>因此，面对这种情况，Redis采用了增量复制，当从服务器重新连接主服务器后，它仍会向主服务器发送<code>psync</code>，不过这次offset值不再是-1（全量复制时为-1）。主服务器收到后会发送CONTINUE命令，告诉从服务器这是一次增量复制。</p>
+<p><strong>主服务器处理增量复制的方式</strong></p>
+<p>主服务器会维护一个环形缓冲区，里面记录了所有最近执行的命令，同时主服务器也会维护一个变量用于记录自己写到哪里了。</p>
+<p>主服务器在收到从服务器的<code>psync</code>命令后，会比较收到的offset和自己维护的写入offset，如果从服务器缺失的数据还在环形缓冲区里，就会执行增量复制，否则会执行全量复制。</p>
 <h4 id="主从链"><a href="#主从链" class="headerlink" title="主从链"></a>主从链</h4><p>创建太多个从服务器可能会造成网络不可用，尤其是在复制需要通过互联网或在不同数据中心之间进行时。为了缓解这一问题，我们让从服务器也可以拥有自己的从服务器，并由此形成主从链。<br>从从复制和主从复制的区别在于，如果从服务器X拥有从服务器Y，那么当从服务器执行复制步骤4时，会断开与服务器Y的连接，导致从服务器Y需要重新连接并重新同步。</p>
 <p>当读请求的重要性明显高于写请求的重要性，并且读请求的数量远远超出一台Redis服务器可以处理的范围时，用户就需要添加新的从服务器来处理读请求。随着负载不断上升，主服务器可能会无法快速地更新所有从服务器，或者因为重新连接和重新同步从服务器而导致系统超载。为了缓解这个问题，用户可以创建一个由Redis主从节点（master/slave node）组成的中间层来分担主服务器的复制工作<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/redis/NeatReader-1661071382123.png"></p>
 <h4 id="检验硬盘写入"><a href="#检验硬盘写入" class="headerlink" title="检验硬盘写入"></a>检验硬盘写入</h4><p>验证主服务器发送的数据是否被从服务器写入磁盘需要以下两个步骤：</p>
@@ -1230,7 +1235,39 @@ dir ./   决定快照文件和AOF文件的保存路径<span aria-hidden="true" c
 	mconn<span class="token punctuation">.</span>zrem<span class="token punctuation">(</span><span class="token string">'sync:wait'</span><span class="token punctuation">,</span> identifier<span class="token punctuation">)</span>
 	mconn<span class="token punctuation">.</span>zremrangebyscore<span class="token punctuation">(</span><span class="token string">'sync:wait'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> time<span class="token punctuation">.</span>time<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">900</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h4 id="减少数据丢失"><a href="#减少数据丢失" class="headerlink" title="减少数据丢失"></a>减少数据丢失</h4><p><strong>异步复制</strong></p>
+<p>Redis主从复制采用的是异步复制，如果主节点向从节点同步写请求时宕机，主节点内存中的数据就会完全丢失。</p>
+<p>Redis配置中有一个参数<code>min-slaves-max-lag</code>。一旦所有的从节点复制/同步数据的耗时都超过了这个配置的值，主服务器就会停止服务，因为它判断，这种情况下继续服务，一旦宕机，会造成大量的数据丢失。</p>
+<p>此时客户端可以选择服务降级，先使用本地缓存继续服务，等待主服务器恢复正常后，再重新发起请求。</p>
+<p><strong>脑裂</strong></p>
+<p>如果主节点无法与从节点交互，也无法响应哨兵的心跳，就会被判断死亡，此时哨兵会选举出一个新的主节点继续服务。</p>
+<p>但假如原主节点是由于网络分区的原因而无法进行响应与同步，当主节点连接回来之后，会被哨兵降级为从节点，此时会进行一次全量复制。这导致主节点在被隔离状态下处理的所有写请求都被清理掉，产生数据丢失。</p>
+<p>为了处理这种情况，Redis使用两个配置参数：</p>
+<ol>
+<li>min-slaves-to-write x 主节点必须要能与x个节点连接，否则它禁止写入数据</li>
+<li>min-slaves-max-lag x 主从数据复制和同步的延迟不能超过 x 秒</li>
+</ol>
+<p>通过上面两个配置，我们能保证主服务器在假死状态下也不会写入数据，当它重新连回集群后，也就不存在数据丢失。</p>
 <h3 id="处理系统故障"><a href="#处理系统故障" class="headerlink" title="处理系统故障"></a>处理系统故障</h3><p>Redis提供了两个命令用于快照和AOF文件的检查与恢复<br>redis-check-aof [–fix] &lt;file.aof&gt;<br>Redis会扫描指定的aof文件，寻找不正确或不完整的命令。如果添加了fix选项，Redis就会删除从第一个不正确命令开始的所有命令。<br>redis-check-dump &lt;dump.rdb&gt;<br>Redis检查指定的快照文件是否出错，但无法进行修复。</p>
+<h3 id="哨兵"><a href="#哨兵" class="headerlink" title="哨兵"></a>哨兵</h3><p>Redis使用哨兵来进行主从故障转移，同时监控主从节点的状态。哨兵节点主要负责三件事：监控，选主，通知</p>
+<p><strong>监控</strong></p>
+<p>哨兵每隔1秒就会向所有的主从节点发送ping，如果某个节点没有在规定时间内（由配置项<code>down-after-milliseconds</code>设置）响应，就会被判断<strong>主观下线</strong>。</p>
+<p>有主观下线，那么自然也有客观下线，当一个哨兵判断某个节点主观下线后就会向其他哨兵发起命令，询问他们是否也认为这个节点主观下线。如果赞成的哨兵数达到配置项<code>quorum</code>指定的值，该节点就会被判断为客观下线。</p>
+<p><strong>选主</strong></p>
+<p>当哨兵集群判断主节点客观下线后，就会选派出一个leader节点进行主从故障转移。通常是由判断主节点客观下线的节点担任<strong>候选者</strong>。</p>
+<p>一个候选者要想赢得选举需要以下两个条件：</p>
+<ol>
+<li>获取半数以上的赞成票</li>
+<li>获取的票数大于配置项<code>quorum</code>值</li>
+</ol>
+<p>主从故障转移流程：</p>
+<ol>
+<li>在已下线主节点的所有从节点中选出一个从节点担任新的主节点。选取标准为：优先级，复制进度，ID号</li>
+<li>让其余的从节点复制新的主节点</li>
+<li>将新主节点的IP地址等信息通过发布/订阅模式通知给客户端。</li>
+<li>继续监视旧主节点，如果它连回集群，将其设为从节点。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/20230125105755.png" alt="选取新主库流程"></p>
 <h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>之前已经简单提过了命令的基本操作，但这一部分命令只能够帮助我们以流水线的方式提升程序效率，它并没有对数据一致性的保障。例如，假设一个客户开启了事务，并决定修改某个键，如果此时另一个客户端修改了这个键，事务最终仍会顺利执行，但最终结果却可能天差地别。<br>在分布式事务的情况下，常常会采用2PC(二阶段提交)，但如果连数据一致性都无法维持的话，2PC无法实现。例如，商店进了一批货，老板1更新好了库存，而老板2没更新好库存，这时候这批货就无法被记录，因为老板之间数据不一致，在投票时会发生明显分歧。<br>为了保证数据的一致性，Redis还提供了<code>WATCH</code>, <code>UNWATCH</code>, <code>DISCARD</code>命令。<br>WATCH会监视指定的键，在开启WATCH到使用EXEC提交这段时间，如果有其他用户对被监视的键做出了修改，在用户尝试执行EXEC的时候就会返回一个错误。<br>UNWATCH会取消Redis对所有监视键的监视<br>DISCARD会取消监视，同时放弃事务中的所有命令</p>
 <p>接下来用一个商场案例来解释事务的用法<br>首先是用户将商品放到商场上销售，这时要监视的键是用户持有物，如果用户将商品挂上去后就用掉了商品，自然是不允许卖出的。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">list_item</span><span class="token punctuation">(</span>conn<span class="token punctuation">,</span> itemid<span class="token punctuation">,</span> sellerid<span class="token punctuation">,</span> price<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -2722,7 +2759,7 @@ end
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://FaustProMaxPX.github.io/2022/09/23/redis/">http://FaustProMaxPX.github.io/2022/09/23/redis/</a>
+                    <a href="http://FaustProMaxPX.github.io/2023/01/25/redis/">http://FaustProMaxPX.github.io/2023/01/25/redis/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -2943,29 +2980,30 @@ end
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/10/09/on%20java/">
+                <a href="/2023/01/25/redis/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="On java">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Redis入门">
                         
-                        <span class="card-title">On java</span>
+                        <span class="card-title">Redis入门</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            菜狗与某次面试中被问到不少并发问题，结果一问三不知，恰好cs186也快看到并发控制，遂开坑《on java》学习一下java进阶知识。
+                            实用主义的redis学习日志，使用的资料为《Redis实战》
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-10-09
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-01-25
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -2978,15 +3016,20 @@ end
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/java/">
-                        <span class="chip bg-color">java</span>
+                    <a href="/tags/redis/">
+                        <span class="chip bg-color">redis</span>
                     </a>
                     
-                    <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
-                        <span class="chip bg-color">并发编程</span>
+                    <a href="/tags/python/">
+                        <span class="chip bg-color">python</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BC%93%E5%AD%98/">
+                        <span class="chip bg-color">缓存</span>
                     </a>
                     
                 </div>
@@ -3000,24 +3043,24 @@ end
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/16/design-mode/">
+                <a href="/2022/10/09/network/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="设计模式">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="计算机网络">
                         
-                        <span class="card-title">设计模式</span>
+                        <span class="card-title">计算机网络</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            更加高效的搬砖方法
+                            计算机网络的基础知识，以及一部分开发必备网络知识
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-16
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-09
                             </span>
                         <span class="publish-author">
                             
@@ -3034,12 +3077,8 @@ end
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Java/">
-                        <span class="chip bg-color">Java</span>
-                    </a>
-                    
-                    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                        <span class="chip bg-color">设计模式</span>
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+                        <span class="chip bg-color">计算机网络</span>
                     </a>
                     
                 </div>
@@ -3236,7 +3275,7 @@ end
             Copyright&nbsp;&copy;
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">144.2k</span>
+                        class="white-color">145.3k</span>
             
             <br>
             <span id="sitetime"></span>
