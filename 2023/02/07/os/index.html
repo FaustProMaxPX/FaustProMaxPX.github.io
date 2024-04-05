@@ -1,192 +1,87 @@
-<!DOCTYPE html>
-<html lang=zh>
+<!DOCTYPE HTML>
+<html>
 <head>
-    <!-- so meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="八股整理 —— 操作系统">
-<meta property="og:type" content="article">
-<meta property="og:title" content="操作系统">
-<meta property="og:url" content="http://faustpromaxpx.github.io/2023/02/07/os/index.html">
-<meta property="og:site_name" content="狂奔的蜗牛">
-<meta property="og:description" content="八股整理 —— 操作系统">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135316.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135438.png">
-<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8c619c94-9405-40be-95e1-06ccb5085c08/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055452Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8138be63ab7445c4091039dd34cf2fd3e2a5491493ea2a847a37a862a91eaeaa&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
-<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/aa0ccc79-bbfe-445e-b281-c24b58866b2d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055500Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8b25beb8235622358748800adc19606330b0ce7a0d41f5b0d30aba272e5131d6&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
-<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d181a345-d9a1-440f-ae19-16ca15fcb034/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055511Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=1a64f54c34af68ca03625ea4b0e6f540f95af9469647ca8aa0b2863ebb5bc990&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
-<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135531.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135550.png">
-<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/630f629a-1091-45d3-8c9c-54f5adaaaa43/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055557Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=ef2f2d045ea436eca55193970f92581df4ce4cea20dcb5080390d7e69241034b&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/a9ed979e2ed8414f9828767592aadc21.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/08a8e315fedc4a858060db5cb4a654af.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/7884f4d8db4949f7a5bb4bbd0f452609.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/19296e249b2240c29f9c52be70f611d5.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/a3cdf27646b24614a64cfc5d7ccffa35.png">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/8904fb89ae0c49c4b0f2f7b5a0a7b099.png">
-<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/10-%E8%BF%9B%E7%A8%8B%E4%B8%83%E4%B8%AD%E7%8A%B6%E6%80%81.jpg">
-<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/28-%E5%A4%9A%E7%BA%A7%E9%98%9F%E5%88%97.jpg">
-<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/epoll.png">
-<meta property="article:published_time" content="2023-02-07T13:04:58.000Z">
-<meta property="article:modified_time" content="2023-03-28T05:57:25.094Z">
-<meta property="article:author" content="Zephyr">
-<meta property="article:tag" content="操作系统">
-<meta property="article:tag" content="计算机基础">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135316.png">
-    
-    
-      
-        
-          <link rel="shortcut icon" href="/images/favicon.ico">
-        
-      
-      
-        
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
-        
-      
-      
-        
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        
-      
-    
-    <!-- title -->
-    <title>操作系统</title>
-    <!-- async scripts -->
-    <!-- Google Analytics -->
+  <meta charset="utf-8">
+  
+  <title>操作系统 | 狂奔的蜗牛 | 人行，路平</title>
 
+  
+  <meta name="author" content="Zephyr">
+  
 
-    <!-- Umami Analytics -->
+  
+  <meta name="description" content="八股整理 —— 操作系统">
+  
 
+  
+  
+  <meta name="keywords" content="操作系统,计算机基础">
+  
 
-    <!-- styles -->
-    
-<link rel="stylesheet" href="/css/style.css">
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!-- persian styles -->
-    
-    <!-- rss -->
-    
-    
-	<!-- mathjax -->
-	
+  <meta property="og:title" content="操作系统"/>
+
+  <meta property="og:site_name" content="狂奔的蜗牛"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="狂奔的蜗牛" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
-<body class="max-width mx-auto px3 ltr">
-    
-      <div id="header-post">
-  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
-  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
-  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
-  <span id="menu">
-    <span id="nav">
-      <ul>
-        <!--
-       --><li><a href="/">首页</a></li><!--
-     --><!--
-       --><li><a href="/about/">关于</a></li><!--
-     --><!--
-       --><li><a href="/archives/">归档</a></li><!--
-     --><!--
-       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
-     -->
-      </ul>
-    </span>
-    <br/>
-    <span id="actions">
-      <ul>
-        
-        <li><a class="icon" aria-label="上一篇" href="/2023/02/27/offer-java/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
-        
-        
-        <li><a class="icon" aria-label="下一篇" href="/2023/01/25/redis/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
-        
-        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
-        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
-      </ul>
-      <span id="i-prev" class="info" style="display:none;">上一篇</span>
-      <span id="i-next" class="info" style="display:none;">下一篇</span>
-      <span id="i-top" class="info" style="display:none;">返回顶部</span>
-      <span id="i-share" class="info" style="display:none;">分享文章</span>
-    </span>
-    <br/>
-    <div id="share" style="display: none">
-      <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://faustpromaxpx.github.io/2023/02/07/os/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://faustpromaxpx.github.io/2023/02/07/os/&text=操作系统"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://faustpromaxpx.github.io/2023/02/07/os/&is_video=false&description=操作系统"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=操作系统&body=Check out this article: http://faustpromaxpx.github.io/2023/02/07/os/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://faustpromaxpx.github.io/2023/02/07/os/&name=操作系统&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://faustpromaxpx.github.io/2023/02/07/os/&t=操作系统"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
-</ul>
 
-    </div>
-    
-    
-      <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">冯诺依曼模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">中央处理器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">CPU执行的具体流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF"><span class="toc-number">1.2.</span> <span class="toc-text">总线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E8%B7%AF%E4%BD%8D%E5%AE%BD"><span class="toc-number">1.2.1.</span> <span class="toc-text">线路位宽</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CPU-Cache"><span class="toc-number">2.</span> <span class="toc-text">CPU Cache</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%98%A0%E5%B0%84"><span class="toc-number">2.1.</span> <span class="toc-text">直接映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">缓存一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">2.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF%E5%97%85%E6%8E%A2"><span class="toc-number">2.2.2.</span> <span class="toc-text">总线嗅探</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MESI%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.2.3.</span> <span class="toc-text">MESI协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%85%B1%E4%BA%AB"><span class="toc-number">2.3.</span> <span class="toc-text">伪共享</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B1%BB"><span class="toc-number">3.1.</span> <span class="toc-text">调度类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">完全公平调度</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">4.</span> <span class="toc-text">中断</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%B8%AD%E6%96%AD"><span class="toc-number">4.1.</span> <span class="toc-text">软中断</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-number">5.</span> <span class="toc-text">虚拟内存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">5.1.</span> <span class="toc-text">内存分段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">5.2.</span> <span class="toc-text">内存分页</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-number">6.1.</span> <span class="toc-text">进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PCB"><span class="toc-number">6.1.1.</span> <span class="toc-text">PCB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">6.1.2.</span> <span class="toc-text">进程间通信</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B-1"><span class="toc-number">6.2.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="toc-number">6.2.1.</span> <span class="toc-text">用户线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B"><span class="toc-number">6.2.2.</span> <span class="toc-text">内核线程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6"><span class="toc-number">6.3.</span> <span class="toc-text">调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%8E%9F%E5%88%99"><span class="toc-number">6.3.1.</span> <span class="toc-text">调度原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">6.3.2.</span> <span class="toc-text">调度算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-number">7.</span> <span class="toc-text">IO多路复用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#select-x2F-poll"><span class="toc-number">7.1.</span> <span class="toc-text">select&#x2F;poll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#epoll"><span class="toc-number">7.2.</span> <span class="toc-text">epoll</span></a></li></ol></li></ol>
-      </div>
-    
-  </span>
-</div>
+<body>
+<div class="blog">
+  <div class="content">
 
-    
-    <div class="content index py4 ">
-        
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-  <header>
-    
-    <h1 class="posttitle p-name" itemprop="name headline">
-        操作系统
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">狂奔的蜗牛</a>
     </h1>
-
-
-
-    <div class="meta">
-      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span class="p-name" itemprop="name">Zephyr</span>
-      </span>
+    <p class="site-description">人行，路平</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
       
-    <div class="postdate">
-      
-        <time datetime="2023-02-07T13:04:58.000Z" class="dt-published" itemprop="datePublished">2023-02-07</time>
-        
-      
-    </div>
+    </ul>
+  </nav>
+</header>
 
+    <main class="site-main posts-loop">
+    <article>
 
-      
-    <div class="article-category">
-        <i class="fa-solid fa-archive"></i>
-        <a class="category-link" href="/categories/%E5%85%AB%E8%82%A1/">八股</a>
-    </div>
-
-
-      
-    <div class="article-tag">
-        <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a>, <a class="p-category" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a>
-    </div>
-
-
-    </div>
-  </header>
+  
+    
+    <h3 class="article-title"><span>操作系统</span></h3>
+    
   
 
-  <div class="content e-content" itemprop="articleBody">
-    <h1 id="冯诺依曼模型"><a href="#冯诺依曼模型" class="headerlink" title="冯诺依曼模型"></a>冯诺依曼模型</h1><p>计算机基本结构：运算器，存储器，控制器，IO设备</p>
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2023/02/07/os/" rel="bookmark">
+        <time class="entry-date published" datetime="2023-02-07T13:04:58.000Z">
+          2023-02-07
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h1 id="冯诺依曼模型"><a href="#冯诺依曼模型" class="headerlink" title="冯诺依曼模型"></a>冯诺依曼模型</h1><p>计算机基本结构：运算器，存储器，控制器，IO设备</p>
 <p>存储单元和输入输出设备和CPU的交互离不开总线，计算机基本结构的关系如下：</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135316.png"></p>
 <h2 id="中央处理器"><a href="#中央处理器" class="headerlink" title="中央处理器"></a>中央处理器</h2><p>中央处理器就是所谓的CPU，常说的32位，64位指的是CPU的<strong>位宽</strong>。位宽代表了CPU一次可以运算的数据量。</p>
@@ -526,143 +421,63 @@
 </li>
 </ol>
 
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/八股/">八股</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/操作系统/">操作系统</a><a href="/tags/计算机基础/">计算机基础</a>
+    </span>
+    
+
+    </div>
+
+    
   </div>
 </article>
 
+  
 
 
-        
-          <div id="footer-post-container">
-  <div id="footer-post">
 
-    <div id="nav-footer" style="display: none">
-      <ul>
-        
-          <li><a href="/">首页</a></li>
-        
-          <li><a href="/about/">关于</a></li>
-        
-          <li><a href="/archives/">归档</a></li>
-        
-          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
-        
-      </ul>
-    </div>
 
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2024 Zephyr
+    
+  </p>
+</footer>
     
     
-      <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">冯诺依曼模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">中央处理器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CPU%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.1.</span> <span class="toc-text">CPU执行的具体流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF"><span class="toc-number">1.2.</span> <span class="toc-text">总线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E8%B7%AF%E4%BD%8D%E5%AE%BD"><span class="toc-number">1.2.1.</span> <span class="toc-text">线路位宽</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CPU-Cache"><span class="toc-number">2.</span> <span class="toc-text">CPU Cache</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%98%A0%E5%B0%84"><span class="toc-number">2.1.</span> <span class="toc-text">直接映射</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">缓存一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">2.2.1.</span> <span class="toc-text">缓存一致性问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BA%BF%E5%97%85%E6%8E%A2"><span class="toc-number">2.2.2.</span> <span class="toc-text">总线嗅探</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MESI%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.2.3.</span> <span class="toc-text">MESI协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E5%85%B1%E4%BA%AB"><span class="toc-number">2.3.</span> <span class="toc-text">伪共享</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%B1%BB"><span class="toc-number">3.1.</span> <span class="toc-text">调度类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6"><span class="toc-number">3.2.</span> <span class="toc-text">完全公平调度</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD"><span class="toc-number">4.</span> <span class="toc-text">中断</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BD%AF%E4%B8%AD%E6%96%AD"><span class="toc-number">4.1.</span> <span class="toc-text">软中断</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="toc-number">5.</span> <span class="toc-text">虚拟内存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="toc-number">5.1.</span> <span class="toc-text">内存分段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="toc-number">5.2.</span> <span class="toc-text">内存分页</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">进程与线程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-number">6.1.</span> <span class="toc-text">进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PCB"><span class="toc-number">6.1.1.</span> <span class="toc-text">PCB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">6.1.2.</span> <span class="toc-text">进程间通信</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B-1"><span class="toc-number">6.2.</span> <span class="toc-text">线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="toc-number">6.2.1.</span> <span class="toc-text">用户线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B"><span class="toc-number">6.2.2.</span> <span class="toc-text">内核线程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6"><span class="toc-number">6.3.</span> <span class="toc-text">调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E5%8E%9F%E5%88%99"><span class="toc-number">6.3.1.</span> <span class="toc-text">调度原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="toc-number">6.3.2.</span> <span class="toc-text">调度算法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-number">7.</span> <span class="toc-text">IO多路复用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#select-x2F-poll"><span class="toc-number">7.1.</span> <span class="toc-text">select&#x2F;poll</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#epoll"><span class="toc-number">7.2.</span> <span class="toc-text">epoll</span></a></li></ol></li></ol>
-      </div>
-    
-
-    <div id="share-footer" style="display: none">
-      <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://faustpromaxpx.github.io/2023/02/07/os/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://faustpromaxpx.github.io/2023/02/07/os/&text=操作系统"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://faustpromaxpx.github.io/2023/02/07/os/&is_video=false&description=操作系统"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=操作系统&body=Check out this article: http://faustpromaxpx.github.io/2023/02/07/os/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://faustpromaxpx.github.io/2023/02/07/os/&title=操作系统"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://faustpromaxpx.github.io/2023/02/07/os/&name=操作系统&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://faustpromaxpx.github.io/2023/02/07/os/&t=操作系统"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-
-    <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
-        
-          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
-        
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
-    </div>
-
   </div>
 </div>
-
-        
-        <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy;
-    
-    
-    2016-2024
-    Zephyr
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-        <!--
-       --><li><a href="/">首页</a></li><!--
-     --><!--
-       --><li><a href="/about/">关于</a></li><!--
-     --><!--
-       --><li><a href="/archives/">归档</a></li><!--
-     --><!--
-       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
-     -->
-      </ul>
-    </nav>
-  </div>
-</footer>
-
-    </div>
-    <!-- styles -->
-
-
-
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
-
-
-    <!-- jquery -->
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
-
-
-
-
-<!-- clipboard -->
-
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
-  
-  <script type="text/javascript">
-  $(function() {
-    // copy-btn HTML
-    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
-    btn += '<i class="fa-regular fa-clone"></i>';
-    btn += '</span>';
-    // mount it!
-    $(".highlight table").before(btn);
-    var clip = new ClipboardJS('.btn-copy', {
-      text: function(trigger) {
-        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
-      }
-    });
-    clip.on('success', function(e) {
-      e.trigger.setAttribute('aria-label', "复制成功！");
-      e.clearSelection();
-    })
-  })
-  </script>
-
-
-<script src="/js/main.js"></script>
-
-<!-- search -->
-
-<!-- Baidu Analytics -->
-
-<!-- Cloudflare Analytics -->
-
-<!-- Disqus Comments -->
-
-<!-- utterances Comments -->
-
 </body>
 </html>

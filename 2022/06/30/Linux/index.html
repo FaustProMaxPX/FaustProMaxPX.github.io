@@ -1,177 +1,87 @@
-<!DOCTYPE html>
-<html lang=zh>
+<!DOCTYPE HTML>
+<html>
 <head>
-    <!-- so meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="Linux基本知识及Shell基础用法">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Linux">
-<meta property="og:url" content="http://faustpromaxpx.github.io/2022/06/30/Linux/index.html">
-<meta property="og:site_name" content="狂奔的蜗牛">
-<meta property="og:description" content="Linux基本知识及Shell基础用法">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://www.runoob.com/wp-content/uploads/2014/06/d0c50-linux2bfile2bsystem2bhierarchy.jpg">
-<meta property="article:published_time" content="2022-06-30T03:06:00.000Z">
-<meta property="article:modified_time" content="2023-01-26T04:32:29.225Z">
-<meta property="article:author" content="Zephyr">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="Shell">
-<meta property="article:tag" content="操作系统">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.runoob.com/wp-content/uploads/2014/06/d0c50-linux2bfile2bsystem2bhierarchy.jpg">
-    
-    
-      
-        
-          <link rel="shortcut icon" href="/images/favicon.ico">
-        
-      
-      
-        
-          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
-        
-      
-      
-        
-          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-        
-      
-    
-    <!-- title -->
-    <title>Linux</title>
-    <!-- async scripts -->
-    <!-- Google Analytics -->
+  <meta charset="utf-8">
+  
+  <title>Linux | 狂奔的蜗牛 | 人行，路平</title>
 
+  
+  <meta name="author" content="Zephyr">
+  
 
-    <!-- Umami Analytics -->
+  
+  <meta name="description" content="Linux基本知识及Shell基础用法">
+  
 
+  
+  
+  <meta name="keywords" content="Linux,Shell,操作系统">
+  
 
-    <!-- styles -->
-    
-<link rel="stylesheet" href="/css/style.css">
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!-- persian styles -->
-    
-    <!-- rss -->
-    
-    
-	<!-- mathjax -->
-	
+  <meta property="og:title" content="Linux"/>
+
+  <meta property="og:site_name" content="狂奔的蜗牛"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="狂奔的蜗牛" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
-<body class="max-width mx-auto px3 ltr">
-    
-      <div id="header-post">
-  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
-  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
-  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
-  <span id="menu">
-    <span id="nav">
-      <ul>
-        <!--
-       --><li><a href="/">首页</a></li><!--
-     --><!--
-       --><li><a href="/about/">关于</a></li><!--
-     --><!--
-       --><li><a href="/archives/">归档</a></li><!--
-     --><!--
-       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
-     -->
-      </ul>
-    </span>
-    <br/>
-    <span id="actions">
-      <ul>
-        
-        <li><a class="icon" aria-label="上一篇" href="/2022/06/30/MySQL/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
-        
-        
-        <li><a class="icon" aria-label="下一篇" href="/2022/06/30/git/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
-        
-        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
-        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
-      </ul>
-      <span id="i-prev" class="info" style="display:none;">上一篇</span>
-      <span id="i-next" class="info" style="display:none;">下一篇</span>
-      <span id="i-top" class="info" style="display:none;">返回顶部</span>
-      <span id="i-share" class="info" style="display:none;">分享文章</span>
-    </span>
-    <br/>
-    <div id="share" style="display: none">
-      <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://faustpromaxpx.github.io/2022/06/30/Linux/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&text=Linux"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&is_video=false&description=Linux"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Linux&body=Check out this article: http://faustpromaxpx.github.io/2022/06/30/Linux/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&name=Linux&description=&lt;p&gt;Linux基本知识及Shell基础用法&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://faustpromaxpx.github.io/2022/06/30/Linux/&t=Linux"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
-</ul>
 
-    </div>
-    
-    
-      <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux"><span class="toc-number">1.</span> <span class="toc-text">Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">Linux目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vi%E5%92%8Cvim"><span class="toc-number">1.2.</span> <span class="toc-text">vi和vim</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vi%E5%92%8Cvim%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">vi和vim常用的三种模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">文件基本属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#file-type"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">file type</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%B1%9E%E4%B8%BB%E5%92%8C%E5%B1%9E%E7%BB%84"><span class="toc-number">1.3.1.</span> <span class="toc-text">文件属主和属组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7"><span class="toc-number">1.3.2.</span> <span class="toc-text">更改文件属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.3.</span> <span class="toc-text">链接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AC%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">硬连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">软连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">语法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4"><span class="toc-number">1.4.</span> <span class="toc-text">文件目录指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7"><span class="toc-number">1.6.</span> <span class="toc-text">管理用户</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E5%92%8C%E6%B3%A8%E9%94%80"><span class="toc-number">1.6.1.</span> <span class="toc-text">用户登录和注销</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7"><span class="toc-number">1.6.2.</span> <span class="toc-text">添加用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A-x2F-%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="toc-number">1.6.3.</span> <span class="toc-text">指定&#x2F;修改密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7"><span class="toc-number">1.6.4.</span> <span class="toc-text">删除用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-number">1.6.5.</span> <span class="toc-text">查询用户信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E7%BB%84"><span class="toc-number">1.6.6.</span> <span class="toc-text">角色组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.7.</span> <span class="toc-text">用户和组相关文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E6%8C%87%E4%BB%A4"><span class="toc-number">1.7.</span> <span class="toc-text">搜索查找指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%BA%A7%E5%88%AB"><span class="toc-number">1.8.</span> <span class="toc-text">运行级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86%EF%BC%88%E5%BE%85%E8%A1%A5%E5%85%A8%EF%BC%89"><span class="toc-number">1.9.</span> <span class="toc-text">磁盘管理（待补全）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6-Crond"><span class="toc-number">1.10.</span> <span class="toc-text">任务调度 Crond</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Crontab"><span class="toc-number">1.10.1.</span> <span class="toc-text">Crontab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#at"><span class="toc-number">1.10.2.</span> <span class="toc-text">at</span></a></li></ol></li></ol></li></ol>
-      </div>
-    
-  </span>
-</div>
+<body>
+<div class="blog">
+  <div class="content">
 
-    
-    <div class="content index py4 ">
-        
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
-  <header>
-    
-    <h1 class="posttitle p-name" itemprop="name headline">
-        Linux
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">狂奔的蜗牛</a>
     </h1>
-
-
-
-    <div class="meta">
-      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span class="p-name" itemprop="name">Zephyr</span>
-      </span>
+    <p class="site-description">人行，路平</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
       
-    <div class="postdate">
-      
-        <time datetime="2022-06-30T03:06:00.000Z" class="dt-published" itemprop="datePublished">2022-06-30</time>
-        
-      
-    </div>
+    </ul>
+  </nav>
+</header>
 
+    <main class="site-main posts-loop">
+    <article>
 
-      
-    <div class="article-category">
-        <i class="fa-solid fa-archive"></i>
-        <a class="category-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
-    </div>
-
-
-      
-    <div class="article-tag">
-        <i class="fa-solid fa-tag"></i>
-        <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/Shell/" rel="tag">Shell</a>, <a class="p-category" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a>
-    </div>
-
-
-    </div>
-  </header>
+  
+    
+    <h3 class="article-title"><span>Linux</span></h3>
+    
   
 
-  <div class="content e-content" itemprop="articleBody">
-    <p>Linux基本知识及Shell基础用法</p>
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2022/06/30/Linux/" rel="bookmark">
+        <time class="entry-date published" datetime="2022-06-30T03:06:00.000Z">
+          2022-06-30
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>Linux基本知识及Shell基础用法</p>
 <span id="more"></span>
 
 <h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><p>实质:内核<br>应用场景:**服务器领域(最强的领域)**，桌面开发，嵌入式<br>特性:免费稳定高效<br>主要发行版:ubuntu, CentOS, RedHat</p>
@@ -548,143 +458,63 @@ job <span class="token number">9</span> at <span class="token number">2013</span
 <p>atq:查看当前等待运行的job</p>
 <p>atrm [工作号] 删除指定的job</p>
 
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/笔记/">笔记</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Linux/">Linux</a><a href="/tags/Shell/">Shell</a><a href="/tags/操作系统/">操作系统</a>
+    </span>
+    
+
+    </div>
+
+    
   </div>
 </article>
 
+  
 
 
-        
-          <div id="footer-post-container">
-  <div id="footer-post">
 
-    <div id="nav-footer" style="display: none">
-      <ul>
-        
-          <li><a href="/">首页</a></li>
-        
-          <li><a href="/about/">关于</a></li>
-        
-          <li><a href="/archives/">归档</a></li>
-        
-          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
-        
-      </ul>
-    </div>
 
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2024 Zephyr
+    
+  </p>
+</footer>
     
     
-      <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux"><span class="toc-number">1.</span> <span class="toc-text">Linux</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">Linux目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vi%E5%92%8Cvim"><span class="toc-number">1.2.</span> <span class="toc-text">vi和vim</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vi%E5%92%8Cvim%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">vi和vim常用的三种模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E5%B1%9E%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">文件基本属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#file-type"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">file type</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%B1%9E%E4%B8%BB%E5%92%8C%E5%B1%9E%E7%BB%84"><span class="toc-number">1.3.1.</span> <span class="toc-text">文件属主和属组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7"><span class="toc-number">1.3.2.</span> <span class="toc-text">更改文件属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.3.</span> <span class="toc-text">链接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AC%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">硬连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">软连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">语法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8C%87%E4%BB%A4"><span class="toc-number">1.4.</span> <span class="toc-text">文件目录指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7"><span class="toc-number">1.6.</span> <span class="toc-text">管理用户</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E5%92%8C%E6%B3%A8%E9%94%80"><span class="toc-number">1.6.1.</span> <span class="toc-text">用户登录和注销</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7"><span class="toc-number">1.6.2.</span> <span class="toc-text">添加用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A-x2F-%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><span class="toc-number">1.6.3.</span> <span class="toc-text">指定&#x2F;修改密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7"><span class="toc-number">1.6.4.</span> <span class="toc-text">删除用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-number">1.6.5.</span> <span class="toc-text">查询用户信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%92%E8%89%B2%E7%BB%84"><span class="toc-number">1.6.6.</span> <span class="toc-text">角色组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.7.</span> <span class="toc-text">用户和组相关文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE%E6%8C%87%E4%BB%A4"><span class="toc-number">1.7.</span> <span class="toc-text">搜索查找指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E7%BA%A7%E5%88%AB"><span class="toc-number">1.8.</span> <span class="toc-text">运行级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86%EF%BC%88%E5%BE%85%E8%A1%A5%E5%85%A8%EF%BC%89"><span class="toc-number">1.9.</span> <span class="toc-text">磁盘管理（待补全）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6-Crond"><span class="toc-number">1.10.</span> <span class="toc-text">任务调度 Crond</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Crontab"><span class="toc-number">1.10.1.</span> <span class="toc-text">Crontab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#at"><span class="toc-number">1.10.2.</span> <span class="toc-text">at</span></a></li></ol></li></ol></li></ol>
-      </div>
-    
-
-    <div id="share-footer" style="display: none">
-      <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://faustpromaxpx.github.io/2022/06/30/Linux/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&text=Linux"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&is_video=false&description=Linux"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Linux&body=Check out this article: http://faustpromaxpx.github.io/2022/06/30/Linux/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&title=Linux"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://faustpromaxpx.github.io/2022/06/30/Linux/&name=Linux&description=&lt;p&gt;Linux基本知识及Shell基础用法&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://faustpromaxpx.github.io/2022/06/30/Linux/&t=Linux"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-
-    <div id="actions-footer">
-        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
-        
-          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
-        
-        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
-        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
-    </div>
-
   </div>
 </div>
-
-        
-        <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy;
-    
-    
-    2016-2024
-    Zephyr
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-        <!--
-       --><li><a href="/">首页</a></li><!--
-     --><!--
-       --><li><a href="/about/">关于</a></li><!--
-     --><!--
-       --><li><a href="/archives/">归档</a></li><!--
-     --><!--
-       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
-     -->
-      </ul>
-    </nav>
-  </div>
-</footer>
-
-    </div>
-    <!-- styles -->
-
-
-
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
-
-
-    <!-- jquery -->
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
-
-
-
-
-<!-- clipboard -->
-
-  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
-  
-  <script type="text/javascript">
-  $(function() {
-    // copy-btn HTML
-    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
-    btn += '<i class="fa-regular fa-clone"></i>';
-    btn += '</span>';
-    // mount it!
-    $(".highlight table").before(btn);
-    var clip = new ClipboardJS('.btn-copy', {
-      text: function(trigger) {
-        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
-      }
-    });
-    clip.on('success', function(e) {
-      e.trigger.setAttribute('aria-label', "复制成功！");
-      e.clearSelection();
-    })
-  })
-  </script>
-
-
-<script src="/js/main.js"></script>
-
-<!-- search -->
-
-<!-- Baidu Analytics -->
-
-<!-- Cloudflare Analytics -->
-
-<!-- Disqus Comments -->
-
-<!-- utterances Comments -->
-
 </body>
 </html>
