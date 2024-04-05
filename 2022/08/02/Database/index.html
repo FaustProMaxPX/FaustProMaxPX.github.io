@@ -1,432 +1,214 @@
-<!DOCTYPE HTML>
-<html lang="zh-CN">
-
-
+<!DOCTYPE html>
+<html lang=zh>
 <head>
+    <!-- so meta -->
     <meta charset="utf-8">
-    <meta name="keywords" content="Remake | 数据库, 狂奔的蜗牛">
-    <meta name="description" content="菜狗的Remake之路 – 数据库篇
-
-DatabaseSQLGrammarsql描述的是我需要什么，而非怎么做。底层交给DBMS实现。
-
-limit
-
-limit [Integer]
-查找表中前Integer条记录。通常与orderby一">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="菜狗的Remake之路 – 数据库篇">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Remake | 数据库">
+<meta property="og:url" content="http://faustpromaxpx.github.io/2022/08/02/Database/index.html">
+<meta property="og:site_name" content="狂奔的蜗牛">
+<meta property="og:description" content="菜狗的Remake之路 – 数据库篇">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220528161445934.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220528161648072.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220528163256111.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220530094616356.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220530150809929.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220531192910950.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220602203353495.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220602205107634.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220608222913582.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220608224724744.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220459995.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220755064.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611220804636.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611224041793.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611230629236.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220611230641780.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220630213659.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220630221951.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709152532.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709152604.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709152629.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709163827.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709165057.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709165303.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709171615.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709172320.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220709172436.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220710154252.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220710160112.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220710160152.png">
+<meta property="og:image" content="c:/Users/Faust/AppData/Roaming/Typora/typora-user-images/image-20220710160212176.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/database20220714152230.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720144434.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720145316.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720152706.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720154642.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220720171607.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220721155144.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220721160700.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/database/20220802152520.png">
+<meta property="article:published_time" content="2022-08-02T08:09:52.000Z">
+<meta property="article:modified_time" content="2023-01-26T04:32:06.652Z">
+<meta property="article:author" content="Faustxc">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/image-20220528161445934.png">
     
-    <style>
-        body{
-            background-image: url(https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/blog20220714125351.png);
-            background-repeat:no-repeat;
-            background-size: 100% 100%;
-            background-attachment:fixed;
-        }
-    </style>
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Remake | 数据库</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
 
 
-    <title>Remake | 数据库 | 狂奔的蜗牛</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- Umami Analytics -->
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
 
-    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
 
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
-
-
-
-<body>
+<body class="max-width mx-auto px3 ltr">
     
-
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">狂奔的蜗牛</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>首页</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>标签</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>分类</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>归档</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>友情链接</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
-    </a>
-  </li>
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2022/08/05/docker/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2022/07/05/rookie-db/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://faustpromaxpx.github.io/2022/08/02/Database/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://faustpromaxpx.github.io/2022/08/02/Database/&text=Remake | 数据库"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://faustpromaxpx.github.io/2022/08/02/Database/&is_video=false&description=Remake | 数据库"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Remake | 数据库&body=Check out this article: http://faustpromaxpx.github.io/2022/08/02/Database/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://faustpromaxpx.github.io/2022/08/02/Database/&name=Remake | 数据库&description=&lt;p&gt;菜狗的Remake之路 – 数据库篇&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://faustpromaxpx.github.io/2022/08/02/Database/&t=Remake | 数据库"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">狂奔的蜗牛</div>
-        <div class="logo-desc">
-            
-            Never really desperate, only the lost of the soul.
-            
-        </div>
     </div>
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			首页
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			标签
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			分类
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			归档
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			友情链接
-		</a>
-          
-        </li>
-        
-        
-    </ul>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Database"><span class="toc-number">1.</span> <span class="toc-text">Database</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-number">1.1.</span> <span class="toc-text">SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Grammar"><span class="toc-number">1.1.1.</span> <span class="toc-text">Grammar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Concept"><span class="toc-number">1.1.2.</span> <span class="toc-text">Concept</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hardware"><span class="toc-number">1.2.</span> <span class="toc-text">Hardware</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Disk"><span class="toc-number">1.2.1.</span> <span class="toc-text">Disk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Files"><span class="toc-number">1.2.2.</span> <span class="toc-text">Files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page"><span class="toc-number">1.2.3.</span> <span class="toc-text">Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Record"><span class="toc-number">1.2.4.</span> <span class="toc-text">Record</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Index"><span class="toc-number">1.2.5.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ISAM"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">ISAM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-Tree"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">B+ Tree</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Search-Key-and-Ordering"><span class="toc-number">1.2.5.3.</span> <span class="toc-text">Search Key and Ordering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Data-Entry-Storage"><span class="toc-number">1.2.5.4.</span> <span class="toc-text">Data Entry Storage</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Buffer-Management"><span class="toc-number">1.3.</span> <span class="toc-text">Buffer Management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Replacement-Policy"><span class="toc-number">1.3.1.</span> <span class="toc-text">Replacement Policy</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LRU"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">LRU</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Clock"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">Clock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MRU"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">MRU</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DBMS-vs-OS-Buffer-Cache"><span class="toc-number">1.3.2.</span> <span class="toc-text">DBMS vs OS Buffer Cache</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sorting-and-Hashing"><span class="toc-number">1.4.</span> <span class="toc-text">Sorting and Hashing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#out-of-core-algorithm"><span class="toc-number">1.4.1.</span> <span class="toc-text">out-of-core algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Single-passing-Streaming"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">Single passing Streaming</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Double-Buffer"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">Double Buffer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Way"><span class="toc-number">1.4.1.3.</span> <span class="toc-text">2-Way</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hash"><span class="toc-number">1.4.1.4.</span> <span class="toc-text">Hash</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Iterator"><span class="toc-number">1.5.</span> <span class="toc-text">Iterator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%92%8C%E6%9F%A5%E8%AF%A2%E8%A7%84%E5%88%92"><span class="toc-number">1.5.1.</span> <span class="toc-text">关系操作符和查询规划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">迭代器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Select"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">Select</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Heap-Scan"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">Heap Scan</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sort"><span class="toc-number">1.5.2.3.</span> <span class="toc-text">Sort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Group-By"><span class="toc-number">1.5.2.4.</span> <span class="toc-text">Group By</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Join"><span class="toc-number">1.6.</span> <span class="toc-text">Join</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Simple-Nested-Loop-Join"><span class="toc-number">1.6.1.</span> <span class="toc-text">Simple Nested-Loop Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-Nested-Loop-Join"><span class="toc-number">1.6.2.</span> <span class="toc-text">Page Nested-Loop Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Index-Nested-Loop-Join"><span class="toc-number">1.6.3.</span> <span class="toc-text">Index Nested-Loop Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sort-Merge-Join"><span class="toc-number">1.6.4.</span> <span class="toc-text">Sort-Merge Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Grace-Hash-Join"><span class="toc-number">1.6.5.</span> <span class="toc-text">Grace Hash Join</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallel-Query"><span class="toc-number">1.7.</span> <span class="toc-text">Parallel Query</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E6%9E%B6%E6%9E%84"><span class="toc-number">1.7.1.</span> <span class="toc-text">并行架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="toc-number">1.7.2.</span> <span class="toc-text">并行的种类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86"><span class="toc-number">1.7.3.</span> <span class="toc-text">数据划分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parallel-Join"><span class="toc-number">1.7.4.</span> <span class="toc-text">Parallel Join</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Parallel-Grace-Hash-Join"><span class="toc-number">1.7.4.1.</span> <span class="toc-text">Parallel Grace Hash Join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Parallel-Sort-Merge-Join"><span class="toc-number">1.7.4.2.</span> <span class="toc-text">Parallel Sort-Merge Join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Symmetric-Hash-join"><span class="toc-number">1.7.4.3.</span> <span class="toc-text">Symmetric Hash join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#One-side-shuffle-Join"><span class="toc-number">1.7.4.4.</span> <span class="toc-text">One-side shuffle Join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Broadcast-Join"><span class="toc-number">1.7.4.5.</span> <span class="toc-text">Broadcast Join</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-Optimization"><span class="toc-number">1.7.5.</span> <span class="toc-text">Query Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">1.7.5.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5"><span class="toc-number">1.7.5.2.</span> <span class="toc-text">优化手段</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DB-Design"><span class="toc-number">1.8.</span> <span class="toc-text">DB Design</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ER-Models"><span class="toc-number">1.8.1.</span> <span class="toc-text">ER Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FDs-and-normalization"><span class="toc-number">1.8.2.</span> <span class="toc-text">FDs and normalization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Decomposition"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">Decomposition</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Lossless-Join-Decomposition"><span class="toc-number">1.8.2.1.1.</span> <span class="toc-text">Lossless Join Decomposition</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Dependency-Preserving-Decomposition"><span class="toc-number">1.8.2.1.2.</span> <span class="toc-text">Dependency Preserving Decomposition</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Concurrency"><span class="toc-number">1.9.</span> <span class="toc-text">Concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.9.1.</span> <span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ACID"><span class="toc-number">1.9.1.1.</span> <span class="toc-text">ACID</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-number">1.9.1.2.</span> <span class="toc-text">可串行化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">1.9.1.3.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%A4%E6%AE%B5%E9%94%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.9.1.3.1.</span> <span class="toc-text">两段锁协议</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%9A%E7%B2%92%E5%BA%A6%E9%94%81"><span class="toc-number">1.9.1.3.2.</span> <span class="toc-text">多粒度锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E5%90%91%E9%94%81"><span class="toc-number">1.9.1.3.3.</span> <span class="toc-text">意向锁</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D"><span class="toc-number">1.9.1.4.</span> <span class="toc-text">恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AD%96%E7%95%A5"><span class="toc-number">1.9.1.4.1.</span> <span class="toc-text">策略</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%97%A5%E5%BF%97"><span class="toc-number">1.9.1.4.2.</span> <span class="toc-text">日志</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D"><span class="toc-number">1.9.1.4.3.</span> <span class="toc-text">崩溃恢复</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Distributed-transactions"><span class="toc-number">1.10.</span> <span class="toc-text">Distributed transactions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E5%88%86%E9%85%8D"><span class="toc-number">1.10.1.</span> <span class="toc-text">锁的分配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Distributed-Commit%EF%BC%9A2PC"><span class="toc-number">1.10.2.</span> <span class="toc-text">Distributed Commit：2PC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Failure-handling"><span class="toc-number">1.10.3.</span> <span class="toc-text">Failure handling</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
 </div>
 
-
-        </div>
-
-        
-    </nav>
-
-</header>
-
     
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Remake | 数据库
+    </h1>
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
-    <div class="container" style="right: 0px;left: 0px;">
-        <div class="row">
-            <div class="col s12 m12 l12">
-                <div class="brand">
-                    <h1 class="description center-align post-title">Remake | 数据库</h1>
-                </div>
-            </div>
-        </div>
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Faustxc</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-08-02T08:09:52.000Z" class="dt-published" itemprop="datePublished">2022-08-02</time>
+        
+      
     </div>
-</div>
 
 
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Remake/">Remake</a>
+    </div>
 
 
-<main class="post-container content">
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a>
+    </div>
 
-    
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
-<style>
-    #articleContent h1::before,
-    #articleContent h2::before,
-    #articleContent h3::before,
-    #articleContent h4::before,
-    #articleContent h5::before,
-    #articleContent h6::before {
-        display: block;
-        content: " ";
-        height: 100px;
-        margin-top: -100px;
-        visibility: hidden;
-    }
 
-    #articleContent :focus {
-        outline: none;
-    }
+    </div>
+  </header>
+  
 
-    .toc-fixed {
-        position: fixed;
-        top: 64px;
-    }
-
-    .toc-widget {
-        width: 345px;
-        padding-left: 20px;
-    }
-
-    .toc-widget .toc-title {
-        padding: 35px 0 15px 17px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 1.5rem;
-    }
-
-    .toc-widget ol {
-        padding: 0;
-        list-style: none;
-    }
-
-    #toc-content {
-        padding-bottom: 30px;
-        overflow: auto;
-    }
-
-    #toc-content ol {
-        padding-left: 10px;
-    }
-
-    #toc-content ol li {
-        padding-left: 10px;
-    }
-
-    #toc-content .toc-link:hover {
-        color: #42b983;
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    #toc-content .toc-link::before {
-        background-color: transparent;
-        max-height: 25px;
-
-        position: absolute;
-        right: 23.5vw;
-        display: block;
-    }
-
-    #toc-content .is-active-link {
-        color: #42b983;
-    }
-
-    #floating-toc-btn {
-        position: fixed;
-        right: 15px;
-        bottom: 76px;
-        padding-top: 15px;
-        margin-bottom: 0;
-        z-index: 998;
-    }
-
-    #floating-toc-btn .btn-floating {
-        width: 48px;
-        height: 48px;
-    }
-
-    #floating-toc-btn .btn-floating i {
-        line-height: 48px;
-        font-size: 1.4rem;
-    }
-</style>
-<div class="row">
-    <div id="main-content" class="col s12 m12 l9">
-        <!-- 文章内容详情 -->
-<div id="artDetail">
-    <div class="card">
-        <div class="card-content article-info">
-            <div class="row tag-cate">
-                <div class="col s7">
-                    
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                <span class="chip bg-color">数据库</span>
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-                <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/Remake/" class="post-category">
-                                Remake
-                            </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="post-info">
-                
-                <div class="post-date info-break-policy">
-                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-08-02
-                </div>
-                
-
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    10.2k
-                </div>
-                
-
-                
-                <div class="info-break-policy">
-                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    37 分
-                </div>
-                
-
-                
-            </div>
-        </div>
-        <hr class="clearfix">
-
-        
-        <!-- 是否加载使用自带的 prismjs. -->
-        <link rel="stylesheet" href="/libs/prism/prism.min.css">
-        
-
-        
-
-        <div class="card-content article-card-content">
-            <div id="articleContent">
-                <p>菜狗的Remake之路 – 数据库篇</p>
+  <div class="content e-content" itemprop="articleBody">
+    <p>菜狗的Remake之路 – 数据库篇</p>
 <span id="more"></span>
 <h1 id="Database"><a href="#Database" class="headerlink" title="Database"></a>Database</h1><h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h2><h3 id="Grammar"><a href="#Grammar" class="headerlink" title="Grammar"></a>Grammar</h3><p>sql描述的是我需要什么，而非怎么做。底层交给DBMS实现。</p>
 <blockquote>
@@ -1222,831 +1004,143 @@ close():
 <li>检测到Commit/Abort log后，将状态做出对于的修改，让恢复进程将状态信息发送给参与者，一旦所有的参与者都确认收到，就写入End记录。</li>
 </ul>
 
-                
-            </div>
-            <hr/>
-
-            
-
-    <div class="reprint" id="reprint-statement">
-        
-            <div class="reprint__author">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-user">
-                        文章作者:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">Faustxc</a>
-                </span>
-            </div>
-            <div class="reprint__type">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-link">
-                        文章链接:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    <a href="http://FaustProMaxPX.github.io/2022/08/02/Database/">http://FaustProMaxPX.github.io/2022/08/02/Database/</a>
-                </span>
-            </div>
-            <div class="reprint__notice">
-                <span class="reprint-meta" style="font-weight: bold;">
-                    <i class="fas fa-copyright">
-                        版权声明:
-                    </i>
-                </span>
-                <span class="reprint-info">
-                    本博客所有文章除特別声明外，均采用
-                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
-                    许可协议。转载请注明来源
-                    <a href="/about" target="_blank">Faustxc</a>
-                    !
-                </span>
-            </div>
-        
-    </div>
-
-    <script async defer>
-      document.addEventListener("copy", function (e) {
-        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
-        M.toast({html: toastHTML})
-      });
-
-      function navToReprintStatement() {
-        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
-      }
-    </script>
-
-
-
-            <div class="tag_share" style="display: block;">
-                <div class="post-meta__tag-list" style="display: inline-block;">
-                    
-                        <div class="article-tag">
-                            
-                                <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                    <span class="chip bg-color">数据库</span>
-                                </a>
-                            
-                        </div>
-                    
-                </div>
-                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
-<div id="article-share">
-
-    
-    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
-    
-
-    
-
-</div>
-
-                </div>
-            </div>
-            
-                <style>
-    #reward {
-        margin: 40px 0;
-        text-align: center;
-    }
-
-    #reward .reward-link {
-        font-size: 1.4rem;
-        line-height: 38px;
-    }
-
-    #reward .btn-floating:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    #rewardModal {
-        width: 320px;
-        height: 350px;
-    }
-
-    #rewardModal .reward-title {
-        margin: 15px auto;
-        padding-bottom: 5px;
-    }
-
-    #rewardModal .modal-content {
-        padding: 10px;
-    }
-
-    #rewardModal .close {
-        position: absolute;
-        right: 15px;
-        top: 15px;
-        color: rgba(0, 0, 0, 0.5);
-        font-size: 1.3rem;
-        line-height: 20px;
-        cursor: pointer;
-    }
-
-    #rewardModal .close:hover {
-        color: #ef5350;
-        transform: scale(1.3);
-        -moz-transform:scale(1.3);
-        -webkit-transform:scale(1.3);
-        -o-transform:scale(1.3);
-    }
-
-    #rewardModal .reward-tabs {
-        margin: 0 auto;
-        width: 210px;
-    }
-
-    .reward-tabs .tabs {
-        height: 38px;
-        margin: 10px auto;
-        padding-left: 0;
-    }
-
-    .reward-content ul {
-        padding-left: 0 !important;
-    }
-
-    .reward-tabs .tabs .tab {
-        height: 38px;
-        line-height: 38px;
-    }
-
-    .reward-tabs .tab a {
-        color: #fff;
-        background-color: #ccc;
-    }
-
-    .reward-tabs .tab a:hover {
-        background-color: #ccc;
-        color: #fff;
-    }
-
-    .reward-tabs .wechat-tab .active {
-        color: #fff !important;
-        background-color: #22AB38 !important;
-    }
-
-    .reward-tabs .alipay-tab .active {
-        color: #fff !important;
-        background-color: #019FE8 !important;
-    }
-
-    .reward-tabs .reward-img {
-        width: 210px;
-        height: 210px;
-    }
-</style>
-
-<div id="reward">
-    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
-
-    <!-- Modal Structure -->
-    <div id="rewardModal" class="modal">
-        <div class="modal-content">
-            <a class="close modal-close"><i class="fas fa-times"></i></a>
-            <h4 class="reward-title">你的赏识是我前进的动力</h4>
-            <div class="reward-content">
-                <div class="reward-tabs">
-                    <ul class="tabs row">
-                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-                    </ul>
-                    <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
-                    </div>
-                    <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(function () {
-        $('.tabs').tabs();
-    });
-</script>
-
-            
-        </div>
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-<article id="prenext-posts" class="prev-next articles">
-    <div class="row article-row">
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
-            <div class="card">
-                <a href="/2022/08/05/docker/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="docker">
-                        
-                        <span class="card-title">docker</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            docker 入门
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-05
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/docker/">
-                        <span class="chip bg-color">docker</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2022/07/05/rookie-db/">
-                    <div class="card-image">
-                        
-                        <img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/rookiedb20220706225650.png" class="responsive-img" alt="rookie db">
-                        
-                        <span class="card-title">rookie db</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Rookie DB 实现cs186 project实现评价：这个project强度有点高，略微有些折磨。
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-05
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E7%8E%B0/" class="post-category">
-                                    项目实现
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Java/">
-                        <span class="chip bg-color">Java</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">数据库</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-    </div>
+  </div>
 </article>
 
-</div>
 
 
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
 
-<!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li>
+        
+      </ul>
+    </div>
 
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Database"><span class="toc-number">1.</span> <span class="toc-text">Database</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-number">1.1.</span> <span class="toc-text">SQL</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Grammar"><span class="toc-number">1.1.1.</span> <span class="toc-text">Grammar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Concept"><span class="toc-number">1.1.2.</span> <span class="toc-text">Concept</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hardware"><span class="toc-number">1.2.</span> <span class="toc-text">Hardware</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Disk"><span class="toc-number">1.2.1.</span> <span class="toc-text">Disk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Files"><span class="toc-number">1.2.2.</span> <span class="toc-text">Files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page"><span class="toc-number">1.2.3.</span> <span class="toc-text">Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Record"><span class="toc-number">1.2.4.</span> <span class="toc-text">Record</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Index"><span class="toc-number">1.2.5.</span> <span class="toc-text">Index</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ISAM"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">ISAM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-Tree"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">B+ Tree</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Search-Key-and-Ordering"><span class="toc-number">1.2.5.3.</span> <span class="toc-text">Search Key and Ordering</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Data-Entry-Storage"><span class="toc-number">1.2.5.4.</span> <span class="toc-text">Data Entry Storage</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Buffer-Management"><span class="toc-number">1.3.</span> <span class="toc-text">Buffer Management</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Replacement-Policy"><span class="toc-number">1.3.1.</span> <span class="toc-text">Replacement Policy</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LRU"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">LRU</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Clock"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">Clock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MRU"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">MRU</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DBMS-vs-OS-Buffer-Cache"><span class="toc-number">1.3.2.</span> <span class="toc-text">DBMS vs OS Buffer Cache</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sorting-and-Hashing"><span class="toc-number">1.4.</span> <span class="toc-text">Sorting and Hashing</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#out-of-core-algorithm"><span class="toc-number">1.4.1.</span> <span class="toc-text">out-of-core algorithm</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Single-passing-Streaming"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">Single passing Streaming</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Double-Buffer"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">Double Buffer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Way"><span class="toc-number">1.4.1.3.</span> <span class="toc-text">2-Way</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hash"><span class="toc-number">1.4.1.4.</span> <span class="toc-text">Hash</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Iterator"><span class="toc-number">1.5.</span> <span class="toc-text">Iterator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E6%93%8D%E4%BD%9C%E7%AC%A6%E5%92%8C%E6%9F%A5%E8%AF%A2%E8%A7%84%E5%88%92"><span class="toc-number">1.5.1.</span> <span class="toc-text">关系操作符和查询规划</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">迭代器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Select"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">Select</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Heap-Scan"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">Heap Scan</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Sort"><span class="toc-number">1.5.2.3.</span> <span class="toc-text">Sort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Group-By"><span class="toc-number">1.5.2.4.</span> <span class="toc-text">Group By</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Join"><span class="toc-number">1.6.</span> <span class="toc-text">Join</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Simple-Nested-Loop-Join"><span class="toc-number">1.6.1.</span> <span class="toc-text">Simple Nested-Loop Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Page-Nested-Loop-Join"><span class="toc-number">1.6.2.</span> <span class="toc-text">Page Nested-Loop Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Index-Nested-Loop-Join"><span class="toc-number">1.6.3.</span> <span class="toc-text">Index Nested-Loop Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sort-Merge-Join"><span class="toc-number">1.6.4.</span> <span class="toc-text">Sort-Merge Join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Grace-Hash-Join"><span class="toc-number">1.6.5.</span> <span class="toc-text">Grace Hash Join</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parallel-Query"><span class="toc-number">1.7.</span> <span class="toc-text">Parallel Query</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E6%9E%B6%E6%9E%84"><span class="toc-number">1.7.1.</span> <span class="toc-text">并行架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="toc-number">1.7.2.</span> <span class="toc-text">并行的种类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%92%E5%88%86"><span class="toc-number">1.7.3.</span> <span class="toc-text">数据划分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parallel-Join"><span class="toc-number">1.7.4.</span> <span class="toc-text">Parallel Join</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Parallel-Grace-Hash-Join"><span class="toc-number">1.7.4.1.</span> <span class="toc-text">Parallel Grace Hash Join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Parallel-Sort-Merge-Join"><span class="toc-number">1.7.4.2.</span> <span class="toc-text">Parallel Sort-Merge Join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Symmetric-Hash-join"><span class="toc-number">1.7.4.3.</span> <span class="toc-text">Symmetric Hash join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#One-side-shuffle-Join"><span class="toc-number">1.7.4.4.</span> <span class="toc-text">One-side shuffle Join</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Broadcast-Join"><span class="toc-number">1.7.4.5.</span> <span class="toc-text">Broadcast Join</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Query-Optimization"><span class="toc-number">1.7.5.</span> <span class="toc-text">Query Optimization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">1.7.5.1.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5"><span class="toc-number">1.7.5.2.</span> <span class="toc-text">优化手段</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DB-Design"><span class="toc-number">1.8.</span> <span class="toc-text">DB Design</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ER-Models"><span class="toc-number">1.8.1.</span> <span class="toc-text">ER Models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FDs-and-normalization"><span class="toc-number">1.8.2.</span> <span class="toc-text">FDs and normalization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Decomposition"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">Decomposition</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Lossless-Join-Decomposition"><span class="toc-number">1.8.2.1.1.</span> <span class="toc-text">Lossless Join Decomposition</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Dependency-Preserving-Decomposition"><span class="toc-number">1.8.2.1.2.</span> <span class="toc-text">Dependency Preserving Decomposition</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Concurrency"><span class="toc-number">1.9.</span> <span class="toc-text">Concurrency</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.9.1.</span> <span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ACID"><span class="toc-number">1.9.1.1.</span> <span class="toc-text">ACID</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="toc-number">1.9.1.2.</span> <span class="toc-text">可串行化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%81"><span class="toc-number">1.9.1.3.</span> <span class="toc-text">锁</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%A4%E6%AE%B5%E9%94%81%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.9.1.3.1.</span> <span class="toc-text">两段锁协议</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%9A%E7%B2%92%E5%BA%A6%E9%94%81"><span class="toc-number">1.9.1.3.2.</span> <span class="toc-text">多粒度锁</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%84%8F%E5%90%91%E9%94%81"><span class="toc-number">1.9.1.3.3.</span> <span class="toc-text">意向锁</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%81%A2%E5%A4%8D"><span class="toc-number">1.9.1.4.</span> <span class="toc-text">恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AD%96%E7%95%A5"><span class="toc-number">1.9.1.4.1.</span> <span class="toc-text">策略</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%97%A5%E5%BF%97"><span class="toc-number">1.9.1.4.2.</span> <span class="toc-text">日志</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D"><span class="toc-number">1.9.1.4.3.</span> <span class="toc-text">崩溃恢复</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Distributed-transactions"><span class="toc-number">1.10.</span> <span class="toc-text">Distributed transactions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E7%9A%84%E5%88%86%E9%85%8D"><span class="toc-number">1.10.1.</span> <span class="toc-text">锁的分配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Distributed-Commit%EF%BC%9A2PC"><span class="toc-number">1.10.2.</span> <span class="toc-text">Distributed Commit：2PC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Failure-handling"><span class="toc-number">1.10.3.</span> <span class="toc-text">Failure handling</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
 
-  <!-- 是否加载使用自带的 prismjs. -->
-  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
-
-
-<!-- 代码语言 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
-
-
-<!-- 代码块复制 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
-
-
-<!-- 代码块收缩 -->
-
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
-
-
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://faustpromaxpx.github.io/2022/08/02/Database/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://faustpromaxpx.github.io/2022/08/02/Database/&text=Remake | 数据库"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://faustpromaxpx.github.io/2022/08/02/Database/&is_video=false&description=Remake | 数据库"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Remake | 数据库&body=Check out this article: http://faustpromaxpx.github.io/2022/08/02/Database/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://faustpromaxpx.github.io/2022/08/02/Database/&title=Remake | 数据库"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://faustpromaxpx.github.io/2022/08/02/Database/&name=Remake | 数据库&description=&lt;p&gt;菜狗的Remake之路 – 数据库篇&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://faustpromaxpx.github.io/2022/08/02/Database/&t=Remake | 数据库"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
 
     </div>
-    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
-        <div class="toc-widget card" style="background-color: white;">
-            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
-            <div id="toc-content"></div>
-        </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
     </div>
+
+  </div>
 </div>
 
-<!-- TOC 悬浮按钮. -->
-
-<div id="floating-toc-btn" class="hide-on-med-and-down">
-    <a class="btn-floating btn-large bg-color">
-        <i class="fas fa-list-ul"></i>
-    </a>
-</div>
-
-
-<script src="/libs/tocbot/tocbot.min.js"></script>
-<script>
-    $(function () {
-        tocbot.init({
-            tocSelector: '#toc-content',
-            contentSelector: '#articleContent',
-            headingsOffset: -($(window).height() * 0.4 - 45),
-            collapseDepth: Number('0'),
-            headingSelector: 'h2, h3, h4'
-        });
-
-        // Set scroll toc fixed.
-        let tocHeight = parseInt($(window).height() * 0.4 - 64);
-        let $tocWidget = $('.toc-widget');
-        $(window).scroll(function () {
-            let scroll = $(window).scrollTop();
-            /* add post toc fixed. */
-            if (scroll > tocHeight) {
-                $tocWidget.addClass('toc-fixed');
-            } else {
-                $tocWidget.removeClass('toc-fixed');
-            }
-        });
-
         
-        /* 修复文章卡片 div 的宽度. */
-        let fixPostCardWidth = function (srcId, targetId) {
-            let srcDiv = $('#' + srcId);
-            if (srcDiv.length === 0) {
-                return;
-            }
-
-            let w = srcDiv.width();
-            if (w >= 450) {
-                w = w + 21;
-            } else if (w >= 350 && w < 450) {
-                w = w + 18;
-            } else if (w >= 300 && w < 350) {
-                w = w + 16;
-            } else {
-                w = w + 14;
-            }
-            $('#' + targetId).width(w);
-        };
-
-        // 切换TOC目录展开收缩的相关操作.
-        const expandedClass = 'expanded';
-        let $tocAside = $('#toc-aside');
-        let $mainContent = $('#main-content');
-        $('#floating-toc-btn .btn-floating').click(function () {
-            if ($tocAside.hasClass(expandedClass)) {
-                $tocAside.removeClass(expandedClass).hide();
-                $mainContent.removeClass('l9');
-            } else {
-                $tocAside.addClass(expandedClass).show();
-                $mainContent.addClass('l9');
-            }
-            fixPostCardWidth('artDetail', 'prenext-posts');
-        });
-        
-    });
-</script>
-
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
     
-
-</main>
-
-
-<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
-    });
-</script>
-
-
-
-    <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="503838841"
-                   fixed='true'
-                   autoplay='false'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="/libs/aplayer/Meting.min.js"></script>
-
-    
-
-    <div class="container row center-align"
-         style="margin-bottom: 0px !important;">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            
-                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">224.2k</span>
-            
-            <br>
-            <span id="sitetime"></span>
-            <br>
-            <!-- 
-                <span id="year">2019-2023</span>
-            
-            <a href="/about" target="_blank">Faustxc</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
-            <br> -->
-            
-            
-            
-                
-            
-            <!-- 
-                <span id="busuanzi_container_site_pv" style="display: none;">
-                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
-                    <span id="busuanzi_value_site_pv" class="white-color"></span>
-            </span>
-            
-            
-                <span id="busuanzi_container_site_uv" style="display: none;">
-                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
-                    <span id="busuanzi_value_site_uv" class="white-color"></span>
-            </span>
-             -->
-            <br>
-
-            <!-- 运行天数提醒. -->
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/FaustProMaxPX" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:1546327522@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1546327522" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1546327522" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
+    2016-2024
+    Faustxc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
 </footer>
 
-<div class="progress-bar"></div>
-
-<script language=javascript> 
-    function siteTime() { 
-        window.setTimeout("siteTime()", 1000); 
-        var seconds = 1000; 
-        var minutes = seconds * 60; 
-        var hours = minutes * 60; 
-        var days = hours * 24; 
-        var years = days * 365; 
-        var today = new Date(); 
-        var todayYear = today.getFullYear();
-        var todayMonth = today.getMonth() + 1; 
-        var todayDate = today.getDate(); 
-        var todayHour = today.getHours(); 
-        var todayMinute = today.getMinutes(); 
-        var todaySecond = today.getSeconds(); 
-        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳) 
-        year - 作为date对象的年份，为4位年份值 
-        month - 0-11之间的整数，做为date对象的月份 
-        day - 1-31之间的整数，做为date对象的天数 
-        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数 
-        minutes - 0-59之间的整数，做为date对象的分钟数 
-        seconds - 0-59之间的整数，做为date对象的秒数 
-        microseconds - 0-999之间的整数，做为date对象的毫秒数 */ 
-        var t1 = Date.UTC(2022, 05, 29, 00, 00, 00); //北京时间2018-2-13 00:00:00
-        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
-        var diff = t2 - t1; 
-        var diffYears = Math.floor(diff / years); 
-        var diffDays = Math.floor((diff / days) - diffYears * 365); 
-        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours); 
-        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes); 
-        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds); 
-        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒"; }
-        
-        siteTime(); 
-
-</script>
-<script> 
-    $(document).ready(function () { 
-        var int = setInterval(fixCount, 50); // 50ms周期检测函数 
-        var pvcountOffset = 80000; // 初始化首次数据 
-        var uvcountOffset = 20000; function fixCount() { 
-            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") { 
-                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset); 
-                clearInterval(int); 
-            } 
-            if ($("#busuanzi_container_site_pv").css("display") != "none") { 
-                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
-                clearInterval(int); // 停止检测 
-            } } }); 
-</script>
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
-            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
     </div>
-</div>
-
-<script type="text/javascript">
-$(function () {
-    var searchFunc = function (path, search_id, content_id) {
-        'use strict';
-        $.ajax({
-            url: path,
-            dataType: "xml",
-            success: function (xmlResponse) {
-                // get the contents from search data
-                var datas = $("entry", xmlResponse).map(function () {
-                    return {
-                        title: $("title", this).text(),
-                        content: $("content", this).text(),
-                        url: $("url", this).text()
-                    };
-                }).get();
-                var $input = document.getElementById(search_id);
-                var $resultContent = document.getElementById(content_id);
-                $input.addEventListener('input', function () {
-                    var str = '<ul class=\"search-result-list\">';
-                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-                    $resultContent.innerHTML = "";
-                    if (this.value.trim().length <= 0) {
-                        return;
-                    }
-                    // perform local searching
-                    datas.forEach(function (data) {
-                        var isMatch = true;
-                        var data_title = data.title.trim().toLowerCase();
-                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
-                        var data_url = data.url;
-                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
-                        var index_title = -1;
-                        var index_content = -1;
-                        var first_occur = -1;
-                        // only match artiles with not empty titles and contents
-                        if (data_title !== '' && data_content !== '') {
-                            keywords.forEach(function (keyword, i) {
-                                index_title = data_title.indexOf(keyword);
-                                index_content = data_content.indexOf(keyword);
-                                if (index_title < 0 && index_content < 0) {
-                                    isMatch = false;
-                                } else {
-                                    if (index_content < 0) {
-                                        index_content = 0;
-                                    }
-                                    if (i === 0) {
-                                        first_occur = index_content;
-                                    }
-                                }
-                            });
-                        }
-                        // show search results
-                        if (isMatch) {
-                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
-                            var content = data.content.trim().replace(/<[^>]+>/g, "");
-                            if (first_occur >= 0) {
-                                // cut out 100 characters
-                                var start = first_occur - 20;
-                                var end = first_occur + 80;
-                                if (start < 0) {
-                                    start = 0;
-                                }
-                                if (start === 0) {
-                                    end = 100;
-                                }
-                                if (end > content.length) {
-                                    end = content.length;
-                                }
-                                var match_content = content.substr(start, end);
-                                // highlight all keywords
-                                keywords.forEach(function (keyword) {
-                                    var regS = new RegExp(keyword, "gi");
-                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
-                                });
-
-                                str += "<p class=\"search-result\">" + match_content + "...</p>"
-                            }
-                            str += "</li>";
-                        }
-                    });
-                    str += "</ul>";
-                    $resultContent.innerHTML = str;
-                });
-            }
-        });
-    };
-
-    searchFunc('/search.xml', 'searchInput', 'searchResult');
-});
-</script>
-
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
+    <!-- styles -->
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-    <script src="/js/FunnyTitle.js"></script>
 
-    
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
 
-    
 
-    <!-- 雪花特效 -->
-    
+    <!-- jquery -->
 
-    <!-- 鼠标星星特效 -->
-    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
 
-     
-        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
-        <script src="/libs/others/TencentCaptcha.js"></script>
-        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
-    
 
-    <!-- Baidu Analytics -->
 
-    <!-- Baidu Push -->
 
-<script>
-    (function () {
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        } else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
-    })();
-</script>
+<!-- clipboard -->
 
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
 
-    
 
-    
+<script src="/js/main.js"></script>
 
-    <!--腾讯兔小巢-->
-    
-    
+<!-- search -->
 
-    
+<!-- Baidu Analytics -->
 
-    
+<!-- Cloudflare Analytics -->
 
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
 
 </body>
-
 </html>

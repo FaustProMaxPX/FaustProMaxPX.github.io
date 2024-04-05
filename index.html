@@ -1,1359 +1,330 @@
-<!DOCTYPE HTML>
-<html lang="zh-CN">
-
-
+<!DOCTYPE html>
+<html lang=zh>
 <head>
+    <!-- so meta -->
     <meta charset="utf-8">
-    <meta name="keywords" content="狂奔的蜗牛">
-    <meta name="description" content="狂奔的蜗牛">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta property="og:type" content="website">
+<meta property="og:title" content="狂奔的蜗牛">
+<meta property="og:url" content="http://faustpromaxpx.github.io/index.html">
+<meta property="og:site_name" content="狂奔的蜗牛">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Faustxc">
+<meta name="twitter:card" content="summary">
     
-    <style>
-        body{
-            background-image: url(https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/blog20220714125351.png);
-            background-repeat:no-repeat;
-            background-size: 100% 100%;
-            background-attachment:fixed;
-        }
-    </style>
-
-
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
     <title>狂奔的蜗牛</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- async scripts -->
+    <!-- Google Analytics -->
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
 
-    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+    <!-- Umami Analytics -->
 
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
-
-
-
-<body>
+<body class="max-width mx-auto px3 ltr">
     
-
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">狂奔的蜗牛</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
-      
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
-      
-      <span>首页</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
-      
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
-      
-      <span>标签</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
-      
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>分类</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/archives" class="waves-effect waves-light">
-      
-      <i class="fas fa-archive" style="zoom: 0.6;"></i>
-      
-      <span>归档</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>友情链接</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
+    <div class="content index py4 h-card">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">狂奔的蜗牛</div>
-        <div class="logo-desc">
-            
-            Never really desperate, only the lost of the soul.
-            
-        </div>
+          <header id="header">
+  <a class="u-url u-uid" href="/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">狂奔的蜗牛</h1>
     </div>
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			首页
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			标签
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			分类
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/archives" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-archive"></i>
-			
-			归档
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			友情链接
-		</a>
-          
-        </li>
-        
-        
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="目录"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li><a href="/">首页</a></li><!--
+   --><!--
+     --><li><a href="/about/">关于</a></li><!--
+   --><!--
+     --><li><a href="/archives/">归档</a></li><!--
+   --><!--
+     --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+   -->
     </ul>
-</div>
-
-
-        </div>
-
-        
-    </nav>
-
+  </div>
 </header>
 
+        
+        <section id="about" class="p-note">
+  
+  
+    <p>
+      在这里找到我：
+      
+      
+      
+        
+        
+          <a class="icon u-url" target="_blank" rel="noopener me" href="http://github.com/probberechts/cactus-dark" aria-label="github" title="github">
+            <i class="fa-brands fa-github"></i><!--
+      ---></a><!--
+    ---><!--
+    --->， 
+        
+      
+        
+        
+          <a class="icon u-url" target="_blank" rel="noopener me" href="/" aria-label="twitter" title="twitter">
+            <i class="fa-brands fa-twitter"></i><!--
+      ---></a><!--
+    ---><!--
+    --->， 
+        
+      
+        
+        
+          <a class="icon u-url" target="_blank" rel="noopener me" href="/" aria-label="facebook" title="facebook">
+            <i class="fa-brands fa-facebook"></i><!--
+      ---></a><!--
+    ---><!--
+    --->， 
+        
+      
+        
+        
+          <a class="icon u-email" target="_blank" rel="noopener" href="mailto:name@email.com" aria-label="mail" title="mail">
+            <i class="fa-solid fa-envelope"></i><!--
+      ---></a>
+        <!--
+    --->， 
+        
+      
+        
+        
+          <a class="icon u-url" target="_blank" rel="noopener me" href="https://mastodon.social/@alice" aria-label="mastodon.social" title="mastodon.social">
+            <i class="fa-brands fa-mastodon"></i><!--
+      ---></a><!--
+    ---><!--
+    ---> 和 
+        
+      
+        
+        
+          <a class="icon u-url" target="_blank" rel="noopener me" href="https://fosstodon.org/@alice" aria-label="fosstodon.org" title="fosstodon.org">
+            <i class="fa-brands fa-mastodon"></i><!--
+      ---></a><!--
+    ---><!--
+    --->.
+        
+      
+    </p>
+  
+</section>
+
+<section id="writing">
+  <span class="h1"><a href="/archives/">文章</a></span>
+  
+  <ul class="post-list">
     
-<style>
-    .carousel-control {
-        width: 45px;
-        height: 45px;
-        line-height: 55px;
-        border-radius: 45px;
-        background: transparent;
-        cursor: pointer;
-        z-index: 100;
-    }
-
-    #prev-cover {
-        position: absolute;
-        top: 48%;
-        left: 8px;
-    }
-
-    #next-cover {
-        position: absolute;
-        top: 48%;
-        right: 8px;;
-    }
-
-    #prev-cover i {
-        margin-right: 3px;
-    }
-
-    #next-cover i {
-        margin-left: 3px;
-    }
-
-    .carousel-control:hover {
-        background-color: rgba(0, 0, 0, .4);
-    }
-
-    .carousel-control i {
-        color: #fff;
-        font-size: 2.4rem;
-    }
-</style>
-
-
-
-<div class="carousel carousel-slider center index-cover" data-indicators="true" style="margin-top: -64px;">
     
-
-    <div class="carousel-item  white-text bg-cover about-cover">
-        <div class="container">
-            <div class="row">
-    <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
-        <div class="brand">
-            <div class="title center-align">
-                
-                人行，路平
-                
-            </div>
-
-            <div class="description center-align">
-                
-                <span id="subtitle"></span>
-                <script src="/libs/typed/typed.js"></script>
-                <script>
-                    var typed = new Typed("#subtitle", {
-                        strings: [ 
-                            
-                                "深藏不露是一种卓越的才能。",
-                            
-                                "It is a great ability to conceal one&#39;s ability",
-                            
-                        ],
-                        startDelay: 300,
-                        typeSpeed: 100,
-                        loop: true,
-                        backSpeed: 50,
-                        showCursor: true
-                    });
-                </script>
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<script>
-    // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
-    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
-</script>
-
-
-
-            <div class="cover-btns">
-                <a href="#indexCard" class="waves-effect waves-light btn">
-                    <i class="fa fa-angle-double-down"></i>开始阅读
-                </a>
-
-                
-                    <a href="https://github.com/FaustProMaxPX/FaustProMaxPX.github.io" class="waves-effect waves-light btn" target="_blank">
-                        <i class="fab fa-github-alt"></i>Github
-                    </a>
-                
-            </div>
-            <div class="cover-social-link">
-    <a href="https://github.com/FaustProMaxPX" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:1546327522@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1546327522" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1546327522" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-        </div>
+      
+    
+    
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2023-05-16T15:37:46.000Z" class="dt-published" itemprop="datePublished">2023-05-16</time>
+        
+      
     </div>
 
+
+        <span>
     
-</div>
-
-<script>
-    $(function () {
-        let coverSlider = $('.carousel');
-
-        //用户触摸轮播自动 restartPlay 是否生效
-        let initUserPressedOrDraggedActive = false
-
-        //用户触摸轮播自动 restartPlay
-        function initUserPressedOrDragged(instance) {
-            setInterval(() => {
-                if (instance.pressed || instance.dragged) {
-                    // console.log('initUserPressedOrDragged: ',instance.pressed,instance.dragged)
-                    restartPlay()
-                }
-            }, 1000)
-        }
-
-        coverSlider.carousel({
-            duration: Number('120'),
-            fullWidth: true,
-            indicators: 'true' === 'true',
-            onCycleTo() {
-                if (!initUserPressedOrDraggedActive) {
-                    // console.log('initUserPressedOrDraggedActive')
-                    initUserPressedOrDragged(this)
-                    initUserPressedOrDraggedActive = true
-                }
-            },
-        })
-
-        let carouselIntervalId;
-        
-        // Loop to call the next cover article picture.
-        let autoCarousel = function () {
-            carouselIntervalId = setInterval(function () {
-                coverSlider.carousel('next');
-            }, 5000);
-        };
-        autoCarousel();
-        
-
-        function restartPlay() {
-            
-            clearInterval(carouselIntervalId);
-            autoCarousel();
-            
-        };
-
-        
-        // prev and next cover post.
-        $('#prev-cover').click(function () {
-            coverSlider.carousel('prev');
-            restartPlay();
-        });
-        $('#next-cover').click(function () {
-            coverSlider.carousel('next');
-            restartPlay();
-        });
-        
-    });
-</script>
-
-
-
-<main class="content">
-
+        <a class="" href="/2023/05/16/rust-ad2/">Rust —— 高级篇（2）</a>
     
-    <div id="indexCard" class="index-card">
-        <div class="container ">
-            <div class="card">
-                <div class="card-content">
-                    
-                        <div class="dream">
+
+
+</span>
+      </li>
     
-    <div class="title center-align">
-        <i class="far fa-lightbulb"></i>&nbsp;&nbsp;我的梦想
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2023-05-06T13:42:45.000Z" class="dt-published" itemprop="datePublished">2023-05-06</time>
+        
+      
     </div>
+
+
+        <span>
     
-    <div class="row">
-        <div class="col l8 offset-l2 m10 offset-m1 s10 offset-s1 center-align text">
-            早日退休。 做一个不需要自我介绍的人
-        </div>
+        <a class="" href="/2023/05/06/rust-ad1/">Rust —— 高级篇（1）</a>
+    
+
+
+</span>
+      </li>
+    
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2023-04-09T03:36:22.000Z" class="dt-published" itemprop="datePublished">2023-04-09</time>
+        
+      
     </div>
-</div>
-
-                    
-
-                    
-
-                    
-
-                    
-                    <div id="recommend-sections" class="recommend">
-                        
 
 
-
-
-
-<div class="title"><i class="far fa-thumbs-up"></i>&nbsp;&nbsp;推荐文章</div>
-
-<div class="row">
-
+        <span>
     
+        <a class="" href="/2023/04/09/rust/">Rust —— 基础篇</a>
     
-    <div class="col s12 m6" >
+
+
+</span>
+      </li>
+    
+      <li class="post-item">
         
-             <div class="post-card" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="meta">
+      
         
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                        
-                            <a href="/categories/Remake/" class="category">Remake</a>
-                        
-                    
-                </div>
-                <a href="/2022/06/29/DataStructure/">
-                    <h3 class="post-title">Remake | 数据结构</h3>
-                </a>
-                <p class="post-description">
-                    
-                        菜狗的Remake之路 – 数据结构篇
-
-
-使用语言：Java
-
-实例化对象的过程
-
-首先根据构造函数传入的参数初始化对象中的属性，然后该对
-                    
-                </p>
-                <a href="/2022/06/29/DataStructure/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #FF5E3A 0%, #FF2A68 100%)" target="_blank">
-                    <i class="icon far fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
+          <time datetime="2023-03-09T06:24:15.000Z" class="dt-published" itemprop="datePublished">2023-03-09</time>
+        
+      
     </div>
+
+
+        <span>
     
+        <a class="" href="/2023/03/09/netty/">netty</a>
     
-    <div class="col s12 m6" >
+
+
+</span>
+      </li>
+    
+      <li class="post-item">
         
-            <div class="post-card" style="background-image: url('/medias/featureimages/22.jpg')">
-            
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                        
-                            <a href="/categories/Remake/" class="category">Remake</a>
-                        
-                    
-                </div>
-                <a href="/2022/08/02/Database/">
-                    <h3 class="post-title">Remake | 数据库</h3>
-                </a>
-                <p class="post-description">
-                    
-                        菜狗的Remake之路 – 数据库篇
-
-DatabaseSQLGrammarsql描述的是我需要什么，而非怎么做。底层交给DBMS实现。
-
-
-                    
-                </p>
-                <a href="/2022/08/02/Database/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #EF4DB6 0%, #C643FC 100%)" target="_blank">
-                    <i class="icon far fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
+    <div class="meta">
+      
+        
+          <time datetime="2023-03-04T09:41:35.000Z" class="dt-published" itemprop="datePublished">2023-03-04</time>
+        
+      
     </div>
+
+
+        <span>
     
+        <a class="" href="/2023/03/04/Spring/">Spring（面试版）</a>
     
-    <div class="col s12 m6" data-aos="zoom-in-up">
+
+
+</span>
+      </li>
+    
+  </ul>
+  
+</section>
+
+
+
         
-             <div class="post-card" style="background-image: url('https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/JavaCupLogo.png')">
-        
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                        
-                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="category">笔记</a>
-                        
-                    
-                </div>
-                <a href="/2022/06/29/Java/">
-                    <h3 class="post-title">Java</h3>
-                </a>
-                <p class="post-description">
-                    
-                        一份关于Java基本操作的笔记
-
-Java随记面向过程编程同一个模块或不同模块的函数能够不受限制的访问全局性数据，全局数据和函数之间缺乏联系
-                    
-                </p>
-                <a href="/2022/06/29/Java/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #1AD6FD 0%, #1D62F0 100%)" target="_blank">
-                    <i class="icon far fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
-    </div>
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
     
     
-    <div class="col s12 m6" data-aos="zoom-in-up">
-        
-             <div class="post-card" style="background-image: url('https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/img/rookiedb20220706225650.png')">
-        
-            <div class="post-body">
-                <div class="post-categories">
-                    
-                        
-                            <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E7%8E%B0/" class="category">项目实现</a>
-                        
-                    
-                </div>
-                <a href="/2022/07/05/rookie-db/">
-                    <h3 class="post-title">rookie db</h3>
-                </a>
-                <p class="post-description">
-                    
-                        Rookie DB 实现cs186 project实现评价：这个project强度有点高，略微有些折磨。
-
-
-B+ TreeTask 1: 
-                    
-                </p>
-                <a href="/2022/07/05/rookie-db/" class="read-more btn waves-effect waves-light" style="background: linear-gradient(to right, #FFCC00 0%, #FF9500 100%)" target="_blank">
-                    <i class="icon far fa-eye fa-fw"></i>阅读更多
-                </a>
-            </div>
-        </div>
-    </div>
-    
-
-</div>
-
-
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    
-
-    
-
-    <!-- 所有文章卡片 -->
-    <article id="articles" class="container articles">
-        <div class="row article-row">
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2023/05/16/rust-ad2/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Rust —— 高级篇（2）">
-                            
-                            <span class="card-title">Rust —— 高级篇（2）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                并发编程创建线程
-let handle = thread::spawn(|| {
-    for i in 1..5 {
-        println!("{i}")
-    }
-});
-handle.join().unwrap();
-
-
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-16
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Rust/">
-                            <span class="chip bg-color">Rust</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2023/05/06/rust-ad1/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Rust —— 高级篇（1）">
-                            
-                            <span class="card-title">Rust —— 高级篇（1）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                闭包Rust中闭包的定义是：可以作为值（函数值）赋值给变量，可以捕获作用域中的值。
-let mut cache = Cacher::new(|s| String::from(s));
-
-上面的|s| String::from(s)就是一个闭
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-06
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Rust/">
-                            <span class="chip bg-color">Rust</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2023/04/09/rust/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Rust —— 基础篇">
-                            
-                            <span class="card-title">Rust —— 基础篇</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                Hello Wrold创建一个项目
-cargo new hello_world
-
-该项目的结构和配置文件都是由cargo生成
-运行项目
-cargo run
-
-# 相当于运行下面的代码
-cargo build
-./target/debug/h
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-04-09
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Rust/">
-                            <span class="chip bg-color">Rust</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2023/03/09/netty/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="netty">
-                            
-                            <span class="card-title">netty</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                Java 网络编程 I/O 模型BIO：同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程处理。适用于连接数目较小且固定的架构，这种方式对服务器的机器资源要求较高，但编写出来的程序比较简单。
-NIO
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-03-09
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
-                            <span class="chip bg-color">网络编程</span>
-                        </a>
-                        
-                        <a href="/tags/Netty/">
-                            <span class="chip bg-color">Netty</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2023/03/04/Spring/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Spring（面试版）">
-                            
-                            <span class="card-title">Spring（面试版）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                IOC控制反转，本质是将用户手动创建对象的控制权，交给程序来管理。主要目的是借助第三方实现具有依赖关系的对象之间的解耦
-将对象之前的依赖关系交给IOC容器来管理，然后由IOC容器完成对象注入。可以很大程度上简化应用的开发。程序员可以从繁杂的
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-03-04
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/java/">
-                            <span class="chip bg-color">java</span>
-                        </a>
-                        
-                        <a href="/tags/Spring/">
-                            <span class="chip bg-color">Spring</span>
-                        </a>
-                        
-                        <a href="/tags/%E9%9D%A2%E8%AF%95/">
-                            <span class="chip bg-color">面试</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-             <!-- 隐藏某个文章 -->
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2023/02/27/offer-java/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Java基础（面试准备版）">
-                            
-                            <span class="card-title">Java基础（面试准备版）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                字节码JVM可以理解的代码就叫做字节码，他不面向任何特定的处理器。并且因为机器处理字节码的速度更高，Java拥有比解释型语言更高的执行效率。
-在将.class文件翻译成机器码这一步中，JVM首先会加载字节码文件，然后通过解释器逐行解释执行。
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-02-27
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/java/">
-                            <span class="chip bg-color">java</span>
-                        </a>
-                        
-                        <a href="/tags/%E9%9D%A2%E8%AF%95/">
-                            <span class="chip bg-color">面试</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-              <!-- 隐藏某个文章 -->
-            
-        </div>
-    </article>
-
-</main>
-
-
-<div class="container paging">
-    <div class="row">
-        <div class="col s6 m4 l4">
-            
-            <a class="left btn-floating btn-large disabled">
-                <i class="fas fa-angle-left"></i>
-            </a>
-            
-        </div>
-        <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">1 / 4</div>
-        </div>
-        <div class="col s6 m4 l4">
-            
-            <a href="/page/2/"
-               class="right btn-floating btn-large waves-effect waves-light bg-color">
-                <i class="fas fa-angle-right"></i>
-            </a>
-            
-        </div>
-    </div>
-</div>
-
-
-
-
-    <footer class="page-footer bg-color">
-    
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-        left: -66px !important;
-    }
-
-    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-        left: 0px !important;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="503838841"
-                   fixed='true'
-                   autoplay='false'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="/libs/aplayer/Meting.min.js"></script>
-
-    
-
-    <div class="container row center-align"
-         style="margin-bottom: 0px !important;">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            
-                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">224.2k</span>
-            
-            <br>
-            <span id="sitetime"></span>
-            <br>
-            <!-- 
-                <span id="year">2019-2023</span>
-            
-            <a href="/about" target="_blank">Faustxc</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
-            <br> -->
-            
-            
-            
-                
-            
-            <!-- 
-                <span id="busuanzi_container_site_pv" style="display: none;">
-                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
-                    <span id="busuanzi_value_site_pv" class="white-color"></span>
-            </span>
-            
-            
-                <span id="busuanzi_container_site_uv" style="display: none;">
-                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
-                    <span id="busuanzi_value_site_uv" class="white-color"></span>
-            </span>
-             -->
-            <br>
-
-            <!-- 运行天数提醒. -->
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/FaustProMaxPX" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:1546327522@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1546327522" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1546327522" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
+    2016-2024
+    Faustxc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
 </footer>
 
-<div class="progress-bar"></div>
-
-<script language=javascript> 
-    function siteTime() { 
-        window.setTimeout("siteTime()", 1000); 
-        var seconds = 1000; 
-        var minutes = seconds * 60; 
-        var hours = minutes * 60; 
-        var days = hours * 24; 
-        var years = days * 365; 
-        var today = new Date(); 
-        var todayYear = today.getFullYear();
-        var todayMonth = today.getMonth() + 1; 
-        var todayDate = today.getDate(); 
-        var todayHour = today.getHours(); 
-        var todayMinute = today.getMinutes(); 
-        var todaySecond = today.getSeconds(); 
-        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳) 
-        year - 作为date对象的年份，为4位年份值 
-        month - 0-11之间的整数，做为date对象的月份 
-        day - 1-31之间的整数，做为date对象的天数 
-        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数 
-        minutes - 0-59之间的整数，做为date对象的分钟数 
-        seconds - 0-59之间的整数，做为date对象的秒数 
-        microseconds - 0-999之间的整数，做为date对象的毫秒数 */ 
-        var t1 = Date.UTC(2022, 05, 29, 00, 00, 00); //北京时间2018-2-13 00:00:00
-        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
-        var diff = t2 - t1; 
-        var diffYears = Math.floor(diff / years); 
-        var diffDays = Math.floor((diff / days) - diffYears * 365); 
-        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours); 
-        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes); 
-        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds); 
-        document.getElementById("sitetime").innerHTML = "本站已运行 " +diffYears+" 年 "+diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒"; }
-        
-        siteTime(); 
-
-</script>
-<script> 
-    $(document).ready(function () { 
-        var int = setInterval(fixCount, 50); // 50ms周期检测函数 
-        var pvcountOffset = 80000; // 初始化首次数据 
-        var uvcountOffset = 20000; function fixCount() { 
-            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") { 
-                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset); 
-                clearInterval(int); 
-            } 
-            if ($("#busuanzi_container_site_pv").css("display") != "none") { 
-                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
-                clearInterval(int); // 停止检测 
-            } } }); 
-</script>
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
-            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
     </div>
-</div>
-
-<script type="text/javascript">
-$(function () {
-    var searchFunc = function (path, search_id, content_id) {
-        'use strict';
-        $.ajax({
-            url: path,
-            dataType: "xml",
-            success: function (xmlResponse) {
-                // get the contents from search data
-                var datas = $("entry", xmlResponse).map(function () {
-                    return {
-                        title: $("title", this).text(),
-                        content: $("content", this).text(),
-                        url: $("url", this).text()
-                    };
-                }).get();
-                var $input = document.getElementById(search_id);
-                var $resultContent = document.getElementById(content_id);
-                $input.addEventListener('input', function () {
-                    var str = '<ul class=\"search-result-list\">';
-                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-                    $resultContent.innerHTML = "";
-                    if (this.value.trim().length <= 0) {
-                        return;
-                    }
-                    // perform local searching
-                    datas.forEach(function (data) {
-                        var isMatch = true;
-                        var data_title = data.title.trim().toLowerCase();
-                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
-                        var data_url = data.url;
-                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
-                        var index_title = -1;
-                        var index_content = -1;
-                        var first_occur = -1;
-                        // only match artiles with not empty titles and contents
-                        if (data_title !== '' && data_content !== '') {
-                            keywords.forEach(function (keyword, i) {
-                                index_title = data_title.indexOf(keyword);
-                                index_content = data_content.indexOf(keyword);
-                                if (index_title < 0 && index_content < 0) {
-                                    isMatch = false;
-                                } else {
-                                    if (index_content < 0) {
-                                        index_content = 0;
-                                    }
-                                    if (i === 0) {
-                                        first_occur = index_content;
-                                    }
-                                }
-                            });
-                        }
-                        // show search results
-                        if (isMatch) {
-                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
-                            var content = data.content.trim().replace(/<[^>]+>/g, "");
-                            if (first_occur >= 0) {
-                                // cut out 100 characters
-                                var start = first_occur - 20;
-                                var end = first_occur + 80;
-                                if (start < 0) {
-                                    start = 0;
-                                }
-                                if (start === 0) {
-                                    end = 100;
-                                }
-                                if (end > content.length) {
-                                    end = content.length;
-                                }
-                                var match_content = content.substr(start, end);
-                                // highlight all keywords
-                                keywords.forEach(function (keyword) {
-                                    var regS = new RegExp(keyword, "gi");
-                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
-                                });
-
-                                str += "<p class=\"search-result\">" + match_content + "...</p>"
-                            }
-                            str += "</li>";
-                        }
-                    });
-                    str += "</ul>";
-                    $resultContent.innerHTML = str;
-                });
-            }
-        });
-    };
-
-    searchFunc('/search.xml', 'searchInput', 'searchResult');
-});
-</script>
-
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
+    <!-- styles -->
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-    <script src="/js/FunnyTitle.js"></script>
 
-    
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
 
-    
 
-    <!-- 雪花特效 -->
-    
+    <!-- jquery -->
 
-    <!-- 鼠标星星特效 -->
-    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
 
-     
-        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
-        <script src="/libs/others/TencentCaptcha.js"></script>
-        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
-    
 
-    <!-- Baidu Analytics -->
 
-    <!-- Baidu Push -->
 
-<script>
-    (function () {
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        } else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
-    })();
-</script>
+<!-- clipboard -->
 
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
 
-    
+<script src="/js/main.js"></script>
 
-    
+<!-- search -->
 
-    <!--腾讯兔小巢-->
-    
-    
+<!-- Baidu Analytics -->
 
-    
+<!-- Cloudflare Analytics -->
 
-    
+<!-- Disqus Comments -->
 
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
+<!-- utterances Comments -->
 
 </body>
-
 </html>
