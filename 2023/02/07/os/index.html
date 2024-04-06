@@ -1,89 +1,554 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <title>操作系统 | 狂奔的蜗牛 | 人行，路平</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Zephyr">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  
-  <meta name="author" content="Zephyr">
-  
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://FaustProMaxPX.github.io/2023/02/07/os/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="八股整理 —— 操作系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统">
+<meta property="og:url" content="http://faustpromaxpx.github.io/2023/02/07/os/index.html">
+<meta property="og:site_name" content="狂奔的蜗牛">
+<meta property="og:description" content="八股整理 —— 操作系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135316.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135438.png">
+<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8c619c94-9405-40be-95e1-06ccb5085c08/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055452Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8138be63ab7445c4091039dd34cf2fd3e2a5491493ea2a847a37a862a91eaeaa&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
+<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/aa0ccc79-bbfe-445e-b281-c24b58866b2d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055500Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8b25beb8235622358748800adc19606330b0ce7a0d41f5b0d30aba272e5131d6&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
+<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d181a345-d9a1-440f-ae19-16ca15fcb034/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055511Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=1a64f54c34af68ca03625ea4b0e6f540f95af9469647ca8aa0b2863ebb5bc990&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135531.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135550.png">
+<meta property="og:image" content="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/630f629a-1091-45d3-8c9c-54f5adaaaa43/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055557Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=ef2f2d045ea436eca55193970f92581df4ce4cea20dcb5080390d7e69241034b&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a9ed979e2ed8414f9828767592aadc21.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/08a8e315fedc4a858060db5cb4a654af.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/7884f4d8db4949f7a5bb4bbd0f452609.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/19296e249b2240c29f9c52be70f611d5.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/a3cdf27646b24614a64cfc5d7ccffa35.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/8904fb89ae0c49c4b0f2f7b5a0a7b099.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/10-%E8%BF%9B%E7%A8%8B%E4%B8%83%E4%B8%AD%E7%8A%B6%E6%80%81.jpg">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/28-%E5%A4%9A%E7%BA%A7%E9%98%9F%E5%88%97.jpg">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/epoll.png">
+<meta property="article:published_time" content="2023-02-07T13:04:58.000Z">
+<meta property="article:modified_time" content="2023-03-28T05:57:25.094Z">
+<meta property="article:author" content="Zephyr">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="计算机基础">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135316.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            操作系统 -
+        
+        狂奔的蜗牛
+    </title>
 
-  
-  <meta name="description" content="八股整理 —— 操作系统">
-  
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
 
-  
-  
-  <meta name="keywords" content="操作系统,计算机基础">
-  
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--- Inject Part-->
+    
 
-  <meta property="og:title" content="操作系统"/>
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
 
-  <meta property="og:site_name" content="狂奔的蜗牛"/>
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
 
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="狂奔的蜗牛" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        狂奔的蜗牛
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
+
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
+
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"faustpromaxpx.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-kx673m_2560x1440.png","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Just do it !!!","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/FaustProMaxPX","instagram":null,"zhihu":"https://www.zhihu.com/people/shou-zu-tai-ye/posts","twitter":null,"email":"faustprogpu@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/4/06 11:24:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
 
 <body>
-<div class="blog">
-  <div class="content">
+<div class="progress-bar-container">
+    
 
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">狂奔的蜗牛</a>
-    </h1>
-    <p class="site-description">人行，路平</p>
-  </div>
-  <nav class="site-navigation">
-    <ul>
-      
-    </ul>
-  </nav>
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/images/logo.png">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                狂奔的蜗牛
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/archives"
+                        >
+                            <span>Archives</span>
+                            <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">30</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
 </header>
 
-    <main class="site-main posts-loop">
-    <article>
 
-  
-    
-    <h3 class="article-title"><span>操作系统</span></h3>
-    
-  
+        </div>
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/02/07/os/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-02-07T13:04:58.000Z">
-          2023-02-07
-        </time>
-      </a>
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">操作系统</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">Zephyr</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-02-07 21:04:58</span>
+        <span class="mobile">2023-02-07 21:04:58</span>
+        <span class="hover-info">创建</span>
     </span>
-  </div>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-03-28 13:57:25</span>
+            <span class="mobile">2023-03-28 13:57:25</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>7.6k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>26 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
 
 
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <h1 id="冯诺依曼模型"><a href="#冯诺依曼模型" class="headerlink" title="冯诺依曼模型"></a>冯诺依曼模型</h1><p>计算机基本结构：运算器，存储器，控制器，IO设备</p>
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="冯诺依曼模型"><a href="#冯诺依曼模型" class="headerlink" title="冯诺依曼模型"></a>冯诺依曼模型</h1><p>计算机基本结构：运算器，存储器，控制器，IO设备</p>
 <p>存储单元和输入输出设备和CPU的交互离不开总线，计算机基本结构的关系如下：</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135316.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135316.png"></p>
 <h2 id="中央处理器"><a href="#中央处理器" class="headerlink" title="中央处理器"></a>中央处理器</h2><p>中央处理器就是所谓的CPU，常说的32位，64位指的是CPU的<strong>位宽</strong>。位宽代表了CPU一次可以运算的数据量。</p>
 <p>CPU内部还有一系列的寄存器，他们与CPU的物理距离非常近，因此可以非常快速的进行运算。</p>
 <p>寄存器的分类大致如下：</p>
@@ -102,7 +567,7 @@
 <li>CPU执行指令</li>
 <li>CPU将计算结果写回寄存器或内存</li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135438.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135438.png"></p>
 <h2 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h2><p>总线用于CPU和内存以及其他设备之间的通信，它的分类如下：</p>
 <ol>
 <li>地址总线：指定CPU将要操作的内存地址</li>
@@ -120,10 +585,10 @@
 <p>通常情况下，CPU位宽大于等于线路位宽，否则的话CPU的操作会变得非常复杂。</p>
 <h1 id="CPU-Cache"><a href="#CPU-Cache" class="headerlink" title="CPU Cache"></a>CPU Cache</h1><p>在Linux中，CPU Cache被分为大小不等的三级缓存，分别是L1 Cache，L2 Cache，L3 Cache。其中的L1 Cache通常会分为<strong>数据缓存</strong>和<strong>指令缓存。</strong></p>
 <p>L1和L2缓存是每个核心独有的，而L3缓存是多个CPU核心共享的</p>
-<p><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8c619c94-9405-40be-95e1-06ccb5085c08/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055452Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8138be63ab7445c4091039dd34cf2fd3e2a5491493ea2a847a37a862a91eaeaa&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8c619c94-9405-40be-95e1-06ccb5085c08/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055452Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8138be63ab7445c4091039dd34cf2fd3e2a5491493ea2a847a37a862a91eaeaa&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
 <p>CPU Cache由多个Cache Line组成，Cache Line是CPU从内存读取数据的基本单位。</p>
 <p>Cache Line由各种标志+数据块组成</p>
-<p><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/aa0ccc79-bbfe-445e-b281-c24b58866b2d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055500Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8b25beb8235622358748800adc19606330b0ce7a0d41f5b0d30aba272e5131d6&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/aa0ccc79-bbfe-445e-b281-c24b58866b2d/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055500Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=8b25beb8235622358748800adc19606330b0ce7a0d41f5b0d30aba272e5131d6&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
 <h2 id="直接映射"><a href="#直接映射" class="headerlink" title="直接映射"></a>直接映射</h2><p>直接映射是CPU查询缓存的策略之一。他的基本思想是：将内存块的地址始终映射在一个缓存块当中，映射关系式用的是取模运算。</p>
 <p>eg：一台机器的内存有32个内存块，CPU中包含8个Cache Line，那么对于每个内存块，将它的编号%8就是它对应的缓存块。</p>
 <p>从上面的例子我们可以很明显的看出一个缓存块会对应多个内存块，CPU判断当前位于缓存块的数据是否是自己想要数据的依据就是Cache Line中的组标记，这个组标记会记录当前缓存块中的数据对应的内存块，CPU可以利用他区分不同的内存块。</p>
@@ -133,7 +598,7 @@
 <li>有效位，标记缓存块中的数据是否是有效的，如果有效位是0，即使缓存块中有数据也不会读取缓存。</li>
 </ul>
 <p>当CPU要访问内存时，他会先通过地址总线获取一个内存的访问地址，这个地址包含：组标记，Cache Line索引，偏移量。偏移量帮助CPU确定目标数据在缓存数据块中的位置。</p>
-<p><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d181a345-d9a1-440f-ae19-16ca15fcb034/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055511Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=1a64f54c34af68ca03625ea4b0e6f540f95af9469647ca8aa0b2863ebb5bc990&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/d181a345-d9a1-440f-ae19-16ca15fcb034/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055511Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=1a64f54c34af68ca03625ea4b0e6f540f95af9469647ca8aa0b2863ebb5bc990&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
 <p>综上所述，CPU访问一个内存地址时会经历4个步骤：</p>
 <ol>
 <li>根据地址中的索引信息，计算它在Cache Line中对应的索引</li>
@@ -183,7 +648,7 @@
 <p>如果核心B有对应的数据且不是脏的，他就会将这个数据发送给核心A，并将这个数据块标记为<strong>共享</strong>。此时A和B持有的缓存数据是一样的。</p>
 <p>接着A修改了这个数据，此时他会向广播中发送一条消息，B收到消息后会将对应缓存块标记为<strong>已失效</strong>。A完成修改后将数据块标记为<strong>已修改</strong>。此后A再修改这个数据块就不需要再向总线发送消息了，因为其他核心已经知道自己对应的缓存已经失效。</p>
 <p>如果其他核心要读取更新之后的数据，他们会向总线发送一条通知，A发现这个数据自己有，且是修改状态。此时它就会将缓存数据刷回内存。这样其他核心读取到的就是最新的数据了。</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135531.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135531.png"></p>
 <h2 id="伪共享"><a href="#伪共享" class="headerlink" title="伪共享"></a>伪共享</h2><p>伪共享的场景：多个CPU核心共享某个数据块，但使用的都是该数据块中不同部分的数据。如果每个核心轮番进行写操作，就会导致缓存被频繁刷入内存，缓存命中率大幅降低。</p>
 <p>伪共享的解决方案显然是避免让频繁修改的热点数据出现在同一个Cache Line里。</p>
 <p>Linux内核提供了<code>__cacheline_aligned_in_smp</code>宏定义来解决伪共享问题。</p>
@@ -194,7 +659,7 @@
 
 <p>由于a和b被定义在同一个结构体里，因此他们很可能出现在同一个Cache Line中。</p>
 <p>但在加上了宏定义之后，他们实际的存储方式是这样的</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135550.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230328135550.png"></p>
 <p>显然这是空间换时间的思想，消耗一部分CPU缓存空间，换来性能提升。</p>
 <h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><p>在Linux中，进程和线程都使用<code>task_struct</code>结构体来表示，区别在于线程的<code>task_struct</code>结构体里部分资源是共享了进程已创建的资源</p>
 <p>根据任务的优先级以及响应要求，主要分为两种，优先级的数值越小，优先级越高：</p>
@@ -203,7 +668,7 @@
 <li>普通任务：优先级在100-139</li>
 </ol>
 <h2 id="调度类"><a href="#调度类" class="headerlink" title="调度类"></a>调度类</h2><p>Linux为了保证高优先级的任务能够尽早被执行，设置了如下调度类：</p>
-<p><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/630f629a-1091-45d3-8c9c-54f5adaaaa43/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055557Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=ef2f2d045ea436eca55193970f92581df4ce4cea20dcb5080390d7e69241034b&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/630f629a-1091-45d3-8c9c-54f5adaaaa43/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45/20230328/us-west-2/s3/aws4_request&amp;X-Amz-Date=20230328T055557Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=ef2f2d045ea436eca55193970f92581df4ce4cea20dcb5080390d7e69241034b&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename=%22Untitled.png%22&amp;x-id=GetObject"></p>
 <p>Deadline和RealTime都是用于实时任务，他们的调度策略解释如下：</p>
 <ol>
 <li>DEADLINE：优先执行临近截止时间的任务</li>
@@ -235,7 +700,7 @@
 <li><p>段内偏移量：位于0和段界限之间</p>
 </li>
 </ol>
-<p><img src="https://img-blog.csdnimg.cn/a9ed979e2ed8414f9828767592aadc21.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://img-blog.csdnimg.cn/a9ed979e2ed8414f9828767592aadc21.png"></p>
 <p>分段的方式简明直接，想要计算某个数据的物理地址只需要获取对应段的基地址再加上偏移量即可。</p>
 <p>但是分段也有很明显的缺点：</p>
 <ol>
@@ -246,7 +711,7 @@
 </ol>
 <h2 id="内存分页"><a href="#内存分页" class="headerlink" title="内存分页"></a>内存分页</h2><p>内存分页可以有效解决分段的缺陷。他将整个虚拟和物理内存切成一段段固定尺寸的大小，每一段称为一页，在Linux中的大小是4KB。</p>
 <p>而虚拟地址和物理地址之间使用页表进行映射，内存管理单元就负责将虚拟内存地址转换为物理地址。</p>
-<p><img src="https://img-blog.csdnimg.cn/08a8e315fedc4a858060db5cb4a654af.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://img-blog.csdnimg.cn/08a8e315fedc4a858060db5cb4a654af.png"></p>
 <p>由于内存空间都是预先划分好的，也就不会像内存分段那样在段与段之间产生间隙非常小的内存。不过也正因为内存分页机制最小单位是一页，面对一些比较小的程序段会导致内存浪费，也就是内部内存碎片。</p>
 <p>如果内存空间不够，OS会将正在运行的进程中<strong>最近没被使用</strong>的内存页给替换掉。也就是将他们暂时写在磁盘上。</p>
 <p>如果进程访问的虚拟地址在页表中查询不到，就会产生一个缺页异常，此时就需要进入系统内核空间分配物理内存、更新进程页表，再返回用户空间。</p>
@@ -254,7 +719,7 @@
 <p>映射方式</p>
 </blockquote>
 <p>分页机制下，虚拟内存分为两部分：页号和页内偏移。页号是页表的索引。页表包含物理页每页所在物理内存的基地址。</p>
-<p><img src="https://img-blog.csdnimg.cn/7884f4d8db4949f7a5bb4bbd0f452609.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://img-blog.csdnimg.cn/7884f4d8db4949f7a5bb4bbd0f452609.png"></p>
 <p>因此最简单的内存地址转换步骤为：</p>
 <ol>
 <li><p>将虚拟内存地址切分为页号和偏移量</p>
@@ -272,13 +737,13 @@
 <p>这样做表面上看还增大了空间开销，但实际上所有的程序都有局部性原理，对于那些不常用的页，随时都可以被操作系统置换出去腾出空间给其他进程。</p>
 <p>并且一级页表就可以实现对4GB虚拟地址的覆盖，如果某个一级页表项没有被用到，那么它的二级页表就可以暂时不创建，这更进一步节省了空间。</p>
 <p>单级页表无法节省空间的原因就在于，它必须创建100w个页表项才能实现对虚拟地址的覆盖，如果无法覆盖虚拟地址，程序的运行根本无法运行，因此单级页表的实现无法节省空间。</p>
-<p><img src="https://img-blog.csdnimg.cn/19296e249b2240c29f9c52be70f611d5.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://img-blog.csdnimg.cn/19296e249b2240c29f9c52be70f611d5.png"></p>
 <p>如果我们进一步将二级页表推广到多级页表，那就可以节省更多的空间。不过这种方式也是有代价的，系统在进行地址映射的时候多了几道转换工序，因此这是种时间换空间的思想。</p>
 <blockquote>
 <p>TLB</p>
 </blockquote>
 <p>为了解决多级页表在转换上带来的时间问题，计算机会将最长访问的页表项放入专门的缓存，也就是TLB。</p>
-<p><img src="https://img-blog.csdnimg.cn/a3cdf27646b24614a64cfc5d7ccffa35.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://img-blog.csdnimg.cn/a3cdf27646b24614a64cfc5d7ccffa35.png"></p>
 <blockquote>
 <p>段页式内存管理</p>
 </blockquote>
@@ -289,7 +754,7 @@
 <li><p>然后再将这些段划分为多个页，也就是对分段出来的连续空间再划分固定大小的页</p>
 </li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/8904fb89ae0c49c4b0f2f7b5a0a7b099.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://img-blog.csdnimg.cn/8904fb89ae0c49c4b0f2f7b5a0a7b099.png"></p>
 <p>可用软、硬件相结合的方法实现段页式地址变换，这样虽然增加了硬件成本和系统开销，但提高了内存的利用率</p>
 <h1 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h1><h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>程序是可以被系统执行的二进制文件，而进程就是正在运行的程序</p>
 <p>进程的状态有：</p>
@@ -307,7 +772,7 @@
 <li><p>挂起：被从内存中调换到磁盘上，避免大量阻塞线程占用物理内存空间</p>
 </li>
 </ol>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/10-%E8%BF%9B%E7%A8%8B%E4%B8%83%E4%B8%AD%E7%8A%B6%E6%80%81.jpg" alt="七种状态变迁"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/10-%E8%BF%9B%E7%A8%8B%E4%B8%83%E4%B8%AD%E7%8A%B6%E6%80%81.jpg" alt="七种状态变迁"></p>
 <h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>PCB是进程唯一标识，里面记录了：</p>
 <p>进程标识符，用户标识符</p>
 <p>进程当前状态，进程优先级</p>
@@ -404,7 +869,7 @@
 </ol>
 <p>  这种算法建立了多个优先级队列，队列优先级从高到低，分配的时间片随着优先级降低而增多。如果在低优先级队列的任务执行过程中，有新的任务到来，就立即将当前进程停止，并移动到原队列末尾，转去执行新来的任务。</p>
 <p>  这种算法可以确保短任务可以很快被执行完，长任务虽然会随着执行次数增多，优先级降低，但每次分配到的时间片变多了。</p>
-<p>  <img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/28-%E5%A4%9A%E7%BA%A7%E9%98%9F%E5%88%97.jpg" alt="多级反馈队列"></p>
+<p>  <img lazyload="" src="/images/loading.svg" data-src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/28-%E5%A4%9A%E7%BA%A7%E9%98%9F%E5%88%97.jpg" alt="多级反馈队列"></p>
 <h1 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h1><p>由于为每个连接都分配一个进程或线程是一种很低效的做法，因此人们开始寻找是否有一种方法可以让一个进程维护多条连接。</p>
 <p>IO多路复用就是这样的一个技术，虽然一个进程在同一时刻只能处理一个请求，但如果每个请求的处理时间可以压缩到1ms，那么在外界看来，就好像一个进程在1s内处理了1000条连接。这就是所谓的时分多路复用。</p>
 <h2 id="select-x2F-poll"><a href="#select-x2F-poll" class="headerlink" title="select/poll"></a>select/poll</h2><p>select实现多路复用的方式是，将所有已连接的Socket放到一个文件描述符集合，然后调用select函数将文件描述符集合拷贝到内核里，由内核来检查是否有读/写事件的发生。如果有发生，就将它添加到可读可写集合中，最后拷贝到用户态里面。</p>
@@ -412,7 +877,7 @@
 <p>poll的基本实现思路和select一样，区别在于它使用链表和动态数组而非bitMaps作为文件描述符集合，突破了select文件描述符个数的限制，不过依旧会受系统描述符个数的限制。</p>
 <h2 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h2><p>epoll的流程：</p>
 <p>首先调用epoll_create建立一个epoll对象，接着将待检测的socket加入到epoll对象中，然后使用epoll_wait等待事件发生</p>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/epoll.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/epoll.png"></p>
 <p>epoll相比于select和poll进行了如下改进：</p>
 <ol>
 <li><p>在内核中维护一个红黑树，存储待检测的socket，因此用户只需要传入一个待检测socket到内核即可，而不需要传入整个待检测socket集合。</p>
@@ -421,39 +886,432 @@
 </li>
 </ol>
 
-      
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 操作系统</li>
+        <li><strong>作者:</strong> Zephyr</li>
+        <li><strong>创建于
+                :</strong> 2023-02-07 21:04:58</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-03-28 13:57:25
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://faustpromaxpx.github.io/2023/02/07/os/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">#计算机基础</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/02/27/offer-java/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Java基础（面试准备版）</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/01/25/redis/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Redis入门</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
     </div>
 
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
     
-      
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">操作系统</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%AF%E8%AF%BA%E4%BE%9D%E6%9B%BC%E6%A8%A1%E5%9E%8B"><span class="nav-text">冯诺依曼模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-text">中央处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">CPU执行的具体流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BA%BF"><span class="nav-text">总线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E8%B7%AF%E4%BD%8D%E5%AE%BD"><span class="nav-text">线路位宽</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU-Cache"><span class="nav-text">CPU Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E6%8E%A5%E6%98%A0%E5%B0%84"><span class="nav-text">直接映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">缓存一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-text">缓存一致性问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BA%BF%E5%97%85%E6%8E%A2"><span class="nav-text">总线嗅探</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MESI%E5%8D%8F%E8%AE%AE"><span class="nav-text">MESI协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%AA%E5%85%B1%E4%BA%AB"><span class="nav-text">伪共享</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B"><span class="nav-text">线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E7%B1%BB"><span class="nav-text">调度类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E5%85%A8%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6"><span class="nav-text">完全公平调度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD"><span class="nav-text">中断</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%B8%AD%E6%96%AD"><span class="nav-text">软中断</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-text">虚拟内存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E6%AE%B5"><span class="nav-text">内存分段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%A1%B5"><span class="nav-text">内存分页</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-text">进程与线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B"><span class="nav-text">进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PCB"><span class="nav-text">PCB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="nav-text">进程间通信</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B-1"><span class="nav-text">线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="nav-text">用户线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E6%A0%B8%E7%BA%BF%E7%A8%8B"><span class="nav-text">内核线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6"><span class="nav-text">调度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E5%8E%9F%E5%88%99"><span class="nav-text">调度原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95"><span class="nav-text">调度算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-text">IO多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#select-x2F-poll"><span class="nav-text">select&#x2F;poll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epoll"><span class="nav-text">epoll</span></a></li></ol></li></ol>
 
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/八股/">八股</a>
-    </span>
+    </div>
+</div>
+        </div>
     
+</div>
 
-    
-    
 
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/操作系统/">操作系统</a><a href="/tags/计算机基础/">计算机基础</a>
-    </span>
-    
 
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zephyr</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 24 篇文章
+                    </span>
+                    
+                        <span>
+                            共 224.2k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
     </div>
 
     
-  </div>
-</article>
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
 
   
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
 
 
 
@@ -463,21 +1321,18 @@
 
 
 
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
+<div class="post-scripts" data-swup-reload-script>
     
-    &copy; 2024 Zephyr
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
     
-  </p>
-</footer>
-    
-    
-  </div>
 </div>
+
+
 </body>
 </html>

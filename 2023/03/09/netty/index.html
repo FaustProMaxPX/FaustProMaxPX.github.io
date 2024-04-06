@@ -1,88 +1,544 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <title>netty | 狂奔的蜗牛 | 人行，路平</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Zephyr">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  
-  <meta name="author" content="Zephyr">
-  
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://FaustProMaxPX.github.io/2023/03/09/netty/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="Java 网络编程 I&#x2F;O 模型BIO：同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程处理。适用于连接数目较小且固定的架构，这种方式对服务器的机器资源要求较高，但编写出来的程序比较简单。 NIO：同步非阻塞，服务器用一个线程处理多个请求，客户端发送的连接请求都会注册到多路复用器上，它以轮询的方式处理注册到该复用器上的请求。适用于连接数目较多且连接比较短">
+<meta property="og:type" content="article">
+<meta property="og:title" content="netty">
+<meta property="og:url" content="http://faustpromaxpx.github.io/2023/03/09/netty/index.html">
+<meta property="og:site_name" content="狂奔的蜗牛">
+<meta property="og:description" content="Java 网络编程 I&#x2F;O 模型BIO：同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程处理。适用于连接数目较小且固定的架构，这种方式对服务器的机器资源要求较高，但编写出来的程序比较简单。 NIO：同步非阻塞，服务器用一个线程处理多个请求，客户端发送的连接请求都会注册到多路复用器上，它以轮询的方式处理注册到该复用器上的请求。适用于连接数目较多且连接比较短">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/netty/2022-10-10%2022-56-43%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%201.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%202.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%203.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%204.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%205.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%206.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%207.png">
+<meta property="article:published_time" content="2023-03-09T06:24:15.000Z">
+<meta property="article:modified_time" content="2023-03-09T06:57:39.403Z">
+<meta property="article:author" content="Zephyr">
+<meta property="article:tag" content="网络编程">
+<meta property="article:tag" content="Netty">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/netty/2022-10-10%2022-56-43%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            netty -
+        
+        狂奔的蜗牛
+    </title>
 
-  
-  <meta name="description" content="Java 网络编程 I/O 模型BIO：同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程处理。适用于连接数目较小且固定的架构，这种方式对服务器的机器资源要求较高，但编写出来的程序比较简单。
-NIO：同步非阻塞，服务器用一个线程处理多个请求，客户端发送的连接">
-  
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
 
-  
-  
-  <meta name="keywords" content="网络编程,Netty">
-  
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--- Inject Part-->
+    
 
-  <meta property="og:title" content="netty"/>
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
 
-  <meta property="og:site_name" content="狂奔的蜗牛"/>
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
 
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="狂奔的蜗牛" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        狂奔的蜗牛
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
+
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
+
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"faustpromaxpx.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-kx673m_2560x1440.png","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Just do it !!!","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/FaustProMaxPX","instagram":null,"zhihu":"https://www.zhihu.com/people/shou-zu-tai-ye/posts","twitter":null,"email":"faustprogpu@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/4/06 11:24:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
 
 <body>
-<div class="blog">
-  <div class="content">
+<div class="progress-bar-container">
+    
 
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">狂奔的蜗牛</a>
-    </h1>
-    <p class="site-description">人行，路平</p>
-  </div>
-  <nav class="site-navigation">
-    <ul>
-      
-    </ul>
-  </nav>
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/images/logo.png">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                狂奔的蜗牛
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/archives"
+                        >
+                            <span>Archives</span>
+                            <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">30</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
 </header>
 
-    <main class="site-main posts-loop">
-    <article>
 
-  
-    
-    <h3 class="article-title"><span>netty</span></h3>
-    
-  
+        </div>
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/03/09/netty/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-03-09T06:24:15.000Z">
-          2023-03-09
-        </time>
-      </a>
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">netty</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">Zephyr</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-03-09 14:24:15</span>
+        <span class="mobile">2023-03-09 14:24:15</span>
+        <span class="hover-info">创建</span>
     </span>
-  </div>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-03-09 14:57:39</span>
+            <span class="mobile">2023-03-09 14:57:39</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Netty/">Netty</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>19.2k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>86 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
 
 
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <h1 id="Java-网络编程-I-x2F-O-模型"><a href="#Java-网络编程-I-x2F-O-模型" class="headerlink" title="Java 网络编程 I/O 模型"></a>Java 网络编程 I/O 模型</h1><p>BIO：<strong>同步并阻塞</strong>，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程处理。适用于连接数目较小且固定的架构，这种方式对服务器的机器资源要求较高，但编写出来的程序比较简单。</p>
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="Java-网络编程-I-x2F-O-模型"><a href="#Java-网络编程-I-x2F-O-模型" class="headerlink" title="Java 网络编程 I/O 模型"></a>Java 网络编程 I/O 模型</h1><p>BIO：<strong>同步并阻塞</strong>，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程处理。适用于连接数目较小且固定的架构，这种方式对服务器的机器资源要求较高，但编写出来的程序比较简单。</p>
 <p>NIO：<strong>同步非阻塞</strong>，服务器用一个线程处理多个请求，客户端发送的连接请求都会注册到多路复用器上，它以<strong>轮询</strong>的方式处理注册到该复用器上的请求。适用于<strong>连接数目较多且连接比较短——轻操作</strong>的架构，例如聊天服务器，弹幕系统，服务器间通讯等。</p>
 <p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/netty/2022-10-10%2022-56-43%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png" alt="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/netty/2022-10-10%2022-56-43%20%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png"></p>
 <p>Netty是基于NIO实现的一个框架</p>
@@ -141,14 +597,14 @@ NIO：同步非阻塞，服务器用一个线程处理多个请求，客户端�
 <li>用户发起写命令后，CPU直接将内核缓冲区的数据写入socket的缓冲区</li>
 <li>最后DMA搬运socket缓冲区的数据到网卡</li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled.png"></p>
 <p>通过这种方式，我们减少了一次拷贝。但系统调用仍然是两次，上下文切换的次数并没有减少。</p>
 <h3 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h3><p>在Linux2.1中，新增了一个专门发送文件的系统调用函数<code>send_file()</code></p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;sys/socket.h&gt;</span></span>
 <span class="token class-name">ssize_t</span> <span class="token function">sendfile</span><span class="token punctuation">(</span><span class="token keyword">int</span> out_fd<span class="token punctuation">,</span> <span class="token keyword">int</span> in_fd<span class="token punctuation">,</span> <span class="token class-name">off_t</span> <span class="token operator">*</span>offset<span class="token punctuation">,</span> <span class="token class-name">size_t</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>前两个参数是目的端和源端的文件描述符，后两个参数是源端的偏移量和复制数据的长度，返回值是实际复制数据的长度。<br>这个函数同时具备读和写的功能，因此他减少了1次系统调用也就是2次上下文切换的开销。<br>此外，他可以直接将内核缓冲区的数据拷贝到socket缓冲区当中，节省了一次数据拷贝。<br>这样就做到了仅用2次上下文切换与3次数据拷贝实现了文件传输。</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%201.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%201.png"></p>
 <p>而Linux对于支持网卡SG-DMA技术的情况，可以实现更加快速的文件传输。具体流程为：</p>
 <ol>
 <li>通过DMA将磁盘上的数据拷贝到内核缓冲区中</li>
@@ -300,12 +756,12 @@ NIO：同步非阻塞，服务器用一个线程处理多个请求，客户端�
 <li>Handler：处理非阻塞任务</li>
 </ol>
 <h3 id="单Reactor线程模型"><a href="#单Reactor线程模型" class="headerlink" title="单Reactor线程模型"></a>单Reactor线程模型</h3><p>Reactor负责处理事件并分发事件，将连接事件交给acceptor，其他事件交给handler处理。始终只有一个线程处理请求。</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%202.png" alt="Untitled"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%202.png" alt="Untitled"></p>
 <p>这种模型的缺点非常明显，单线程模型在高并发环境下可能带来严重的性能问题。</p>
 <h3 id="单Reactor多线程模型"><a href="#单Reactor多线程模型" class="headerlink" title="单Reactor多线程模型"></a>单Reactor多线程模型</h3><p>为了修改上面的模型的缺陷，引入了池化技术。因为单线程模型的性能缺陷在于，业务处理可能非常繁重，导致单个线程处理缓慢，造成事件堆积。因此通过加入线程池的方法，将业务处理分离出来，交给线程池处理。Reactor线程只负责连接建立以及读写操作。</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%203.png" alt="Untitled"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%203.png" alt="Untitled"></p>
 <p>虽然引入了池化技术，但连接的建立以及网络I/O依旧由单个线程处理，性能问题依旧存在。</p>
-<h3 id="多Reactor多线程模型"><a href="#多Reactor多线程模型" class="headerlink" title="多Reactor多线程模型"></a>多Reactor多线程模型</h3><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%204.png" alt="Untitled"></p>
+<h3 id="多Reactor多线程模型"><a href="#多Reactor多线程模型" class="headerlink" title="多Reactor多线程模型"></a>多Reactor多线程模型</h3><p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%204.png" alt="Untitled"></p>
 <p>在这种模型中，将Reactor拆分为mainReactor和subReactor两个部分，mainReactor只负责处理连接事件，一般一个线程足矣。subReactor负责处理读写事件，数量和CPU核心数相等。这种模型使各个模块职责单一，降低了耦合度。Netty的主从线程模型就是这种模型的一种实现。</p>
 <h2 id="使用入门"><a href="#使用入门" class="headerlink" title="使用入门"></a>使用入门</h2><p><code>NioEventLoopGroup</code>是一个线程组，它包含一组NIO线程专门用于网络事件的处理。这里使用的是多Reactor多线程模式，bossGroup作为主Reactor负责处理连接事件，workerGroup负责读写事件的处理。接着设置创建的Channel为<code>NioServerSocketChannel</code>。最后设置Handler专门负责处理请求。<br><code>ChildChannelHandler</code>获取socketChannel的管道，并将一个处理器添加到管道当中。<br>最后调用bind函数让服务器监听指定端口，并使用sync方法等待返回结果。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TimeServer</span> <span class="token punctuation">{</span>
@@ -1438,7 +1894,7 @@ Sec-WebSocket-Protocol: ...<span aria-hidden="true" class="line-numbers-rows"><s
 <li>注册SocketChannel到多路复用器。</li>
 </ol>
 <h2 id="客户端创建"><a href="#客户端创建" class="headerlink" title="客户端创建"></a>客户端创建</h2><p>客户端创建时序图</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%205.png" alt="Untitled"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%205.png" alt="Untitled"></p>
 <p>步骤：</p>
 <ol>
 <li>创建Bootstrap实例，通过API设置客户端相关参数，异步发起客户端连接</li>
@@ -1673,7 +2129,7 @@ Sec-WebSocket-Protocol: ...<span aria-hidden="true" class="line-numbers-rows"><s
 <h2 id="内存池原理分析"><a href="#内存池原理分析" class="headerlink" title="内存池原理分析"></a>内存池原理分析</h2><p>为了集中管理内存的分配与释放，同时提高分配和释放时的性能，很多框架和应用都会通过预先申请一大块内存，然后通过提供相应的分配与释放接口来使用内存。这样一来，分配与释放的操作就被集中到了几个类或是几个函数当中，由于不再频繁使用系统调用来申请和释放内存，性能也就大大提高了。</p>
 <p>Netty的内存池由多个Chunk组成，每一个Chunk则由一个或多个Page组成。Chunk用来组织和管理多个Page的内存分配与释放。Netty中Chunk的Page被构建成一个二叉树。</p>
 <p>假设Page是4个字节，Chunk大小是32个字节，那么Chunk的结构如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%206.png" alt="Untitled"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%206.png" alt="Untitled"></p>
 <p>每个节点都记录了自己在整个内存池中的偏移地址，当某个节点的内存被分配出去后，会将该结点标记为已分配。</p>
 <p>对于一个小于Page的内存，Netty在Page中完成分配，每个Page会被切分成<strong>大小相等</strong>的多个存储块。存储块的大小会由<strong>第一次申请的内存块大小</strong>决定。如果想要更改存储块的大小，那只能使用一个新的Page。</p>
 <p>Page中存储区域使用一个long数组来记录存储区域的使用状况。每个元素中的1位用来表示一个存储块的使用情况。</p>
@@ -2069,7 +2525,7 @@ Sec-WebSocket-Protocol: ...<span aria-hidden="true" class="line-numbers-rows"><s
 <hr>
 <ul>
 <li><p>ChannelPipeline的事件处理</p>
-<p>  <img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%207.png" alt="Untitled"></p>
+<p>  <img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/Untitled%207.png" alt="Untitled"></p>
 <ol>
 <li>底层的SocketChannel read()方法读取ByteBuf，触发ChannelRead事件，由I/O线程NioEventLoop调用ChannelPipeline的fireChannelRead方法，将消息传输到ChannelPipeline中</li>
 <li>消息依次被HeadHandler、ChannelHandler1、ChannelHandler2、… 、TailHandler拦截和处理。过程中任何Handler都可以中断当前流程结束消息的传递。</li>
@@ -2764,39 +3220,432 @@ needsToSelectAgain <span class="token operator">=</span> <span class="token bool
 <p>首先判断是否已被设置过，如果已被设置过就直接返回，不允许再次设置。</p>
 <p>接下来用同步代码块保护对Promise的操作，二次判断操作结果是否被设置。然后判断操作结果是否为空，如果为空说明只需要notify所有的listener，如果不为空，则需要先将结果设置为result</p>
 
-      
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> netty</li>
+        <li><strong>作者:</strong> Zephyr</li>
+        <li><strong>创建于
+                :</strong> 2023-03-09 14:24:15</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-03-09 14:57:39
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://faustpromaxpx.github.io/2023/03/09/netty/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">#网络编程</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/Netty/">#Netty</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/04/09/rust/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Rust —— 基础篇</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/03/04/Spring/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Spring（面试版）</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
     </div>
 
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
     
-      
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">netty</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B-I-x2F-O-%E6%A8%A1%E5%9E%8B"><span class="nav-text">Java 网络编程 I&#x2F;O 模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NIO"><span class="nav-text">NIO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO%E4%B8%8EBIO%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">NIO与BIO的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO%E4%B8%89%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-text">NIO三大核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF"><span class="nav-text">零拷贝技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mmap-write"><span class="nav-text">mmap + write</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sendfile"><span class="nav-text">sendfile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NIO%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8"><span class="nav-text">NIO使用入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">客户端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty"><span class="nav-text">Netty</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactor%E6%A8%A1%E5%9E%8B"><span class="nav-text">Reactor模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95Reactor%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-text">单Reactor线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95Reactor%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-text">单Reactor多线程模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9AReactor%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="nav-text">多Reactor多线程模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8"><span class="nav-text">使用入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86TCP%E7%B2%98%E5%8C%85"><span class="nav-text">处理TCP粘包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty%E7%BC%96%E8%A7%A3%E7%A0%81"><span class="nav-text">Netty编解码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-XML%E5%8D%8F%E8%AE%AE%E6%A0%88%E5%AE%9E%E7%8E%B0"><span class="nav-text">HTTP+XML协议栈实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebSocket%E5%8D%8F%E8%AE%AE%E5%BC%80%E5%8F%91"><span class="nav-text">WebSocket协议开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B"><span class="nav-text">WebSocket连接建立</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%88%9B%E5%BB%BA"><span class="nav-text">服务端创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8E%A5%E5%85%A5"><span class="nav-text">客户端接入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%88%9B%E5%BB%BA"><span class="nav-text">客户端创建</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">Netty源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ByteBuf%E5%92%8C%E7%9B%B8%E5%85%B3%E8%BE%85%E5%8A%A9%E7%B1%BB"><span class="nav-text">ByteBuf和相关辅助类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90"><span class="nav-text">内存池原理分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channel%E5%92%8CUnsafe"><span class="nav-text">Channel和Unsafe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractNioChannel%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">AbstractNioChannel源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractNioByteChannel-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">AbstractNioByteChannel 源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractNioMessageChannel%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">AbstractNioMessageChannel源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractNioMessageServerChannel%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">AbstractNioMessageServerChannel源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NioServerSocketChannel%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">NioServerSocketChannel源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NioSocketChannel%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">NioSocketChannel源码分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChannelPipeline%E5%92%8CChannelHandler"><span class="nav-text">ChannelPipeline和ChannelHandler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NioEventLoop"><span class="nav-text">NioEventLoop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future%E5%92%8CPromise"><span class="nav-text">Future和Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Future"><span class="nav-text">Future</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Promise"><span class="nav-text">Promise</span></a></li></ol></li></ol></li></ol>
 
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/笔记/">笔记</a>
-    </span>
+    </div>
+</div>
+        </div>
     
+</div>
 
-    
-    
 
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/网络编程/">网络编程</a><a href="/tags/Netty/">Netty</a>
-    </span>
-    
 
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zephyr</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 24 篇文章
+                    </span>
+                    
+                        <span>
+                            共 224.2k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
     </div>
 
     
-  </div>
-</article>
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
 
   
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
 
 
 
@@ -2806,21 +3655,18 @@ needsToSelectAgain <span class="token operator">=</span> <span class="token bool
 
 
 
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
+<div class="post-scripts" data-swup-reload-script>
     
-    &copy; 2024 Zephyr
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
     
-  </p>
-</footer>
-    
-    
-  </div>
 </div>
+
+
 </body>
 </html>

@@ -1,88 +1,552 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <title>Java基础（面试准备版） | 狂奔的蜗牛 | 人行，路平</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Zephyr">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  
-  <meta name="author" content="Zephyr">
-  
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://FaustProMaxPX.github.io/2023/02/27/offer-java/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="字节码JVM可以理解的代码就叫做字节码，他不面向任何特定的处理器。并且因为机器处理字节码的速度更高，Java拥有比解释型语言更高的执行效率。 在将.class文件翻译成机器码这一步中，JVM首先会加载字节码文件，然后通过解释器逐行解释执行。这种方式显然不会有多高的执行速度。在面对一些热点代码时，就会显得比较吃力。因此Java引入了JIT编译器，JIT是运行时编译，在完成第一次编译后会将这段代码保存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础（面试准备版）">
+<meta property="og:url" content="http://faustpromaxpx.github.io/2023/02/27/offer-java/index.html">
+<meta property="og:site_name" content="狂奔的蜗牛">
+<meta property="og:description" content="字节码JVM可以理解的代码就叫做字节码，他不面向任何特定的处理器。并且因为机器处理字节码的速度更高，Java拥有比解释型语言更高的执行效率。 在将.class文件翻译成机器码这一步中，JVM首先会加载字节码文件，然后通过解释器逐行解释执行。这种方式显然不会有多高的执行速度。在面对一些热点代码时，就会显得比较吃力。因此Java引入了JIT编译器，JIT是运行时编译，在完成第一次编译后会将这段代码保存">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/202302251732063.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/202303031051276.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303110518.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303112019.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303113627.png">
+<meta property="og:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/collection/java7_concurrenthashmap.png">
+<meta property="og:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/collection/java8_concurrenthashmap.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303172901.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303173141.png">
+<meta property="og:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/java-runtime-data-areas-jdk1.8.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230304095615.png">
+<meta property="og:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/concurrent/threadlocal-data-structure.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230305150211.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230305150911.png">
+<meta property="og:image" content="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/40cb932a64694262993907ebda6a0bfe~tplv-k3u1fbpfcp-zoom-1.image">
+<meta property="og:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/access-location-of-object-handle.png">
+<meta property="og:image" content="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/access-location-of-object-handle-direct-pointer.png">
+<meta property="article:published_time" content="2023-02-27T03:36:05.000Z">
+<meta property="article:modified_time" content="2023-03-06T02:07:02.402Z">
+<meta property="article:author" content="Zephyr">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/202302251732063.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Java基础（面试准备版） -
+        
+        狂奔的蜗牛
+    </title>
 
-  
-  <meta name="description" content="字节码JVM可以理解的代码就叫做字节码，他不面向任何特定的处理器。并且因为机器处理字节码的速度更高，Java拥有比解释型语言更高的执行效率。
-在将.class文件翻译成机器码这一步中，JVM首先会加载字节码文件，然后通过解释器逐行解释执行。这种方式显然不会有多高的执行速度。在面对一些热点代码时，就会">
-  
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
 
-  
-  
-  <meta name="keywords" content="java,面试">
-  
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--- Inject Part-->
+    
 
-  <meta property="og:title" content="Java基础（面试准备版）"/>
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
 
-  <meta property="og:site_name" content="狂奔的蜗牛"/>
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
 
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="狂奔的蜗牛" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        狂奔的蜗牛
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
+
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
+
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"faustpromaxpx.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-kx673m_2560x1440.png","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Just do it !!!","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/FaustProMaxPX","instagram":null,"zhihu":"https://www.zhihu.com/people/shou-zu-tai-ye/posts","twitter":null,"email":"faustprogpu@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/4/06 11:24:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
 
 <body>
-<div class="blog">
-  <div class="content">
+<div class="progress-bar-container">
+    
 
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">狂奔的蜗牛</a>
-    </h1>
-    <p class="site-description">人行，路平</p>
-  </div>
-  <nav class="site-navigation">
-    <ul>
-      
-    </ul>
-  </nav>
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/images/logo.png">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                狂奔的蜗牛
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/archives"
+                        >
+                            <span>Archives</span>
+                            <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">30</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
 </header>
 
-    <main class="site-main posts-loop">
-    <article>
 
-  
-    
-    <h3 class="article-title"><span>Java基础（面试准备版）</span></h3>
-    
-  
+        </div>
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2023/02/27/offer-java/" rel="bookmark">
-        <time class="entry-date published" datetime="2023-02-27T03:36:05.000Z">
-          2023-02-27
-        </time>
-      </a>
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">Java基础（面试准备版）</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">Zephyr</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-02-27 11:36:05</span>
+        <span class="mobile">2023-02-27 11:36:05</span>
+        <span class="hover-info">创建</span>
     </span>
-  </div>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-03-06 10:07:02</span>
+            <span class="mobile">2023-03-06 10:07:02</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/java/">java</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>9.4k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>33 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
 
 
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <h1 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h1><p>JVM可以理解的代码就叫做字节码，他不面向任何特定的处理器。并且因为机器处理字节码的速度更高，Java拥有比解释型语言更高的执行效率。</p>
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h1><p>JVM可以理解的代码就叫做字节码，他不面向任何特定的处理器。并且因为机器处理字节码的速度更高，Java拥有比解释型语言更高的执行效率。</p>
 <p>在将<code>.class</code>文件翻译成机器码这一步中，JVM首先会加载字节码文件，然后通过解释器逐行解释执行。这种方式显然不会有多高的执行速度。在面对一些热点代码时，就会显得比较吃力。因此Java引入了JIT编译器，JIT是运行时编译，在完成第一次编译后会将这段代码保存下来，之后再次运行时，就不需要重新编译了。</p>
 <p>HotSpot会采用惰性评估，由于热点代码在整个系统中的占比较小，因此JVM会根据代码每次被执行的情况收集信息，并做出一定的优化，随着执行次数的增多，对应代码块的速度就越快。</p>
 <ul>
@@ -124,7 +588,7 @@
 </ol>
 <p>  Kryo 是一个高性能的序列化/反序列化工具，由于其变长存储特性并使用了字节码生成机制，拥有较高的运行速度和较小的字节码体积。</p>
 <p>  demo：</p>
-<p>  <img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/202302251732063.png"></p>
+<p>  <img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/202302251732063.png"></p>
 <h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><h2 id="泛型擦除"><a href="#泛型擦除" class="headerlink" title="泛型擦除"></a>泛型擦除</h2><p>Java使用擦除来实现泛型，也就是说在泛型代码内部无法获得泛型的具体信息，对于程序来说<code>List&lt;Integer&gt;</code>和<code>List&lt;String&gt;</code>没有任何区别。这也就意味着我们无法在使用泛型的类中调用泛型的某些方法，哪怕我们传入的泛型确实有这些方法。</p>
 <p>如果我们想要使用泛型的方法，那就必须告诉编译器，泛型的界限。比如，如果我们想要对列表中的元素进行排序，就必须要告诉编译器，这里的元素都是可排序的，你可以调用元素中的比较方法。</p>
 <p>它的语法格式就是<code>&lt;? extends X&gt;</code>。这段代码告诉程序，传入的泛型必然是X的子类，因此可以放心调用X中的方法。</p>
@@ -216,10 +680,10 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">fullFence</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h1 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h1><h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><p>List的子类有<code>ArrayList</code>，<code>Vector</code>，<code>LinkedList</code>。其中Vector是线程安全的，其余二者则都是线程不安全的。LinkedList底层使用双向链表实现，不过由于该数据结构只在头插时具备一定优势，因此基本没什么人使用。</p>
-<h3 id="ArrayList源码分析"><a href="#ArrayList源码分析" class="headerlink" title="ArrayList源码分析"></a>ArrayList源码分析</h3><h4 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/202303031051276.png"></p>
+<h3 id="ArrayList源码分析"><a href="#ArrayList源码分析" class="headerlink" title="ArrayList源码分析"></a>ArrayList源码分析</h3><h4 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h4><p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/202303031051276.png"></p>
 <p>上面是ArrayList的构造器代码，无参构造器生产的实例在初始条件下容量为0，其他情况则会根据入参调整初始实例的大小。</p>
 <h4 id="扩容机制"><a href="#扩容机制" class="headerlink" title="扩容机制"></a>扩容机制</h4><p>ArrayList最重要的就是它的扩容机制，下面是相关的代码：</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303110518.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303110518.png"></p>
 <p>它的相关流程是：</p>
 <ol>
 <li><p>判断当前数组容量是否充足，如果充足，直接插入</p>
@@ -234,14 +698,14 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <p>小技巧</p>
 <p>ArrayList提供了一个<code>ensureCapacity</code>方法供用户调用，它需要一个<code>minCapacity</code>参数。在添加大量元素之前可以先调用这个方法，它会一次性将需要的容量分配到位。避免添加过程中频繁的内存分配。</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303112019.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303112019.png"></p>
 <h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map中最常用的就是HashMap，因此这里主要讲解HashMap。HashMap是一个线程不安全的类。同ArrayList一样，我们也可以通过在构造器中传入容量大小设置它的初始容量，不过HashMap会自动将这个容量<strong>扩充到2的幂次</strong>。</p>
 <p>在面对Hash冲突时，HashMap使用拉链式冲突解决办法，将冲突的元素串在一个链表当中。但当一条链表的长度大于阈值（默认为8）并且数组长度大于64时，会将这条链表树化以提升搜索效率。不过当数组小于64时，它会选择数组扩容以及rehash的方法来降低哈希冲突。</p>
 <blockquote>
 <p>TreeMap</p>
 <p>除了HashMap之外，Java还提供了TreeMap，相比HashMap，它额外提供了根据键排序的能力以及对集合内元素搜索的能力。</p>
 </blockquote>
-<h3 id="HashMap源码分析"><a href="#HashMap源码分析" class="headerlink" title="HashMap源码分析"></a>HashMap源码分析</h3><h4 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303113627.png"></p>
+<h3 id="HashMap源码分析"><a href="#HashMap源码分析" class="headerlink" title="HashMap源码分析"></a>HashMap源码分析</h3><h4 id="插入元素"><a href="#插入元素" class="headerlink" title="插入元素"></a>插入元素</h4><p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303113627.png"></p>
 <p>上面是HashMap执行插入操作时进行的操作，流程如下：</p>
 <ol>
 <li><p>如果哈希表还处于初始化状态，那就对它进行扩容</p>
@@ -259,17 +723,17 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <h4 id="实现线程安全的形式"><a href="#实现线程安全的形式" class="headerlink" title="实现线程安全的形式"></a>实现线程安全的形式</h4><ol>
 <li><p>Segment</p>
 <p>这时JDK1.7之前的实现，主要思想是对整个桶数组进行分割，分割出来的每一段都称为一个Segment，每当要执行操作时，调用者就要尝试去获取目标数据所在段的Segment锁。也就是说每一个Segment锁都可以保护一部分数据。不过锁的数量是不可变的，也就是说在数据量非常大的情况下，竞争就会比较明显。</p>
-<p><img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/collection/java7_concurrenthashmap.png" alt="Java7 ConcurrentHashMap 存储结构"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/collection/java7_concurrenthashmap.png" alt="Java7 ConcurrentHashMap 存储结构"></p>
 </li>
 <li><p>synchronize + CAS</p>
 <p>在JDK1.8之后，采用了<strong>Node 数组 + 链表 / 红黑树</strong>解决冲突</p>
-<p><img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/collection/java8_concurrenthashmap.png" alt="Java8 ConcurrentHashMap 存储结构（图片来自 javadoop）"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/collection/java8_concurrenthashmap.png" alt="Java8 ConcurrentHashMap 存储结构（图片来自 javadoop）"></p>
 </li>
 </ol>
 <h4 id="ConcurrentHashMap源码分析"><a href="#ConcurrentHashMap源码分析" class="headerlink" title="ConcurrentHashMap源码分析"></a>ConcurrentHashMap源码分析</h4><blockquote>
 <p>初始化</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303172901.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303172901.png"></p>
 <p>从上面的代码中可以看出，它使用自旋+CAS完成初始化。其中sizeCtl是一个关键的标志变量，它的含义如下：</p>
 <ol>
 <li>-1 说明正在初始化</li>
@@ -280,7 +744,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <blockquote>
 <p>插入数据</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303173141.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303173141.png"></p>
 <p>插入数据的步骤如下：</p>
 <ol>
 <li><p>计算哈希值</p>
@@ -291,7 +755,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 </li>
 </ol>
 <h1 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h1><h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>Java中的线程与进程间的关系如下</p>
-<p><img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/java-runtime-data-areas-jdk1.8.png" alt="Java 运行时数据区域（JDK1.8 之后）"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/java-runtime-data-areas-jdk1.8.png" alt="Java 运行时数据区域（JDK1.8 之后）"></p>
 <p>线程共享进程的堆和方法区（或者说元空间）。但每个线程都有自己的虚拟机栈，本地方法栈和程序计数器。</p>
 <p>下面来解释一下这三者私有的原因：</p>
 <ol>
@@ -320,7 +784,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <p>wait是让获得对象锁的线程实现等待，也就是说它涉及的是对象，因此必然被定义在对象方法中。</p>
 </blockquote>
 <h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>禁止指令重排序的实战应用</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230304095615.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230304095615.png"></p>
 <p>上面是使用双重锁校验的单例模式实现，可以看到不仅使用同步代码块保护了对象的创建过程，还是用volatile修饰了实例。下面简单讲解一下这么做的原因：</p>
 <p>创建对象看上去就只有一行代码，但实际上它分为3步：</p>
 <ol>
@@ -365,7 +829,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>ThreadLocal的数据结构如图</p>
-<p><img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/concurrent/threadlocal-data-structure.png" alt="ThreadLocal 数据结构"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/concurrent/threadlocal-data-structure.png" alt="ThreadLocal 数据结构"></p>
 <blockquote>
 <p>内存泄漏问题</p>
 <p>由于ThreadLocalMap中的key是一个弱引用，因此如果ThreadLocal没有被外部强引用，那么key就会被GC清理掉，这样就会出现key为null而value不为null的情况。如果我们不采取一些措施，这些value永远都不会被清理掉，这就导致内存泄漏。</p>
@@ -403,7 +867,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 </li>
 </ol>
 <p>通俗理解：正常情况下，线程池只会使用核心线程进行工作。如果发现等待队列都满了，代表这段时间非常繁忙，此时就开始扩充线程池，如果线程池扩充到最大值还无法应付庞大的任务数，就按照饱和策略处理多余的任务。</p>
-<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230305150211.png"></p>
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230305150211.png"></p>
 <ol>
 <li><p>首先会判断当前工作线程的个数是否少于核心线程数，如果是，就执行这个任务。在addWorker这个方法中会原子性的检查运行状态和工作线程数，避免并发环境下的问题。</p>
 </li>
@@ -412,7 +876,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <li><p>最后一种情况就是核心线程数已满，且等待队列也已经满了，这时候尝试扩充线程池，如果失败就代表线程池已经完全爆满，启动饱和策略。</p>
 </li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230305150911.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230305150911.png"></p>
 <p>上面是添加工作线程的操作：</p>
 <ol>
 <li><p>首先判断当前线程池的状态是否可以接收新的任务</p>
@@ -440,7 +904,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <li><p>JMM与并发编程相关，抽象了线程和主内存之间的关系，规定了从 Java 源代码到 CPU 可执行指令的这个转化过程要遵守哪些和并发相关的原则和规范，其主要目的是为了简化多线程编程，增强程序可移植性</p>
 </li>
 </ul>
-<h3 id="抽象主内存与本地内存的方式"><a href="#抽象主内存与本地内存的方式" class="headerlink" title="抽象主内存与本地内存的方式"></a>抽象主内存与本地内存的方式</h3><p>详见：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/concurrent/jmm.html#jmm-%E6%98%AF%E5%A6%82%E4%BD%95%E6%8A%BD%E8%B1%A1%E7%BA%BF%E7%A8%8B%E5%92%8C%E4%B8%BB%E5%86%85%E5%AD%98%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB">JMM（Java 内存模型）详解 | JavaGuide(Java面试+学习指南)</a></p>
+<h3 id="抽象主内存与本地内存的方式"><a href="#抽象主内存与本地内存的方式" class="headerlink" title="抽象主内存与本地内存的方式"></a>抽象主内存与本地内存的方式</h3><p>详见：<a class="link" target="_blank" rel="noopener" href="https://javaguide.cn/java/concurrent/jmm.html#jmm-%E6%98%AF%E5%A6%82%E4%BD%95%E6%8A%BD%E8%B1%A1%E7%BA%BF%E7%A8%8B%E5%92%8C%E4%B8%BB%E5%86%85%E5%AD%98%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB">JMM（Java 内存模型）详解 | JavaGuide(Java面试+学习指南) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <h3 id="happens-before原则"><a href="#happens-before原则" class="headerlink" title="happens-before原则"></a>happens-before原则</h3><p>happens-before关系实际上就是一种对事物发生前后顺序的关系的描述，而与实际的绝对时间没有关系。从本质上来讲，他想表达的意思是前一个操作对之后的操作是可见的。</p>
 <p>设计思想：</p>
 <ol>
@@ -464,7 +928,7 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 </ol>
 <h2 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h2><p>AQS是一个抽象队列同步器。它的核心思想是，如果被请求的共享资源空闲，就将当前请求资源的线程设置为有效的工作线程，并且将共享资源设置为锁定状态。如果被请求的共享资源被占用，就需要一套线程阻塞等待以及被唤醒时所分配的机制，这个机制使用CLH锁实现。</p>
 <p>CLH锁是一个虚拟的双向队列，暂时获取不到锁的线程会被加入到队列中。AQS会将每条请求共享资源的线程封装成一个队列节点来实现锁的分配。每个节点表示一个线程，它保存着线程的引用，在队列中的状态。</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/40cb932a64694262993907ebda6a0bfe~tplv-k3u1fbpfcp-zoom-1.image"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/40cb932a64694262993907ebda6a0bfe~tplv-k3u1fbpfcp-zoom-1.image"></p>
 <p>接下来用<code>ReentrantLock</code>为例说明AQS工作方式。AQS使用state变量来表示同步状态，使用volatile修饰，确保它的修改对所有线程可见。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">int</span> state<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
@@ -519,19 +983,19 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <li>句柄</li>
 </ol>
 <p>  Java在堆中划分出一块内存作为句柄池，reference中存储的就是对象的句柄地址。句柄中包含了对象的实例数据和对象类型数据各自的地址信息。这么做的好处在于，即使对象发生了移动，句柄地址也不会有什么影响</p>
-<p>  <img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/access-location-of-object-handle.png" alt="对象的访问定位使用句柄"></p>
+<p>  <img lazyload="" src="/images/loading.svg" data-src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/access-location-of-object-handle.png" alt="对象的访问定位使用句柄"></p>
 <ol start="2">
 <li>直接指针</li>
 </ol>
 <p>  reference直接指向对象实例地址，它的效率更高，节省了一次指针定位的时间开销</p>
-<p>  <img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/access-location-of-object-handle-direct-pointer.png" alt="对象的访问定位直接指针"></p>
+<p>  <img lazyload="" src="/images/loading.svg" data-src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/jvm/access-location-of-object-handle-direct-pointer.png" alt="对象的访问定位直接指针"></p>
 <h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>类加载器分类：</p>
 <ul>
 <li><strong>BootstrapClassLoader(启动类加载器)</strong> ：最顶层的加载类，由 C++实现，负责加载 <code>%JAVA_HOME%/lib</code>目录下的 jar 包和类或者被 <code>-Xbootclasspath</code>参数指定的路径中的所有类。</li>
 <li><strong>ExtensionClassLoader(扩展类加载器)</strong> ：主要负责加载 <code>%JRE_HOME%/lib/ext</code> 目录下的 jar 包和类，或被 <code>java.ext.dirs</code> 系统变量所指定的路径下的 jar 包。</li>
 <li><strong>AppClassLoader(应用程序类加载器)</strong> ：面向我们用户的加载器，负责加载当前应用 classpath 下的所有 jar 包和类。</li>
 </ul>
-<p>著作权归所有<br>原文链接：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/jvm/classloader.html">https://javaguide.cn/java/jvm/classloader.html</a></p>
+<p>著作权归所有<br>原文链接：<a class="link" target="_blank" rel="noopener" href="https://javaguide.cn/java/jvm/classloader.html">https://javaguide.cn/java/jvm/classloader.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
 <p>加载一个类主要分为以下几步：</p>
 <p>加载，连接，初始化，其中连接又分为验证，准备，解析</p>
 <ol>
@@ -555,39 +1019,432 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 <p>这么做的好处在于，可以防止用户的代码影响JDK代码，因为最高级的类加载器是JDK的加载器，用户无法创建和JDK自带的类全类名完全相同的类。</p>
 <p>同时也可以避免类的重复加载（相同的类被不同的类加载器加载会产生不同的类），使用了双亲委派机制之后大部分的类加载都会由最顶级的加载器加载。</p>
 
-      
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> Java基础（面试准备版）</li>
+        <li><strong>作者:</strong> Zephyr</li>
+        <li><strong>创建于
+                :</strong> 2023-02-27 11:36:05</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-03-06 10:07:02
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://faustpromaxpx.github.io/2023/02/27/offer-java/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/java/">#java</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E9%9D%A2%E8%AF%95/">#面试</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/03/04/Spring/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Spring（面试版）</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/02/07/os/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">操作系统</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
     </div>
 
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
     
-      
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">Java基础（面试准备版）</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-text">字节码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String"><span class="nav-text">String</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="nav-text">不可变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text">+运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-text">字符串常量池</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SPI"><span class="nav-text">SPI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-text">实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B"><span class="nav-text">泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4"><span class="nav-text">泛型擦除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">通配符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E7%95%8C%E9%80%9A%E9%85%8D%E7%AC%A6"><span class="nav-text">无界通配符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="nav-text">创建类型的实例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E9%99%90%E5%AE%9A%E7%B1%BB%E5%9E%8B"><span class="nav-text">自限定类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%93%8D%E4%BD%9C"><span class="nav-text">内存操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C"><span class="nav-text">内存屏障</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E5%90%88"><span class="nav-text">集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#List"><span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayList%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">ArrayList源码分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">HashMap源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-text">ConcurrentHashMap</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B"><span class="nav-text">并发编程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B"><span class="nav-text">进程与线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile"><span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%81"><span class="nav-text">锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%B9%B3%E9%94%81%E4%B8%8E%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81"><span class="nav-text">公平锁与非公平锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81%E4%B8%8E%E4%B8%8D%E5%8F%AF%E4%B8%AD%E6%96%AD%E9%94%81"><span class="nav-text">可中断锁与不可中断锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal"><span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E9%A5%B1%E5%92%8C%E7%AD%96%E7%95%A5"><span class="nav-text">线程池的饱和策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-text">处理任务的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E5%AE%9A%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%A4%A7%E5%B0%8F"><span class="nav-text">设定线程池大小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMM"><span class="nav-text">JMM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E4%B8%BB%E5%86%85%E5%AD%98%E4%B8%8E%E6%9C%AC%E5%9C%B0%E5%86%85%E5%AD%98%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-text">抽象主内存与本地内存的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#happens-before%E5%8E%9F%E5%88%99"><span class="nav-text">happens-before原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AQS"><span class="nav-text">AQS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM"><span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-text">运行时常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1"><span class="nav-text">创建对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-text">对象的内存布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D"><span class="nav-text">对象的访问定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6"><span class="nav-text">双亲委派机制</span></a></li></ol></li></ol>
 
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/笔记/">笔记</a>
-    </span>
+    </div>
+</div>
+        </div>
     
+</div>
 
-    
-    
 
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/java/">java</a><a href="/tags/面试/">面试</a>
-    </span>
-    
 
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zephyr</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 24 篇文章
+                    </span>
+                    
+                        <span>
+                            共 224.2k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
     </div>
 
     
-  </div>
-</article>
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
 
   
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
 
 
 
@@ -597,21 +1454,18 @@ flist<span class="token punctuation">.</span><span class="token function">add</s
 
 
 
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
+<div class="post-scripts" data-swup-reload-script>
     
-    &copy; 2024 Zephyr
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
     
-  </p>
-</footer>
-    
-    
-  </div>
 </div>
+
+
 </body>
 </html>

@@ -1,87 +1,551 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <title>计算机网络 | 狂奔的蜗牛 | 人行，路平</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="Zephyr">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  
-  <meta name="author" content="Zephyr">
-  
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://FaustProMaxPX.github.io/2022/10/09/network/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="计算机网络的基础知识，以及一部分开发必备网络知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机网络">
+<meta property="og:url" content="http://faustpromaxpx.github.io/2022/10/09/network/index.html">
+<meta property="og:site_name" content="狂奔的蜗牛">
+<meta property="og:description" content="计算机网络的基础知识，以及一部分开发必备网络知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303200247.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909154857.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909155324.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909160541.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221011222824.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221012094640.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221012094743.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221012102231.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221012105756.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/netty/45.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909162916.png">
+<meta property="og:image" content="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/IP/39.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221004225302.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110019.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110407.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006111656.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007110905.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007112708.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007114451.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162150.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162221.png">
+<meta property="article:published_time" content="2022-10-09T13:17:31.000Z">
+<meta property="article:modified_time" content="2023-03-13T07:32:43.054Z">
+<meta property="article:author" content="Zephyr">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303200247.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            计算机网络 -
+        
+        狂奔的蜗牛
+    </title>
 
-  
-  <meta name="description" content="计算机网络的基础知识，以及一部分开发必备网络知识">
-  
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
 
-  
-  
-  <meta name="keywords" content="计算机网络">
-  
 
-  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!--- Inject Part-->
+    
 
-  <meta property="og:title" content="计算机网络"/>
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
 
-  <meta property="og:site_name" content="狂奔的蜗牛"/>
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
 
-  
-  <meta property="og:image" content="/favicon.ico"/>
-  
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
 
-  <link href="/favicon.ico" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="狂奔的蜗牛" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        狂奔的蜗牛
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
+
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
+
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"faustpromaxpx.github.io","root":"/","language":"zh-CN","path":"search.xml"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-kx673m_2560x1440.png","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Just do it !!!","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/FaustProMaxPX","instagram":null,"zhihu":"https://www.zhihu.com/people/shou-zu-tai-ye/posts","twitter":null,"email":"faustprogpu@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"},"Tags":{"path":"/tags","icon":"fa-regular fa-tags"},"Categories":{"path":"/categories","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/4/06 11:24:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 </head>
 
 
 <body>
-<div class="blog">
-  <div class="content">
+<div class="progress-bar-container">
+    
 
-    <header>
-  <div class="site-branding">
-    <h1 class="site-title">
-      <a href="/">狂奔的蜗牛</a>
-    </h1>
-    <p class="site-description">人行，路平</p>
-  </div>
-  <nav class="site-navigation">
-    <ul>
-      
-    </ul>
-  </nav>
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/images/logo.png">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                狂奔的蜗牛
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/archives"
+                        >
+                            <span>Archives</span>
+                            <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/tags"
+                        >
+                            <span>Tags</span>
+                            <i class="fa-regular fa-tags fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/categories"
+                        >
+                            <span>Categories</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">30</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">4</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">24</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
 </header>
 
-    <main class="site-main posts-loop">
-    <article>
 
-  
-    
-    <h3 class="article-title"><span>计算机网络</span></h3>
-    
-  
+        </div>
 
-  <div class="article-top-meta">
-    <span class="posted-on">
-      <a href="/2022/10/09/network/" rel="bookmark">
-        <time class="entry-date published" datetime="2022-10-09T13:17:31.000Z">
-          2022-10-09
-        </time>
-      </a>
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">计算机网络</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/logo.png">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">Zephyr</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv3</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2022-10-09 21:17:31</span>
+        <span class="mobile">2022-10-09 21:17:31</span>
+        <span class="hover-info">创建</span>
     </span>
-  </div>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-03-13 15:32:43</span>
+            <span class="mobile">2023-03-13 15:32:43</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>13.8k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>47 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
 
 
-  
-
-  <div class="article-content">
-    <div class="entry">
-      
-        <p>计算机网络的基础知识，以及一部分开发必备网络知识</p>
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <p>计算机网络的基础知识，以及一部分开发必备网络知识</p>
 <span id="more"></span>
 
 <h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><h2 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h2><h3 id="数据包交换原则"><a href="#数据包交换原则" class="headerlink" title="数据包交换原则"></a>数据包交换原则</h3><p>数据包：<strong>独立的</strong>，包含将数据送到目的地必要信息的数据集合<br>数据包交换：独立的处理任何一个到来的数据包，在对应链路空闲时将该数据包发送出去。<br>流：一系列属于相同起点与终点的数据<br>数据包交换不需要流的状态，如果流是有状态的，那会给交换机带来巨大的管理压力，大量需要管理的状态也会拖慢网络的速度。同时，如果某一端出现了问题，也不会导致无限重连，给网络带来巨大的压力，因为流不需要记录数据包是否抵达，也就不需要为数据丢失负责。</p>
@@ -103,7 +567,7 @@
 <li><p>协议栈</p>
 <p>接下来数据包就会被交给OS中的协议栈</p>
 <p>协议栈的内部分为几个部分，分别承担不同的工作。上下关系是有一定的规则的，上面的部分会向下面的部分委托工作，下面的部分收到委托的工作并执行。</p>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303200247.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/notes/20230303200247.png"></p>
 </li>
 <li><p>TCP</p>
 <p>通过协议栈，可以确定接下来由TCP处理这个数据包</p>
@@ -145,14 +609,14 @@
 <li>B接收到数据，向A返回确认，并表示B希望与A进行连接</li>
 <li>A接收到连接请求，返回确认，连接建立。</li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909154857.png"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909154857.png"></p>
 <p>TCP拆除连接的步骤</p>
 <ol>
 <li>A向B发送FIN信号，表示要断开与B的连接</li>
 <li>B接收到信号后不再从连接中获取新数据，返回一个ACK</li>
 <li>A接收到确认后关闭<strong>A到B的连接</strong>，但B可能还有数据要传输，因此B到A的连接还没有被关闭。</li>
 <li>B完成数据传输后，向A发送FIN信号，关闭B到A的连接</li>
-<li>A收到信号，返回确认，连接正式关闭。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909155324.png"></li>
+<li>A收到信号，返回确认，连接正式关闭。<br><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909155324.png"></li>
 </ol>
 <h4 id="TCP服务模型"><a href="#TCP服务模型" class="headerlink" title="TCP服务模型"></a>TCP服务模型</h4><table>
 <thead>
@@ -178,7 +642,7 @@
 <td>√</td>
 </tr>
 </tbody></table>
-<h4 id="TCP报文结构"><a href="#TCP报文结构" class="headerlink" title="TCP报文结构"></a>TCP报文结构</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909160541.png"></p>
+<h4 id="TCP报文结构"><a href="#TCP报文结构" class="headerlink" title="TCP报文结构"></a>TCP报文结构</h4><p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909160541.png"></p>
 <p>Source/Destination port:源端口，目的端口，用于标注报文来自/去往主机的哪一个应用程序<br>Sequence:当前报文携带的数据的首个字节，在整个数据中的位置<br>Acknowledgment Sequence:已经确定收到了#字节前的部分，期待从#开始之后的数据内容<br>HLEN:报文头部大小<br>Checksum:检验和，检验报文是否在传输过程中损坏<br>PSH:告诉连接的另一端，立即发送数据而不要等待接收到指定数量的数据一起发送。</p>
 <h4 id="TCP三次握手的原因"><a href="#TCP三次握手的原因" class="headerlink" title="TCP三次握手的原因"></a>TCP三次握手的原因</h4><ul>
 <li><p>阻止重复历史连接的初始化<br>三次握手的首要原因是为了防止旧的重复连接初始化造成混乱。现在假设客户端向服务器发起连接，附带的序列号为seq1，但是在服务器接收到请求之前，客户端宕机了，恢复之后，客户端重新发起了一次建立连接请求。服务端首先接收到的大概率是seq1的连接请求，之后服务端响应客户端，此时服务端根据响应回来的ack判断该连接是否是一个历史连接，如果是就向服务器发送RST中止连接。<br>现在考虑一下如果只有两次握手会导致什么，服务端在接收到请求之后直接响应客户端并建立连接，发送数据，但对客户端来说，这是一个历史连接，并不生效。这就导致网络资源被白白浪费。而三次握手给了发起方一个判断请求是否有效的机会，可以有效防止资源的浪费。</p>
@@ -310,7 +774,7 @@ TCP头部有一个字段Window，表示窗口的大小。
 <li>自定义消息结构 最后一种方式，也就是TCP使用的，自定一个消息结构，由包头和数据组成，包头大小固定(让接收方能明确接收到包头中的提示信息)。同时包头中的信息可以指明后续数据的大小。</li>
 </ol>
 <h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h3><p>UDP只会获取需要传输的数据，然后交给网络层<br>UDP不像TCP那样保证可靠传输，一般由不需要可靠传输，或是拥有私有传输机制的应用使用。</p>
-<h4 id="UDP报文结构"><a href="#UDP报文结构" class="headerlink" title="UDP报文结构"></a>UDP报文结构</h4><p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909162916.png"></p>
+<h4 id="UDP报文结构"><a href="#UDP报文结构" class="headerlink" title="UDP报文结构"></a>UDP报文结构</h4><p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20220909162916.png"></p>
 <p>Length:UDP数据报中数据的长度<br>Checksum:UDP中的检验和会用到IP层的一部分信息，虽然这会破坏分层原则，但也可以帮助UDP发现数据报是否传输到错误的目的地。</p>
 <h4 id="UDP服务模型"><a href="#UDP服务模型" class="headerlink" title="UDP服务模型"></a>UDP服务模型</h4><table>
 <thead>
@@ -340,7 +804,7 @@ TCP头部有一个字段Window，表示窗口的大小。
 </li>
 </ol>
 <h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>由于IPv4的地址数量有限，因此诞生了像是NAT一类用于缓解地址消耗的协议。NAT的基本思想就是将内网机器的IP+端口映射到公网IP的不同端口上。下面用一张图来表示：</p>
-<p><img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/IP/39.jpg" alt="NAPT"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/IP/39.jpg" alt="NAPT"></p>
 <p>图中有两个客户端 192.168.1.10 和 192.168.1.11 同时与服务器 183.232.231.172 进行通信，并且这两个客户端的本地端口都是 1025。</p>
 <p>此时，<strong>两个私有 IP 地址都转换 IP 地址为公有地址 120.229.175.121，但是以不同的端口号作为区分。</strong></p>
 <p>因此，只要生成这样一张转换表，就可以让内网主机全都使用一个IP与外部通信。这张表中的记录会在首次建立TCP连接时建立，又会在连接结束后删除</p>
@@ -428,7 +892,7 @@ TCP头部有一个字段Window，表示窗口的大小。
 <li>浏览器在此请求访问服务器中相同的资源时，会先比较当前时间与设定的缓存过期时间，如果没有过期就使用缓存。</li>
 <li>服务器再次收到请求，代表本地缓存已经过期，会更新响应头的Cache-Control</li>
 </ol>
-<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>在上面的HTTP状态码介绍中，有一个状态码为304，这代表服务器告诉浏览器，这个资源没有更新，可以直接使用本地缓存。这种通过服务端告知客户端是否可以使用缓存的方式就是协商缓存。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221004225302.png" alt="协商缓存过程"></p>
+<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>在上面的HTTP状态码介绍中，有一个状态码为304，这代表服务器告诉浏览器，这个资源没有更新，可以直接使用本地缓存。这种通过服务端告知客户端是否可以使用缓存的方式就是协商缓存。<br><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221004225302.png" alt="协商缓存过程"></p>
 <p>协商缓存的实现方式</p>
 <ol>
 <li>请求头中携带<code>If-Modified-Since</code>字段，内容一般是本地缓存中对应资源的获取时间，服务器接收到请求后发现请求带有该字段，就会将本地缓存的更新时间与服务器端对应资源的最后一次更新时间进行比较，如果服务器端的资源在本地缓存获取时间之后有进行更新，就会返回最新资源；否则返回响应304告诉浏览器使用缓存</li>
@@ -466,7 +930,7 @@ TCP头部有一个字段Window，表示窗口的大小。
 <li>双方协商生成会话密钥</li>
 <li>双方采用会话密钥进行加密通信</li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110019.png" alt="基于RSA的四次握手"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110019.png" alt="基于RSA的四次握手"></p>
 <p>详细流程：</p>
 <ol>
 <li><p>ClientHello<br>客户端向服务器发送加密通信请求<br>在这一步，客户端主要发送以下信息：<br>(1) 客户端支持的SSL/TLS协议版本<br>(2) 客户端生成的随机数，后续会用于生成会话密钥<br>(3) 客户端支持的密码套件列表</p>
@@ -483,7 +947,7 @@ TCP头部有一个字段Window，表示窗口的大小。
 <blockquote>
 <p>客户端校验数字证书的流程</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110407.png" alt="数字证书签发和验证流程"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006110407.png" alt="数字证书签发和验证流程"></p>
 <p>签发证书：</p>
 <ol>
 <li>CA将持有者的公钥，用途，颁发者，有效时间等信息打包，然后进行哈希计算得到一个Hash值。</li>
@@ -506,7 +970,7 @@ TCP头部有一个字段Window，表示窗口的大小。
 <li>将消息分割成多个较短的片段，然后分别对每个片段进行压缩</li>
 <li>然后压缩的片段会被加上MAC值，这个MAC值用来识别数据的完整性，同时防止篡改。此外为了防止重放攻击，还加上了片段的编码。</li>
 <li>接下来，压缩的片段和MAC值会一起通过对称加密进行加密</li>
-<li>最后加上由数据类型，版本，长度组成的报文头部<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006111656.png"></li>
+<li>最后加上由数据类型，版本，长度组成的报文头部<br><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221006111656.png"></li>
 </ol>
 <h3 id="HTTP-x2F-1-1-HTTP-x2F-2-HTTP-x2F-3"><a href="#HTTP-x2F-1-1-HTTP-x2F-2-HTTP-x2F-3" class="headerlink" title="HTTP/1.1 HTTP/2 HTTP/3"></a>HTTP/1.1 HTTP/2 HTTP/3</h3><h4 id="HTTP-x2F-1-1"><a href="#HTTP-x2F-1-1" class="headerlink" title="HTTP/1.1"></a>HTTP/1.1</h4><p>HTTP/1.1相比HTTP/1.0的改进：</p>
 <ul>
@@ -521,19 +985,19 @@ TCP头部有一个字段Window，表示窗口的大小。
 <li>没有请求优先级控制</li>
 <li>请求只能从客户端开始，服务端只能被动响应</li>
 </ul>
-<h4 id="HTTP-x2F-2"><a href="#HTTP-x2F-2" class="headerlink" title="HTTP/2"></a>HTTP/2</h4><p>HTTP/2协议基于HTTPS，因此它的安全性是可以保证的<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007110905.png"></p>
+<h4 id="HTTP-x2F-2"><a href="#HTTP-x2F-2" class="headerlink" title="HTTP/2"></a>HTTP/2</h4><p>HTTP/2协议基于HTTPS，因此它的安全性是可以保证的<br><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007110905.png"></p>
 <p>相比于HTTP/1.1，HTTP/2在以下方面做出了改进：</p>
 <ol>
 <li><p>头部压缩<br>如果同时发送多个请求，且这些请求的头部基本相同，HTTP2就会压缩头，消除掉重复的部分。<br>它的具体实现就是<code>HPACK</code>算法：客户端和服务端同时维护一张头部表，所有字段都会存入该表，下次要发送同样的字段时就可以直接发送索引号。</p>
 </li>
 <li><p>二进制格式<br>HTTP/2全面采用二进制格式传输数据，头信息和数据体都是二进制并且统称为帧。虽然这大幅降低了报文的可读性，但却加快了计算机的处理速度，计算机可以直接解析二进制报文。</p>
 </li>
-<li><p>并发传输<br>由于HTTP/1.1的实现是基于请求-响应模型的。在同一个连接中，HTTP完成一个事务才能开始处理下一个事务，这就有可能导致队头阻塞。<br>而在HTTP2中引入了Stream的概念，多个Stream可以复用一条TCP连接。1个TCP连接可以包含多个Stream，Stream里可以包含一个或多个Message(Message对应请求/响应报文)。而在一个Message中，又有多个帧(存放报文各部分的信息)。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007112708.png"><br>针对不同的HTTP请求用独一无二的StreamID来区分，接收端可以通过StreamID来组装HTTP消息。这就使得Stream的帧可以乱序发送，也就代表HTTP2可以并行的发送请求/接收响应。</p>
+<li><p>并发传输<br>由于HTTP/1.1的实现是基于请求-响应模型的。在同一个连接中，HTTP完成一个事务才能开始处理下一个事务，这就有可能导致队头阻塞。<br>而在HTTP2中引入了Stream的概念，多个Stream可以复用一条TCP连接。1个TCP连接可以包含多个Stream，Stream里可以包含一个或多个Message(Message对应请求/响应报文)。而在一个Message中，又有多个帧(存放报文各部分的信息)。<br><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007112708.png"><br>针对不同的HTTP请求用独一无二的StreamID来区分，接收端可以通过StreamID来组装HTTP消息。这就使得Stream的帧可以乱序发送，也就代表HTTP2可以并行的发送请求/接收响应。</p>
 </li>
 <li><p>服务器推送<br>HTTP/2还在一定程度上改善了传统的<em>请求-应答</em>模式。服务器可以主动地向客户端发送消息。<br>客户端的服务器双方都可以建立Stream，规定客户端建立的StreamID必须是奇数，服务端建立的StreamID必须是偶数。<br>乍一听可能感觉这个功能没有什么价值，但现在想象一下，如果我们希望请求一个页面，在HTTP/1.1中我们首先要请求html文件，但只请求一个html文件显然是不够的，再加上css和js文件才能构成我们平日使用的网页。这就需要客户端发送多个请求，消息往返次数很多。但在HTTP2中，服务端发现客户端请求了一个网页，在返回html文件的同时，主动将对应的css和js文件返回过去，这就大大提高了通信效率。</p>
 </li>
 </ol>
-<h4 id="HTTP-x2F-3"><a href="#HTTP-x2F-3" class="headerlink" title="HTTP/3"></a>HTTP/3</h4><p>HTTP/2看上去已经非常完美了，但实际上，他仍然存在队头阻塞的问题，只不过问题的根源在于TCP层。HTTP/2用流的方式让服务端不至于因为处理某个特定请求速度过慢而导致无法接收到其他请求。但如果某个请求在传输过程中发生了丢包，就会导致TCP触发超时重传，此时丢失的包之后发送的所有数据包都会被存储在TCP的缓冲区，应用层无法接收到数据。也就是说，如果发生了丢包，那么之后传输的数据，哪怕不属于同一个流也会被TCP关在缓冲区里。<br>HTTP/3为了解决这个问题，直接将运输层的协议改成了基于UDP的QUIC协议。由于UDP的发送是无序且不可靠的，因此不会因为丢包而发生阻塞。而基于UDP的QUIC协议又实现了类似TCP的可靠传输功能。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007114451.png"><br>QUIC具备如下特点：</p>
+<h4 id="HTTP-x2F-3"><a href="#HTTP-x2F-3" class="headerlink" title="HTTP/3"></a>HTTP/3</h4><p>HTTP/2看上去已经非常完美了，但实际上，他仍然存在队头阻塞的问题，只不过问题的根源在于TCP层。HTTP/2用流的方式让服务端不至于因为处理某个特定请求速度过慢而导致无法接收到其他请求。但如果某个请求在传输过程中发生了丢包，就会导致TCP触发超时重传，此时丢失的包之后发送的所有数据包都会被存储在TCP的缓冲区，应用层无法接收到数据。也就是说，如果发生了丢包，那么之后传输的数据，哪怕不属于同一个流也会被TCP关在缓冲区里。<br>HTTP/3为了解决这个问题，直接将运输层的协议改成了基于UDP的QUIC协议。由于UDP的发送是无序且不可靠的，因此不会因为丢包而发生阻塞。而基于UDP的QUIC协议又实现了类似TCP的可靠传输功能。<br><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221007114451.png"><br>QUIC具备如下特点：</p>
 <ol>
 <li><p>无队头阻塞<br>QUIC也有类似HTTP/2多路复用的概念，同时QUIC也有自己的一套机制来保证传输的可靠性。<strong>当某个流发生丢包时，只会阻塞这个流，其他流不会收到影响</strong>。因此QUIC连接上的流是相互独立的，即使发生丢包也不会影响其他流。</p>
 </li>
@@ -551,9 +1015,9 @@ TCP头部有一个字段Window，表示窗口的大小。
 <p>第一种思路可以通过缓存实现，具体的介绍在HTTP缓存一节[[#^3b171b]]</p>
 <h4 id="减少HTTP请求次数"><a href="#减少HTTP请求次数" class="headerlink" title="减少HTTP请求次数"></a>减少HTTP请求次数</h4><p>切入点：</p>
 <ul>
-<li>减少重定向请求次数<br>由于服务器上的资源可能由于迁移或维护等等原因，将资源转移到另一个URL后，客户端不知情，仍旧请求原先的URL。这时服务端就需要通过302状态码和Location头部告诉客户端资源已经迁移，客户端转而向新的URL发起请求。<br>因此，如果重定向请求过多，就会导致客户端为请求一个资源发起多次请求，大大拉低网络性能。此外，客户端的请求一般需要先经过代理服务器然后到达源服务器，这就导致重定向请求在网络中的传递次数翻了一倍。<br>为了减少重定向的请求次数，我们可以让代理服务器帮助客户端去请求重定向之后的URL，而不是将302的响应交给客户端让它重发一次响应。并且，在代理服务器知晓了重定向规则之后，就可以将客户端给的旧URL地址映射到新的URL地址上，这样就可以直接略过重定向这一步骤。<br><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162150.png" alt="代理服务器发送重定向请求"></li>
+<li>减少重定向请求次数<br>由于服务器上的资源可能由于迁移或维护等等原因，将资源转移到另一个URL后，客户端不知情，仍旧请求原先的URL。这时服务端就需要通过302状态码和Location头部告诉客户端资源已经迁移，客户端转而向新的URL发起请求。<br>因此，如果重定向请求过多，就会导致客户端为请求一个资源发起多次请求，大大拉低网络性能。此外，客户端的请求一般需要先经过代理服务器然后到达源服务器，这就导致重定向请求在网络中的传递次数翻了一倍。<br>为了减少重定向的请求次数，我们可以让代理服务器帮助客户端去请求重定向之后的URL，而不是将302的响应交给客户端让它重发一次响应。并且，在代理服务器知晓了重定向规则之后，就可以将客户端给的旧URL地址映射到新的URL地址上，这样就可以直接略过重定向这一步骤。<br><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162150.png" alt="代理服务器发送重定向请求"></li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162221.png" alt="代理服务器了解重定向规则后"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="https://raw.githubusercontent.com/FaustProMaxPX/pic_repository/main/network/20221008162221.png" alt="代理服务器了解重定向规则后"></p>
 <ul>
 <li><p>合并请求<br>由于HTTP/1.1是请求响应模型，如果一个请求未收到响应就会导致阻塞。因此为了防止单个请求的阻塞，浏览器一般会<em>同时发起多个请求，每个请求都是不同的TCP连接</em>。因此如果我们能够合并请求，就可以减少TCP连接的数量，省去TCP握手和慢启动过程的耗时。<br>具体的做法包括：<br>(1) 部分网页会包含大量的小图片，图标。对于这种资源，单开一个TCP连接显然是非常浪费的。对于这种情况，我们可以将这些小图片合成一张大图片，浏览器用一次请求获取这张大图然后根据CSS数据切割大图片<br>(2) 将js、css等资源打包成大文件<br>(3) 将图片的二进制数据使用base64编码后，以URL的形式直接嵌入HTML文件，跟随HTML一起发送。</p>
 </li>
@@ -561,39 +1025,428 @@ TCP头部有一个字段Window，表示窗口的大小。
 </li>
 </ul>
 
-      
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 计算机网络</li>
+        <li><strong>作者:</strong> Zephyr</li>
+        <li><strong>创建于
+                :</strong> 2022-10-09 21:17:31</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2023-03-13 15:32:43
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://faustpromaxpx.github.io/2022/10/09/network/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/01/25/redis/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Redis入门</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2022/10/09/on%20java/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">On java</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
     </div>
 
-  </div>
-
-  <div class="article-footer">
-    <div class="article-meta pull-left">
-
     
-      
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">计算机网络</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span class="nav-text">计算机网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%9F%BA%E7%A1%80"><span class="nav-text">前置基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E4%BA%A4%E6%8D%A2%E5%8E%9F%E5%88%99"><span class="nav-text">数据包交换原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B1%82%E5%8E%9F%E5%88%99"><span class="nav-text">分层原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E5%8E%9F%E5%88%99"><span class="nav-text">封装原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5URL%E5%88%B0%E7%BD%91%E9%A1%B5%E6%98%BE%E7%A4%BA%E6%9C%9F%E9%97%B4%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-text">输入URL到网页显示期间的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%BE%93%E5%B1%82"><span class="nav-text">运输层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="nav-text">TCP断开连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME-WAIT%E5%AD%98%E5%9C%A8%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-text">TIME_WAIT存在的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E9%87%8D%E4%BC%A0"><span class="nav-text">TCP重传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E9%87%8D%E4%BC%A0"><span class="nav-text">快速重传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SACK"><span class="nav-text">SACK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-SACK"><span class="nav-text">D-SACK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="nav-text">滑动窗口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E5%85%B3%E9%97%AD"><span class="nav-text">窗口关闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%8A%E6%B6%82%E7%AA%97%E5%8F%A3%E7%BB%BC%E5%90%88%E7%97%87"><span class="nav-text">糊涂窗口综合症</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-text">拥塞控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E5%BF%AB%E9%80%9F%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5"><span class="nav-text">TCP快速建立连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP%E6%98%AF%E9%9D%A2%E5%90%91%E5%AD%97%E8%8A%82%E6%B5%81%E7%9A%84%E5%8D%8F%E8%AE%AE"><span class="nav-text">TCP是面向字节流的协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP"><span class="nav-text">UDP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DHCP"><span class="nav-text">DHCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NAT"><span class="nav-text">NAT</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%9B%B8%E5%85%B3%E7%BD%91%E7%BB%9C%E7%9F%A5%E8%AF%86"><span class="nav-text">开发相关网络知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-text">状态码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GET%E5%92%8CPOST"><span class="nav-text">GET和POST</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E7%BC%93%E5%AD%98"><span class="nav-text">HTTP缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS"><span class="nav-text">HTTPS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-x2F-1-1-HTTP-x2F-2-HTTP-x2F-3"><span class="nav-text">HTTP&#x2F;1.1 HTTP&#x2F;2 HTTP&#x2F;3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-x2F-1-1%E4%BC%98%E5%8C%96"><span class="nav-text">HTTP&#x2F;1.1优化</span></a></li></ol></li></ol></li></ol>
 
-    <span class="post-categories">
-      <i class="icon-categories"></i>
-        <a href="/categories/笔记/">笔记</a>
-    </span>
+    </div>
+</div>
+        </div>
     
+</div>
 
-    
-    
 
-    <span class="post-tags">
-      <i class="icon-tags"></i>
-        <a href="/tags/计算机网络/">计算机网络</a>
-    </span>
-    
 
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">Zephyr</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 24 篇文章
+                    </span>
+                    
+                        <span>
+                            共 224.2k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
     </div>
 
     
-  </div>
-</article>
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
 
   
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
 
 
 
@@ -603,21 +1456,18 @@ TCP头部有一个字段Window，表示窗口的大小。
 
 
 
-    </main>
-
-    <footer class="site-footer">
-  <p class="site-info">
-    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
-    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
-    </br>
+<div class="post-scripts" data-swup-reload-script>
     
-    &copy; 2024 Zephyr
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
     
-  </p>
-</footer>
-    
-    
-  </div>
 </div>
+
+
 </body>
 </html>
